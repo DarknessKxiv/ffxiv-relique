@@ -8,9 +8,13 @@ Overlay pour **ACT + OverlayPlugin** qui suit tes armes reliques, job par job :
 |---|---|---|---|
 | Dawntrail (niv. 100) | Armes fantômes | Penumbra iL 745 → Occultum iL 795 | 21 |
 | Endwalker (niv. 90) | Armes Manderville | Manderville iL 615 → Manderveilleuse iL 665 | 19 |
+| Shadowbringers (niv. 80) | Armes de la Résistance | Résistance iL 485 → Gunnhildr iL 535 | 17 |
+| Stormblood (niv. 70) | Armes d'Eurêka | Vieillie iL 290 → Personnalisée iL 405 | 15 |
+| Heavensward (niv. 60) | Armes Anima | Animée iL 170 → Lux iL 275 | 13 |
+| A Realm Reborn (niv. 50) | Armes du Zodiaque | Zodiaque iL 80 → Zêta iL 135 | 10 |
 
 Choisis la relique en haut de l'overlay. Il te montre où tu en es et **ce qu'il faut faire ensuite** : quête, PNJ et coordonnées, objets à réunir et où les obtenir.
-Les reliques plus anciennes (Shadowbringers, Stormblood, Heavensward, A Realm Reborn) sont prévues.
+Pour les anciennes reliques, les étapes sont **celles d'aujourd'hui** : les objets qui venaient d'un contenu retiré ou d'une autre monnaie sont indiqués avec leurs sources actuelles, **le farm d'abord, l'achat ensuite** (mémoquartz poétiques, sceaux de compagnie).
 
 ![Aperçu de l'overlay](docs/apercu-fr.png)
 
@@ -21,12 +25,12 @@ Les reliques plus anciennes (Shadowbringers, Stormblood, Heavensward, A Realm Re
 ## Fonctionnalités
 
 - **Prochaine étape** du job suivi : la quête, le PNJ avec ses coordonnées, les objets à réunir et leur source.
-- **Toutes les phases** détaillées : pour Dawntrail, demi-âtma, Magi sphérier, pâtes de cristal, dissipateurs, cristal de savoir (65 objectifs) ; pour Endwalker, les quêtes d'Hildibrand et les échanges de mémoquartz.
+- **Toutes les phases** détaillées : pour Dawntrail, demi-âtma, Magi sphérier, pâtes de cristal, dissipateurs, cristal de savoir (65 objectifs) ; pour Endwalker, les quêtes d'Hildibrand et les échanges de mémoquartz ; pour les anciennes reliques, chaque objet à réunir par arme, les quêtes uniques et les missions à réussir avec chaque job.
 - **Où farmer** : les ALÉA et affrontements cruciaux de Lunule qui donnent chaque demi-âtma ou dissipateur.
 - **Suivi de chaque job**, avec les mémoquartz restant à dépenser pour chacun.
 - **Détection automatique** pendant que tu joues (voir plus bas), avec le job suivi qui s'adapte au job joué.
 - **Trois affichages** : complet, compact (bouton ☰, sans les onglets) ou **réduit à une seule barre** (bouton ▴) qui montre juste la prochaine étape.
-- **Masquage automatique pendant les donjons, défis et raids** (activé par défaut, désactivable dans les Réglages). L'overlay reste affiché sur l'Île de Lunule.
+- **Masquage automatique pendant les donjons, défis et raids** (activé par défaut, désactivable dans les Réglages). L'overlay reste affiché sur l'Île de Lunule, à Bozja, Zadnor et Eurêka.
 - Progression enregistrée **séparément pour chaque personnage**.
 
 ## Installation
@@ -71,6 +75,7 @@ Quand ACT tourne, l'overlay lit le journal du jeu transmis par OverlayPlugin.
 | Armes reliques reçues | |
 | Quêtes acceptées et terminées | |
 | Missions réussies du cristal de savoir | |
+| Missions à réussir avec le job d'une arme (étapes Anima…) | Livres d'épreuves, matérias, lumière, mahatma, densité |
 
 Seuls les **messages système** sont pris en compte : ce que les joueurs écrivent dans le chat est ignoré.
 Tout ce qui est détecté apparaît dans l'onglet **Journal**.

@@ -2,6 +2,7 @@
 // À relancer si un patch renomme des objets :  node outils/generer-noms.mjs
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import * as ANCIENNES from './noms-reliques-anciennes.mjs';
 
 const API = 'https://v2.xivapi.com/api';
 const LANGUES = ['fr', 'en', 'de'];
@@ -148,6 +149,28 @@ async function rechercheNoms(feuille, noms) {
   return res;
 }
 
+// Recherche par nom anglais (anciennes reliques) : la ligne dont le nom, sans glyphes, est exactement celui-là
+// (la plus ancienne s'il y en a plusieurs, comme les versions par job de « A Relic Reborn »). Renvoie { cle: { id, f } }.
+async function parNomAnglais(feuille, champ, table, champsVoulus, extra = '') {
+  const noms = [...new Set(Object.values(table))];
+  const trouve = {};
+  for (let i = 0; i < noms.length; i += 10) {
+    const lot = noms.slice(i, i + 10);
+    const q = lot.map((n) => `${champ}~"${n.replace(/"/g, '\\"')}"`).join(' ');
+    const { results } = await json(`${API}/search?sheets=${feuille}&query=${encodeURIComponent(q)}`
+      + `&fields=${champ},${champs(champsVoulus)}${extra}&limit=300`);
+    // Le jeu met parfois deux espaces (« Heaven-on-High  (Floors 1-10) ») ou un tiret long (« Toto–Rak »).
+    const egal = (s) => propre(s).toLowerCase().replace(/\s+/g, ' ').replace(/[–—]/g, '-');
+    for (const n of lot) {
+      const r = results.filter((x) => egal(x.fields[champ]) === egal(n)).sort((a, b) => a.row_id - b.row_id)[0];
+      if (r) trouve[n] = { id: r.row_id, f: r.fields };
+    }
+  }
+  const manquants = noms.filter((n) => !trouve[n]);
+  if (manquants.length) console.warn(`${feuille} introuvable(s) :`, manquants.join(' | '));
+  return Object.fromEntries(Object.entries(table).filter(([, n]) => trouve[n]).map(([cle, n]) => [cle, trouve[n]]));
+}
+
 const formes = (f, l) => ({ nom: propre(f[`Name@lang(${l})`]), sg: propre(f[`Singular@lang(${l})`]), pl: propre(f[`Plural@lang(${l})`]) });
 
 const objets = await parCle('Item', OBJETS, ['Name', 'Singular', 'Plural']);
@@ -161,6 +184,33 @@ const classes = await parCle('ClassJob', CLASSES, ['Name', 'Abbreviation']);
 const emotes = await parCle('Emote', EMOTES, ['Name']);
 const temoins = await parCle('Item', { arme: ARME_TEMOIN, replique: REPLIQUE_TEMOIN }, ['Name']);
 
+// Anciennes reliques : recherche par nom anglais, ajoutée aux mêmes tables.
+const idsQuetes = { ...QUETES };
+for (const [cle, { id, f }] of Object.entries(await parNomAnglais('Quest', 'Name', ANCIENNES.QUETES, ['Name']))) { quetes[cle] = f; idsQuetes[cle] = id; }
+for (const [cle, { f }] of Object.entries(await parNomAnglais('Item', 'Name', ANCIENNES.OBJETS, ['Name', 'Singular', 'Plural']))) objets[cle] = f;
+for (const [cle, { f }] of Object.entries(await parNomAnglais('ContentFinderCondition', 'Name', ANCIENNES.MISSIONS, ['Name']))) missions[cle] = f;
+for (const [cle, { f }] of Object.entries(await parNomAnglais('PlaceName', 'Name', ANCIENNES.LIEUX, ['Name']))) lieux[cle] = f;
+for (const [cle, { f }] of Object.entries(await parNomAnglais('ENpcResident', 'Singular', ANCIENNES.PNJ, ['Singular', 'Pronoun']))) pnj[cle] = f;
+const fates = Object.fromEntries(Object.entries(await parNomAnglais('Fate', 'Name', ANCIENNES.FATES, ['Name'])).map(([c, { f }]) => [c, f]));
+
+// PNJ de départ de chaque quête et sa position (feuilles Quest → IssuerStart, IssuerLocation → Level → Map).
+const carte = (pos, taille, decalage) => { const c = taille / 100; return Math.round((41 / c * ((pos + decalage) * c + 1024) / 2048 + 1) * 10) / 10; };
+const departsBruts = {};
+{
+  const entrees = Object.entries(idsQuetes);
+  const voulus = ['IssuerStart.Singular', 'IssuerStart.Pronoun', 'IssuerLocation.Map.PlaceName.Name'];
+  for (let i = 0; i < entrees.length; i += 50) {
+    const lot = entrees.slice(i, i + 50);
+    const { rows } = await json(`${API}/sheet/Quest?rows=${lot.map(([, id]) => id).join(',')}&fields=${champs(voulus)},`
+      + 'IssuerLocation.X,IssuerLocation.Z,IssuerLocation.Map.SizeFactor,IssuerLocation.Map.OffsetX,IssuerLocation.Map.OffsetY&limit=50');
+    for (const r of rows) {
+      const cle = lot.find(([, id]) => id === r.row_id)?.[0];
+      const lv = r.fields.IssuerLocation?.fields, m = lv?.Map?.fields;
+      if (cle && lv && m) departsBruts[cle] = { pnj: r.fields.IssuerStart?.fields, lieu: m.PlaceName?.fields, x: carte(lv.X, m.SizeFactor, m.OffsetX), y: carte(lv.Z, m.SizeFactor, m.OffsetY) };
+    }
+  }
+}
+
 // Armes : pour chaque relique et chaque stade, les armes du bon niveau d'objet, rangées par job.
 const armesBrutes = [];
 for (const [relique, stades] of Object.entries(RELIQUES)) {
@@ -171,6 +221,18 @@ for (const [relique, stades] of Object.entries(RELIQUES)) {
       const job = r.fields.ClassJobCategory?.fields?.Name;
       if (CLASSES[job] && r.fields.LevelItem?.value === ilvl) armesBrutes.push({ relique, job, stade: i, f: r.fields });
     }
+  }
+}
+// Anciennes reliques : noms anglais des armes, stade par stade (le job vient du wiki, le niveau d'objet est vérifié).
+const NB_STADES = Object.fromEntries([...Object.entries(RELIQUES), ...Object.entries(ANCIENNES.ARMES)].map(([r, s]) => [r, s.length]));
+for (const [relique, stades] of Object.entries(ANCIENNES.ARMES)) {
+  const liste = stades.flatMap(([ilvl, texte], i) => texte.split(';').map((x) => { const [job, nom] = x.split(':'); return { job, nom, ilvl, stade: i }; }));
+  const trouves = await parNomAnglais('Item', 'Name', Object.fromEntries(liste.map((a, k) => [k, a.nom])), ['Name', 'Singular', 'Plural'], ',LevelItem.value');
+  for (const [k, a] of liste.entries()) {
+    const t = trouves[k];
+    if (!t) continue;
+    if (t.f.LevelItem?.value !== a.ilvl) console.warn(`niveau inattendu : ${a.nom} (${t.f.LevelItem?.value} au lieu de ${a.ilvl})`);
+    armesBrutes.push({ relique, job: a.job, stade: a.stade, f: t.f });
   }
 }
 
@@ -189,7 +251,7 @@ const donnees = enLangues((l) => {
   const armes = {};
   for (const a of armesBrutes) {
     const parJob = (armes[a.relique] ||= {});
-    (parJob[a.job] ||= RELIQUES[a.relique].map(() => []))[a.stade].push(formes(a.f, l));
+    (parJob[a.job] ||= Array.from({ length: NB_STADES[a.relique] }, () => []))[a.stade].push(formes(a.f, l));
   }
   // Le mot qui distingue une réplique d'apparence (« réplique », « replica », « replik »), en minuscules.
   const replique = nom(temoins.replique).toLowerCase().replace(nom(temoins.arme).toLowerCase(), '').replace(/[^\p{L}\s-]/gu, '').trim().split(/\s/)[0];
@@ -197,12 +259,16 @@ const donnees = enLangues((l) => {
     objets: Object.fromEntries(Object.entries(objets).map(([c, f]) => [c, formes(f, l)])),
     objetsCles: Object.fromEntries(Object.entries(objetsCles).map(([c, f]) => [c, formes(f, l)])),
     quetes: Object.fromEntries(Object.entries(quetes).map(([c, f]) => [c, nom(f)])),
-    missions: Object.fromEntries(Object.entries(missions).map(([c, f]) => [c, nom(f).replace(/\s*\(.*\)$/, '')])),
+    missions: Object.fromEntries(Object.entries(missions).map(([c, f]) => [c, nom(f).replace(/\s*\([^)]*\d[^)]*\)$/, '').replace(/\s+/g, ' ')])),
     monstres: Object.fromEntries(Object.entries(monstres).map(([c, f]) => [c, affichage(f[`Singular@lang(${l})`], f[`Pronoun@lang(${l})`])])),
     pnj: Object.fromEntries(Object.entries(pnj).map(([c, f]) => [c, affichage(f[`Singular@lang(${l})`], f[`Pronoun@lang(${l})`])])),
     lieux: Object.fromEntries(Object.entries(lieux).map(([c, f]) => [c, nom(f)])),
     classes: Object.fromEntries(Object.entries(classes).map(([c, f]) => [c, { nom: nom(f), abr: nom(f, 'Abbreviation') }])),
     emotes: Object.fromEntries(Object.entries(emotes).map(([c, f]) => [c, nom(f)])),
+    fates: Object.fromEntries(Object.entries(fates).map(([c, f]) => [c, nom(f)])),
+    departs: Object.fromEntries(Object.entries(departsBruts).map(([c, d]) => [c, {
+      pnj: affichage(d.pnj?.[`Singular@lang(${l})`], d.pnj?.[`Pronoun@lang(${l})`]), lieu: propre(d.lieu?.[`Name@lang(${l})`]), x: d.x, y: d.y,
+    }])),
     armes,
     replique,
     sourcesLunule: Object.fromEntries(Object.entries(SOURCES_LUNULE).map(([cle, noms]) => [cle, noms.map((en) => {

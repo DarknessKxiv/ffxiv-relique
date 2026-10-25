@@ -37,6 +37,24 @@
     artisanManderville: { lieu: 'radzAtHan', x: 12.1, y: 7.2 },
     alchimisteManderville: { lieu: 'radzAtHan', x: 12.1, y: 7.2 },
     geroltEw: { lieu: 'radzAtHan', x: 12.0, y: 7.1 },
+    // Reliques plus anciennes. `nom` : PNJ du même nom ailleurs (Gerolt change de place à chaque relique).
+    // Sans lieu : PNJ présent à plusieurs endroits, seul son nom s'affiche.
+    auriana: { lieu: 'morDhona', x: 22.7, y: 6.7 },
+    syndony: { lieu: 'morDhona', x: 22.7, y: 5.9 },
+    cristiana: { lieu: 'morDhona', x: 21.4, y: 5.5 },
+    blamprest: { lieu: 'idyllee', x: 8.0, y: 6.1 },
+    hubairtin: { lieu: 'thanalan_centre', x: 23.6, y: 13.8 },
+    ulan: { lieu: 'idyllee', x: 6.4, y: 4.7 },
+    gjusana: { lieu: 'morDhona', x: 22.9, y: 7.4 },
+    remon: { lieu: 'noscea_ouest', x: 34.3, y: 31.7 },
+    jalzahn: { lieu: 'sombrelinceul_nord', x: 29.6, y: 19.7 },
+    geroltArr: { nom: 'gerolt', lieu: 'sombrelinceul_nord', x: 30.3, y: 20.3 },
+    geroltAnemos: { nom: 'gerolt', lieu: 'eurekaAnemos', x: 18.0, y: 32.3 },
+    geroltPagos: { nom: 'gerolt', lieu: 'eurekaPagos', x: 4.3, y: 25.1 },
+    geroltPyros: { nom: 'gerolt', lieu: 'eurekaPyros', x: 15.3, y: 23.6 },
+    geroltHydatos: { nom: 'gerolt', lieu: 'eurekaHydatos', x: 21.5, y: 13.7 },
+    oiseleur: {},
+    receleur: {},
   };
 
   // Chaque fichier de js/reliques/ ajoute sa relique ici (clé : dt, ew…).

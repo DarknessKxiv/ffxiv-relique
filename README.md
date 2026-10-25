@@ -8,9 +8,13 @@ An overlay for **ACT + OverlayPlugin** that tracks the FFXIV relic weapons, job 
 |---|---|---|---|
 | Dawntrail (Lv. 100) | Phantom Weapons | Penumbrae iLvl 745 → Occultum iLvl 795 | 21 |
 | Endwalker (Lv. 90) | Manderville Weapons | Manderville iLvl 615 → Mandervillous iLvl 665 | 19 |
+| Shadowbringers (Lv. 80) | Resistance Weapons | Resistance iLvl 485 → Blade’s iLvl 535 | 17 |
+| Stormblood (Lv. 70) | Eurekan Weapons | Antiquated iLvl 290 → Physeos iLvl 405 | 15 |
+| Heavensward (Lv. 60) | Anima Weapons | Animated iLvl 170 → Lux iLvl 275 | 13 |
+| A Realm Reborn (Lv. 50) | Zodiac Weapons | Zodiac iLvl 80 → Zeta iLvl 135 | 10 |
 
 Pick the relic at the top of the overlay. It shows where you are and **what to do next**: the quest, the NPC and its coordinates, the items to gather and where to get them.
-Older relics (Shadowbringers, Stormblood, Heavensward, A Realm Reborn) are planned.
+For the older relics, the steps are the **current ones**: items that used to come from removed content or other currencies are shown with today’s sources, **farming first, then buying** (Allagan Tomestones of Poetics, company seals).
 
 ![Overlay preview](docs/apercu-en.png)
 
@@ -21,12 +25,12 @@ Older relics (Shadowbringers, Stormblood, Heavensward, A Realm Reborn) are plann
 ## Features
 
 - **Next step** for the tracked job: quest, NPC with coordinates, items to gather and where to get them.
-- **Every phase in detail**: for Dawntrail, demiatma, Aetherwell Array, crystal paste, phantom dispellers, knowledge crystal (65 objectives); for Endwalker, the Hildibrand quests and the tomestone exchanges.
+- **Every phase in detail**: for Dawntrail, demiatma, Aetherwell Array, crystal paste, phantom dispellers, knowledge crystal (65 objectives); for Endwalker, the Hildibrand quests and the tomestone exchanges; for older relics, every item to gather per weapon, the one-time quests and the duties to clear on each job.
 - **Where to farm**: which Occult Crescent FATEs and critical engagements give each demiatma or dispeller.
 - **Every job** tracked, with the tomestones left to spend for each.
 - **Automatic tracking** while you play (see below); the tracked job follows the job you are playing.
 - **Three display sizes**: full, compact (☰, no tabs) or **collapsed to a single bar** (▴) showing just the next step.
-- **Hidden automatically during dungeons, trials and raids** (on by default, can be turned off in Settings). It stays visible in the Occult Crescent.
+- **Hidden automatically during dungeons, trials and raids** (on by default, can be turned off in Settings). It stays visible in the Occult Crescent, Bozja, Zadnor and Eureka.
 - Progress saved **separately for each character**.
 
 ## Installation
@@ -71,6 +75,7 @@ While ACT is running, the overlay reads the game log that OverlayPlugin passes t
 | Relic weapons received | |
 | Quests accepted and completed | |
 | Knowledge crystal duties completed | |
+| Duties a weapon needs on its job (Anima steps…) | Trial books, materia, light, mahatma, density |
 
 Only **system messages** are used: what players type in chat is ignored.
 Everything detected shows up in the **Log** tab.

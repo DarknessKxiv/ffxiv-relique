@@ -78,7 +78,11 @@
   const QUETES = indexer((l) => NJ[l].quetes);
   const MISSIONS = indexer((l) => NJ[l].missions);
   const JOB_PAR_ID = Object.fromEntries(JOBS.map((j) => [String(j.id), j.code]));
-  const MISSIONS_MEMOIRE = new Set(Object.values(RELIQUES).flatMap((r) => r.memoires?.missions.flatMap((c) => c.cles) || []));
+  // Missions suivies : cristal de savoir (Dawntrail) et missions à faire avec un job pour une arme (reliques plus anciennes).
+  const MISSIONS_SUIVIES = new Set(Object.values(RELIQUES).flatMap((r) => [
+    ...(r.memoires?.missions.flatMap((c) => c.cles) || []),
+    ...r.phases.flatMap((p) => (p.arme?.taches || []).filter((t) => t.type === 'missions').flatMap((t) => t.groupes.flat())),
+  ]));
 
   let missionEnCours = null;   // nom (normalisé) de la mission commencée
   let derniereLangue = null;
@@ -98,7 +102,7 @@
     if (!missionEnCours) return [];
     const cle = MISSIONS[missionEnCours];
     missionEnCours = null;  // une seule validation par mission
-    return cle && MISSIONS_MEMOIRE.has(cle) ? [{ type: 'mission', cle }] : [];
+    return cle && MISSIONS_SUIVIES.has(cle) ? [{ type: 'mission', cle }] : [];
   }
 
   function langueVue(langue) {
