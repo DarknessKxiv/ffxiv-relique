@@ -43,6 +43,7 @@
     syndony: { lieu: 'morDhona', x: 22.7, y: 5.9 },
     cristiana: { lieu: 'morDhona', x: 21.4, y: 5.5 },
     blamprest: { lieu: 'idyllee', x: 8.0, y: 6.1 },
+    sabina: { lieu: 'idyllee', x: 5.7, y: 5.4 },
     hubairtin: { lieu: 'thanalan_centre', x: 23.6, y: 13.8 },
     ulan: { lieu: 'idyllee', x: 6.4, y: 4.7 },
     gjusana: { lieu: 'morDhona', x: 22.9, y: 7.4 },

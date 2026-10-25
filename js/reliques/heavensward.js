@@ -6,7 +6,8 @@
   // Seuls les jobs de Heavensward et d'avant ont une arme Anima.
   const AVEC = ['PLD', 'WAR', 'DRK', 'DRG', 'MNK', 'NIN', 'BRD', 'MCH', 'BLM', 'SMN', 'WHM', 'SCH', 'AST'];
   const CRAFT_GC = (cle) => ({ cle, qte: 4, detail: { cle: 'srcCraftGc', prix: 5000 } });
-  const NON_IDENTIFIE = (cle) => ({ cle, qte: 10, detail: { cle: 'srcGordias', mission: 'a1', pnj: 'auriana', prix: 150, monnaie: 'poetique' } });
+  // Objets non identifiés : 3 pièces de précision d'un raid Gordias s'échangent contre 1 (sinon achat, voir le conseil).
+  const NON_IDENTIFIE = ([cle, mission]) => ({ cle, qte: 10, detail: { cle: 'srcPrecision', mission, pnj: 'sabina' } });
 
   const phases = [
     { num: 0, titre: 'phasePrerequis', quetes: [{ id: 'hwMsq', texte: 'hwMsq' }] },
@@ -32,9 +33,9 @@
     {
       num: 3, ilvl: 210, quetes: [],
       arme: { quete: 'hwPropre', texte: 'hwAnima', taches: [
-        { type: 'compteurs', titre: 'titreNonIdentifies', elements: ['os', 'coquille', 'minerai', 'graines'].map(NON_IDENTIFIE) },
+        { type: 'compteurs', titre: 'titreNonIdentifies', elements: [['os', 'a1'], ['coquille', 'a2'], ['minerai', 'a3'], ['graines', 'a4']].map(NON_IDENTIFIE) },
         { type: 'compteurs', titre: 'titreArtisanat', elements: ['francisque', 'miroir', 'fleche', 'galette'].map(CRAFT_GC) },
-      ] },
+      ], conseils: [{ cle: 'hwNonIdentifies', pnj: 'auriana', prix: 150, monnaie: 'poetique' }] },
     },
     {
       num: 4, ilvl: 230, quetes: [],

@@ -59,16 +59,16 @@
       quetes: [
         { id: 'shbTerrain' }, { id: 'shbReves' },
         { id: 'shbPieces', texte: 'uneFois', taches: [
-          compteur('essieu', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 1, n: 1 }, { cle: 'srcSerie', mission: 'a1', n: 1 }]),
-          compteur('ressort', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 1, n: 2 }, { cle: 'srcSerie', mission: 'a4', n: 1 }]),
+          compteur('essieu', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 1, n: 1 }, { cle: 'srcRaid', mission: 'a1', n: 1 }]),
+          compteur('ressort', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 1, n: 2 }, { cle: 'srcRaid', mission: 'a4', n: 1 }]),
         ] },
         { id: 'shbHistoire', texte: 'uneFois', taches: [
-          compteur('livreRoyaume', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 2, n: 1 }, { cle: 'srcSerie', mission: 'o1', n: 1 }]),
-          compteur('livreFaille', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 2, n: 2 }, { cle: 'srcSerie', mission: 'o3', n: 1 }]),
+          compteur('livreRoyaume', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 2, n: 1 }, { cle: 'srcRaid', mission: 'o1', n: 1 }]),
+          compteur('livreFaille', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 2, n: 2 }, { cle: 'srcRaid', mission: 'o3', n: 1 }]),
         ] },
         { id: 'shbSouvenir', texte: 'uneFois', taches: [
-          compteur('memSombre', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 3, n: 1 }, { cle: 'srcSerie', mission: 'e1', n: 1 }]),
-          compteur('memCriard', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 3, n: 2 }, { cle: 'srcSerie', mission: 'e3', n: 1 }]),
+          compteur('memSombre', 30, [{ cle: 'srcEscarmouche', mission: 'zadnor', zone: 3, n: 1 }, { cle: 'srcRaid', mission: 'e1', n: 1 }]),
+          compteur('memCriard', 30, [{ cle: 'srcCeZone', mission: 'zadnor', zone: 3, n: 2 }, { cle: 'srcRaid', mission: 'e3', n: 1 }]),
         ] },
         { id: 'shbMarche' },
       ],

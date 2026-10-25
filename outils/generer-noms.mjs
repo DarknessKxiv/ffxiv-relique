@@ -282,6 +282,39 @@ const donnees = enLangues((l) => {
   };
 });
 
+// Objets dont le nom contient, en mot entier, celui d'une arme relique ou d'un objet suivi sans en être un
+// (« Forgotten Fragment of Tenacity », « Unfinished Bravura », « Mythrit-Dreizack »…) : la détection les retire
+// du message avant de chercher armes et objets, sinon ils passeraient pour eux.
+const NON_SUIVIS = ['memoquartz', 'poetique', 'gemme', 'couteau'];
+const normDetection = (s) => propre(s).normalize('NFC').replace(/[’`]/g, "'").replace(/\s+/g, ' ').toLowerCase();
+const motifMot = (s) => new RegExp(`(?<!\\p{L})${normDetection(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?!\\p{L})`, 'u');
+for (const l of LANGUES) {
+  const d = donnees[l];
+  const cibles = [...new Set([
+    ...Object.values(d.armes).flatMap((jobs) => Object.values(jobs).flat(2).map((f) => f.nom)),
+    ...Object.entries(d.objets).filter(([c]) => !NON_SUIVIS.includes(c)).map(([, f]) => f.nom),
+  ].filter(Boolean))];
+  const connus = new Set(cibles.map(normDetection));
+  const homonymes = new Map();
+  const examiner = (results, lot) => {
+    for (const r of results) {
+      const n = normDetection(r.fields.Name);
+      if (!n || connus.has(n) || n.includes(d.replique) || homonymes.has(n) || !lot.some((c) => motifMot(c).test(n))) continue;
+      homonymes.set(n, { nom: propre(r.fields.Name), sg: propre(r.fields.Singular), pl: propre(r.fields.Plural) });
+    }
+  };
+  const chercher = async (lot) => (await json(`${API}/search?sheets=Item&language=${l}&query=${encodeURIComponent(lot.map((n) => `Name~"${n.replace(/"/g, '\\"')}"`).join(' '))}&fields=Name,Singular,Plural&limit=500`)).results;
+  for (let i = 0; i < cibles.length; i += 10) {
+    const lot = cibles.slice(i, i + 10);
+    const results = await chercher(lot);
+    // Lot trop fourni pour une seule page : on reprend nom par nom.
+    if (results.length >= 500) for (const c of lot) examiner(await chercher([c]), [c]);
+    else examiner(results, lot);
+  }
+  d.homonymes = [...homonymes.values()];
+  console.log(`${l} : ${d.homonymes.length} homonyme(s)`);
+}
+
 writeFileSync(SORTIE, '// Fichier généré par outils/generer-noms.mjs : noms officiels du jeu (FR, EN, DE).\n'
   + `window.NOMS_JEU = ${JSON.stringify(donnees, null, 1)};\n`, 'utf8');
 console.log('écrit :', SORTIE);

@@ -692,6 +692,8 @@ window.NOMS_JEU = {
    "antitour": "L'Antitour",
    "hellsLid": "le Couvercle des enfers",
    "a1": "Alexander - Le Poing du Père",
+   "a2": "Alexander - Le Poignet du Père",
+   "a3": "Alexander - Le Bras du Père",
    "a4": "Alexander - Le Fardeau du Père",
    "o1": "Deltastice v1.0",
    "o3": "Deltastice v3.0",
@@ -791,7 +793,8 @@ window.NOMS_JEU = {
    "hubairtin": "Hubairtin",
    "remon": "Remon",
    "oiseleur": "sentinelle de l'expédition",
-   "receleur": "consigneur"
+   "receleur": "consigneur",
+   "sabina": "Sabina"
   },
   "lieux": {
    "tuliyollal": "Tuliyollal",
@@ -6107,7 +6110,464 @@ window.NOMS_JEU = {
    "defis": "Mission aléatoire : défis",
    "alliance": "Mission aléatoire : raids en alliance",
    "raidsNormaux": "Mission aléatoire : raids normaux"
-  }
+  },
+  "homonymes": [
+   {
+    "nom": "Ail du solstice",
+    "sg": "gousse d'ail du solstice",
+    "pl": "gousses d'ail du solstice"
+   },
+   {
+    "nom": "Épée élémentaire +1",
+    "sg": "épée élémentaire +1",
+    "pl": "épées élémentaires +1"
+   },
+   {
+    "nom": "Épée élémentaire +2",
+    "sg": "épée élémentaire +2",
+    "pl": "épées élémentaires +2"
+   },
+   {
+    "nom": "Bouclier élémentaire +1",
+    "sg": "bouclier élémentaire +1",
+    "pl": "boucliers élémentaires +1"
+   },
+   {
+    "nom": "Bouclier élémentaire +2",
+    "sg": "bouclier élémentaire +2",
+    "pl": "boucliers élémentaires +2"
+   },
+   {
+    "nom": "Hache de combat élémentaire +1",
+    "sg": "hache de combat élémentaire +1",
+    "pl": "haches de combat élémentaires +1"
+   },
+   {
+    "nom": "Hache de combat élémentaire +2",
+    "sg": "hache de combat élémentaire +2",
+    "pl": "haches de combat élémentaires +2"
+   },
+   {
+    "nom": "Fendoir élémentaire +1",
+    "sg": "fendoir élémentaire +1",
+    "pl": "fendoirs élémentaires +1"
+   },
+   {
+    "nom": "Fendoir élémentaire +2",
+    "sg": "fendoir élémentaire +2",
+    "pl": "fendoirs élémentaires +2"
+   },
+   {
+    "nom": "Lance élémentaire +1",
+    "sg": "lance élémentaire +1",
+    "pl": "lances élémentaires +1"
+   },
+   {
+    "nom": "Lance élémentaire +2",
+    "sg": "lance élémentaire +2",
+    "pl": "lances élémentaires +2"
+   },
+   {
+    "nom": "Poings élémentaires +1",
+    "sg": "paire de poings élémentaires +1",
+    "pl": "paires de poings élémentaires +1"
+   },
+   {
+    "nom": "Poings élémentaires +2",
+    "sg": "paire de poings élémentaires +2",
+    "pl": "paires de poings élémentaires +2"
+   },
+   {
+    "nom": "Lame élémentaire +1",
+    "sg": "lame élémentaire +1",
+    "pl": "lames élémentaires +1"
+   },
+   {
+    "nom": "Lame élémentaire +2",
+    "sg": "lame élémentaire +2",
+    "pl": "lames élémentaires +2"
+   },
+   {
+    "nom": "Arc-harpe élémentaire +1",
+    "sg": "arc-harpe élémentaire +1",
+    "pl": "arcs-harpes élémentaires +1"
+   },
+   {
+    "nom": "Couteaux élémentaires +1",
+    "sg": "paire de couteaux élémentaires +1",
+    "pl": "paires de couteaux élémentaires +1"
+   },
+   {
+    "nom": "Arc-harpe élémentaire +2",
+    "sg": "arc-harpe élémentaire +2",
+    "pl": "arcs-harpes élémentaires +2"
+   },
+   {
+    "nom": "Couteaux élémentaires +2",
+    "sg": "paire de couteaux élémentaires +2",
+    "pl": "paires de couteaux élémentaires +2"
+   },
+   {
+    "nom": "Haquebute élémentaire +1",
+    "sg": "haquebute élémentaire +1",
+    "pl": "haquebutes élémentaires +1"
+   },
+   {
+    "nom": "Haquebute élémentaire +2",
+    "sg": "haquebute élémentaire +2",
+    "pl": "haquebutes élémentaires +2"
+   },
+   {
+    "nom": "Grimoire élémentaire +1",
+    "sg": "grimoire élémentaire +1",
+    "pl": "grimoires élémentaires +1"
+   },
+   {
+    "nom": "Grimoire élémentaire +2",
+    "sg": "grimoire élémentaire +2",
+    "pl": "grimoires élémentaires +2"
+   },
+   {
+    "nom": "Sceptre élémentaire +1",
+    "sg": "sceptre élémentaire +1",
+    "pl": "sceptres élémentaires +1"
+   },
+   {
+    "nom": "Sceptre élémentaire +2",
+    "sg": "sceptre élémentaire +2",
+    "pl": "sceptres élémentaires +2"
+   },
+   {
+    "nom": "Canne élémentaire +1",
+    "sg": "canne élémentaire +1",
+    "pl": "cannes élémentaires +1"
+   },
+   {
+    "nom": "Estoc élémentaire +1",
+    "sg": "estoc élémentaire +1",
+    "pl": "estocs élémentaires +1"
+   },
+   {
+    "nom": "Canne élémentaire +2",
+    "sg": "canne élémentaire +2",
+    "pl": "cannes élémentaires +2"
+   },
+   {
+    "nom": "Estoc élémentaire +2",
+    "sg": "estoc élémentaire +2",
+    "pl": "estocs élémentaires +2"
+   },
+   {
+    "nom": "Codex élémentaire +1",
+    "sg": "codex élémentaire +1",
+    "pl": "codex élémentaires +1"
+   },
+   {
+    "nom": "Codex élémentaire +2",
+    "sg": "codex élémentaire +2",
+    "pl": "codex élémentaires +2"
+   },
+   {
+    "nom": "Planisphère élémentaire +1",
+    "sg": "planisphère élémentaire +1",
+    "pl": "planisphères élémentaires +1"
+   },
+   {
+    "nom": "Planisphère élémentaire +2",
+    "sg": "planisphère élémentaire +2",
+    "pl": "planisphères élémentaires +2"
+   },
+   {
+    "nom": "Almace zêta",
+    "sg": "Almace zêta",
+    "pl": "Almace zêta"
+   },
+   {
+    "nom": "Ancile zêta",
+    "sg": "Ancile zêta",
+    "pl": "Ancile zêta"
+   },
+   {
+    "nom": "Ukonvasara zêta",
+    "sg": "Ukonvasara zêta",
+    "pl": "Ukonvasara zêta"
+   },
+   {
+    "nom": "Rhongomiant zêta",
+    "sg": "Rhongomiant zêta",
+    "pl": "Rhongomiant zêta"
+   },
+   {
+    "nom": "Nothung zêta",
+    "sg": "Nothung zêta",
+    "pl": "Nothung zêta"
+   },
+   {
+    "nom": "Verethragna zêta",
+    "sg": "paire de Verethragna zêta",
+    "pl": "paires de Verethragna zêta"
+   },
+   {
+    "nom": "Kannagi zêta",
+    "sg": "paire de Kannagi zêta",
+    "pl": "paires de Kannagi zêta"
+   },
+   {
+    "nom": "Gandiva zêta",
+    "sg": "Gandiva zêta",
+    "pl": "Gandiva zêta"
+   },
+   {
+    "nom": "Armageddon zêta",
+    "sg": "Armageddon zêta",
+    "pl": "Armageddon zêta"
+   },
+   {
+    "nom": "Hvergelmir zêta",
+    "sg": "Hvergelmir zêta",
+    "pl": "Hvergelmir zêta"
+   },
+   {
+    "nom": "Draconomicon zêta",
+    "sg": "Draconomicon zêta",
+    "pl": "Draconomicon zêta"
+   },
+   {
+    "nom": "Majestas zêta",
+    "sg": "Majestas zêta",
+    "pl": "Majestas zêta"
+   },
+   {
+    "nom": "Tetrabiblos zêta",
+    "sg": "Tetrabiblos zêta",
+    "pl": "Tetrabiblos zêta"
+   },
+   {
+    "nom": "Bouclier saint Ultima",
+    "sg": "Bouclier saint Ultima",
+    "pl": "Boucliers saints Ultima"
+   },
+   {
+    "nom": "Vouge Canopus",
+    "sg": "vouge Canopus",
+    "pl": "vouges Canopus"
+   },
+   {
+    "nom": "Curtana Ultima",
+    "sg": "Curtana Ultima",
+    "pl": "Curtana Ultima"
+   },
+   {
+    "nom": "Deneb zêta",
+    "sg": "Deneb zêta",
+    "pl": "Deneb zêta"
+   },
+   {
+    "nom": "Guisarme Canopus",
+    "sg": "guisarme Canopus",
+    "pl": "guisarmes Canopus"
+   },
+   {
+    "nom": "Bouclier Canopus",
+    "sg": "bouclier Canopus",
+    "pl": "boucliers Canopus"
+   },
+   {
+    "nom": "Curtana inachevée",
+    "sg": "Curtana inachevée",
+    "pl": "Curtana inachevées"
+   },
+   {
+    "nom": "Stylets de Canopus",
+    "sg": "paire de stylets de Canopus",
+    "pl": "paires de stylets de Canopus"
+   },
+   {
+    "nom": "Parchemin stellaire du Bouclier saint",
+    "sg": "parchemin stellaire du Bouclier saint",
+    "pl": "parchemins stellaires du Bouclier saint"
+   },
+   {
+    "nom": "Bouclier Canopus de Dzemael",
+    "sg": "bouclier Canopus de Dzemael",
+    "pl": "boucliers Canopus de Dzemael"
+   },
+   {
+    "nom": "Parchemin stellaire de Curtana",
+    "sg": "parchemin stellaire de Curtana",
+    "pl": "parchemins stellaires de Curtana"
+   },
+   {
+    "nom": "Bravura Ultima",
+    "sg": "Bravura Ultima",
+    "pl": "Bravura Ultima"
+   },
+   {
+    "nom": "Ragnarok miniature",
+    "sg": "Ragnarok miniature",
+    "pl": "Ragnarok miniatures"
+   },
+   {
+    "nom": "Rouleau “Ragnarok”",
+    "sg": "rouleau d'orchestrion “Ragnarok”",
+    "pl": "rouleaux d'orchestrion “Ragnarok”"
+   },
+   {
+    "nom": "Bravura inachevée",
+    "sg": "Bravura inachevée",
+    "pl": "Bravura inachevées"
+   },
+   {
+    "nom": "Parchemin stellaire de Bravura",
+    "sg": "parchemin stellaire de Bravura",
+    "pl": "parchemins stellaires de Bravura"
+   },
+   {
+    "nom": "Sphairai Ultima",
+    "sg": "paire de Sphairai Ultima",
+    "pl": "paires de Sphairai Ultima"
+   },
+   {
+    "nom": "Gae bolg Ultima",
+    "sg": "Gae bolg Ultima",
+    "pl": "Gae bolg Ultima"
+   },
+   {
+    "nom": "Poisson Sphairai",
+    "sg": "poisson Sphairai",
+    "pl": "poissons Sphairai"
+   },
+   {
+    "nom": "Gae bolg inachevé",
+    "sg": "Gae bolg inachevé",
+    "pl": "Gae bolg inachevé"
+   },
+   {
+    "nom": "Sphairai inachevés",
+    "sg": "paire de Sphairai inachevés",
+    "pl": "paires de Sphairai inachevés"
+   },
+   {
+    "nom": "Parchemin stellaire du Gae bolg",
+    "sg": "parchemin stellaire du Gae bolg",
+    "pl": "parchemins stellaires du Gae bolg"
+   },
+   {
+    "nom": "Parchemin stellaire des Sphairai",
+    "sg": "parchemin stellaire des Sphairai",
+    "pl": "parchemins stellaires des Sphairai"
+   },
+   {
+    "nom": "Yoshimitsu Ultima",
+    "sg": "paire de Yoshimitsu Ultima",
+    "pl": "paires de Yoshimitsu Ultima"
+   },
+   {
+    "nom": "Yoshimitsu inachevés",
+    "sg": "paire de Yoshimitsu inachevés",
+    "pl": "paires de Yoshimitsu inachevés"
+   },
+   {
+    "nom": "Parchemins stellaires des Yoshimitsu",
+    "sg": "parchemin stellaire des Yoshimitsu",
+    "pl": "parchemins stellaires des Yoshimitsu"
+   },
+   {
+    "nom": "Arc d'Artémis Ultima",
+    "sg": "Arc d'Artémis Ultima",
+    "pl": "Arcs d'Artémis Ultima"
+   },
+   {
+    "nom": "Arc d'Artémis inachevé",
+    "sg": "Arc d'Artémis inachevé",
+    "pl": "Arcs d'Artémis inachevés"
+   },
+   {
+    "nom": "Parchemin stellaire de l'Arc d'Artémis",
+    "sg": "parchemin stellaire de l'Arc d'Artémis",
+    "pl": "parchemins stellaires de l'Arc d'Artémis"
+   },
+   {
+    "nom": "Sceptre étoilé Ultima",
+    "sg": "Sceptre étoilé Ultima",
+    "pl": "Sceptres étoilés Ultima"
+   },
+   {
+    "nom": "Sceptre étoilé inachevé",
+    "sg": "Sceptre étoilé inachevé",
+    "pl": "Sceptres étoilés inachevés"
+   },
+   {
+    "nom": "Parchemin stellaire du Sceptre étoilé",
+    "sg": "parchemin stellaire du Sceptre étoilé",
+    "pl": "parchemins stellaires du Sceptre étoilé"
+   },
+   {
+    "nom": "Œilvert Ultima",
+    "sg": "Œilvert Ultima",
+    "pl": "Œilvert Ultima"
+   },
+   {
+    "nom": "Œilvert inachevé",
+    "sg": "Œilvert inachevé",
+    "pl": "Œilvert inachevés"
+   },
+   {
+    "nom": "Thyrse Ultima",
+    "sg": "Thyrse Ultima",
+    "pl": "Thyrses Ultima"
+   },
+   {
+    "nom": "Thyrse inachevé",
+    "sg": "Thyrse inachevé",
+    "pl": "Thyrses inachevés"
+   },
+   {
+    "nom": "Parchemin stellaire d'Œilvert",
+    "sg": "parchemin stellaire d'Œilvert",
+    "pl": "parchemins stellaires d'Œilvert"
+   },
+   {
+    "nom": "Parchemin stellaire du Thyrse",
+    "sg": "parchemin stellaire du Thyrse",
+    "pl": "parchemins stellaires du Thyrse"
+   },
+   {
+    "nom": "“Contes d'aventures : Chroniques de l'apocalypse”",
+    "sg": "exemplaire des “Contes d'aventures : Chroniques de l'apocalypse”",
+    "pl": "exemplaires des “Contes d'aventures : Chroniques de l'apocalypse”"
+   },
+   {
+    "nom": "Omnilex Ultima",
+    "sg": "Omnilex Ultima",
+    "pl": "Omnilex Ultima"
+   },
+   {
+    "nom": "Omnilex inachevé",
+    "sg": "Omnilex inachevé",
+    "pl": "Omnilex inachevés"
+   },
+   {
+    "nom": "Parchemin stellaire d'Omnilex",
+    "sg": "parchemin stellaire d'Omnilex",
+    "pl": "parchemins stellaires d'Omnilex"
+   },
+   {
+    "nom": "Cristal instable de feu",
+    "sg": "cristal instable de feu",
+    "pl": "cristaux instables de feu"
+   },
+   {
+    "nom": "Huile isolante sharlayanaise",
+    "sg": "pot d'huile isolante sharlayanaise",
+    "pl": "pots d'huile isolante sharlayanaise"
+   },
+   {
+    "nom": "Alexandrite immaculée",
+    "sg": "alexandrite immaculée",
+    "pl": "alexandrites immaculées"
+   }
+  ]
  },
  "en": {
   "objets": {
@@ -6801,6 +7261,8 @@ window.NOMS_JEU = {
    "antitour": "the Antitower",
    "hellsLid": "Hells' Lid",
    "a1": "Alexander - The Fist of the Father",
+   "a2": "Alexander - The Cuff of the Father",
+   "a3": "Alexander - The Arm of the Father",
    "a4": "Alexander - The Burden of the Father",
    "o1": "Deltascape V1.0",
    "o3": "Deltascape V3.0",
@@ -6900,7 +7362,8 @@ window.NOMS_JEU = {
    "hubairtin": "Hubairtin",
    "remon": "Remon",
    "oiseleur": "expedition birdwatcher",
-   "receleur": "Calamity salvager"
+   "receleur": "Calamity salvager",
+   "sabina": "Sabina"
   },
   "lieux": {
    "tuliyollal": "Tuliyollal",
@@ -12216,7 +12679,489 @@ window.NOMS_JEU = {
    "defis": "Duty Roulette: Trials",
    "alliance": "Duty Roulette: Alliance Raids",
    "raidsNormaux": "Duty Roulette: Normal Raids"
-  }
+  },
+  "homonymes": [
+   {
+    "nom": "Tenacity Orchestrion Roll",
+    "sg": "Tenacity orchestrion roll",
+    "pl": "Tenacity orchestrion rolls"
+   },
+   {
+    "nom": "Forgotten Fragment of Tenacity",
+    "sg": "forgotten fragment of tenacity",
+    "pl": "forgotten fragments of tenacity"
+   },
+   {
+    "nom": "Carrots of Brilliance Orchestrion Roll",
+    "sg": "Carrots of Brilliance orchestrion roll",
+    "pl": "Carrots of Brilliance orchestrion rolls"
+   },
+   {
+    "nom": "Solstice Ingot",
+    "sg": "solstice ingot",
+    "pl": "solstice ingots"
+   },
+   {
+    "nom": "Solstice Stone",
+    "sg": "solstice stone",
+    "pl": "solstice stones"
+   },
+   {
+    "nom": "Solstice Garlic",
+    "sg": "bulb of solstice garlic",
+    "pl": "bulbs of solstice garlic"
+   },
+   {
+    "nom": "Elemental Shield +1",
+    "sg": "elemental shield +1",
+    "pl": "elemental shields +1"
+   },
+   {
+    "nom": "Elemental Shield +2",
+    "sg": "elemental shield +2",
+    "pl": "elemental shields +2"
+   },
+   {
+    "nom": "Elemental Sword +1",
+    "sg": "elemental sword +1",
+    "pl": "elemental swords +1"
+   },
+   {
+    "nom": "Elemental Sword +2",
+    "sg": "elemental sword +2",
+    "pl": "elemental swords +2"
+   },
+   {
+    "nom": "Elemental Guillotine +1",
+    "sg": "elemental guillotine +1",
+    "pl": "elemental guillotines +1"
+   },
+   {
+    "nom": "Elemental Guillotine +2",
+    "sg": "elemental guillotine +2",
+    "pl": "elemental guillotines +2"
+   },
+   {
+    "nom": "Elemental Battleaxe +1",
+    "sg": "elemental battleaxe +1",
+    "pl": "elemental battleaxes +1"
+   },
+   {
+    "nom": "Elemental Battleaxe +2",
+    "sg": "elemental battleaxe +2",
+    "pl": "elemental battleaxes +2"
+   },
+   {
+    "nom": "Elemental Lance +1",
+    "sg": "elemental lance +1",
+    "pl": "elemental lances +1"
+   },
+   {
+    "nom": "Elemental Lance +2",
+    "sg": "elemental lance +2",
+    "pl": "elemental lances +2"
+   },
+   {
+    "nom": "Elemental Knuckles +1",
+    "sg": "pair of elemental knuckles +1",
+    "pl": "pairs of elemental knuckles +1"
+   },
+   {
+    "nom": "Elemental Knuckles +2",
+    "sg": "pair of elemental knuckles +2",
+    "pl": "pairs of elemental knuckles +2"
+   },
+   {
+    "nom": "Elemental Blade +1",
+    "sg": "elemental blade +1",
+    "pl": "elemental blades +1"
+   },
+   {
+    "nom": "Elemental Blade +2",
+    "sg": "elemental blade +2",
+    "pl": "elemental blades +2"
+   },
+   {
+    "nom": "Elemental Harp Bow +1",
+    "sg": "elemental harp bow +1",
+    "pl": "elemental harp bows +1"
+   },
+   {
+    "nom": "Elemental Harp Bow +2",
+    "sg": "elemental harp bow +2",
+    "pl": "elemental harp bows +2"
+   },
+   {
+    "nom": "Elemental Knives +1",
+    "sg": "pair of elemental knives +1",
+    "pl": "pairs of elemental knives +1"
+   },
+   {
+    "nom": "Elemental Knives +2",
+    "sg": "pair of elemental knives +2",
+    "pl": "pairs of elemental knives +2"
+   },
+   {
+    "nom": "Elemental Handgonne +1",
+    "sg": "elemental handgonne +1",
+    "pl": "elemental handgonnes +1"
+   },
+   {
+    "nom": "Elemental Handgonne +2",
+    "sg": "elemental handgonne +2",
+    "pl": "elemental handgonnes +2"
+   },
+   {
+    "nom": "Elemental Grimoire +1",
+    "sg": "elemental grimoire +1",
+    "pl": "elemental grimoires +1"
+   },
+   {
+    "nom": "Elemental Grimoire +2",
+    "sg": "elemental grimoire +2",
+    "pl": "elemental grimoires +2"
+   },
+   {
+    "nom": "Elemental Rod +1",
+    "sg": "elemental rod +1",
+    "pl": "elemental rods +1"
+   },
+   {
+    "nom": "Elemental Rod +2",
+    "sg": "elemental rod +2",
+    "pl": "elemental rods +2"
+   },
+   {
+    "nom": "Elemental Cane +1",
+    "sg": "elemental cane +1",
+    "pl": "elemental canes +1"
+   },
+   {
+    "nom": "Elemental Tuck +1",
+    "sg": "elemental tuck +1",
+    "pl": "elemental tucks +1"
+   },
+   {
+    "nom": "Elemental Cane +2",
+    "sg": "elemental cane +2",
+    "pl": "elemental canes +2"
+   },
+   {
+    "nom": "Elemental Tuck +2",
+    "sg": "elemental tuck +2",
+    "pl": "elemental tucks +2"
+   },
+   {
+    "nom": "Elemental Codex +1",
+    "sg": "elemental codex +1",
+    "pl": "elemental codices +1"
+   },
+   {
+    "nom": "Elemental Codex +2",
+    "sg": "elemental codex +2",
+    "pl": "elemental codices +2"
+   },
+   {
+    "nom": "Elemental Astrometer +1",
+    "sg": "elemental astrometer +1",
+    "pl": "elemental astrometers +1"
+   },
+   {
+    "nom": "Elemental Astrometer +2",
+    "sg": "elemental astrometer +2",
+    "pl": "elemental astrometers +2"
+   },
+   {
+    "nom": "Ultimate Almace",
+    "sg": "ultimate Almace",
+    "pl": "ultimate Almace"
+   },
+   {
+    "nom": "Ultimate Ancile",
+    "sg": "ultimate Ancile",
+    "pl": "ultimate Ancile"
+   },
+   {
+    "nom": "Ultimate Ukonvasara",
+    "sg": "ultimate Ukonvasara",
+    "pl": "ultimate Ukonvasara"
+   },
+   {
+    "nom": "Ultimate Rhongomiant",
+    "sg": "ultimate Rhongomiant",
+    "pl": "ultimate Rhongomiant"
+   },
+   {
+    "nom": "Ultimate Nothung",
+    "sg": "ultimate Nothung",
+    "pl": "ultimate Nothung"
+   },
+   {
+    "nom": "Ultimate Verethragna",
+    "sg": "pair of ultimate Verethragna",
+    "pl": "pairs of ultimate Verethragna"
+   },
+   {
+    "nom": "Ultimate Kannagi",
+    "sg": "pair of ultimate Kannagi",
+    "pl": "pairs of ultimate Kannagi"
+   },
+   {
+    "nom": "Ultimate Gandiva",
+    "sg": "ultimate Gandiva",
+    "pl": "ultimate Gandiva"
+   },
+   {
+    "nom": "Ultimate Armageddon",
+    "sg": "ultimate Armageddon",
+    "pl": "ultimate Armageddon"
+   },
+   {
+    "nom": "Ultimate Hvergelmir",
+    "sg": "ultimate Hvergelmir",
+    "pl": "ultimate Hvergelmir"
+   },
+   {
+    "nom": "Ultimate Draconomicon",
+    "sg": "copy of the ultimate Draconomicon",
+    "pl": "copies of the ultimate Draconomicon"
+   },
+   {
+    "nom": "Ultimate Majestas",
+    "sg": "ultimate Majestas",
+    "pl": "ultimate Majestas"
+   },
+   {
+    "nom": "Ultimate Tetrabiblos",
+    "sg": "copy of the ultimate Tetrabiblos",
+    "pl": "copies of the ultimateTetrabiblos"
+   },
+   {
+    "nom": "Holy Shield Ultima",
+    "sg": "Holy Shield Ultima",
+    "pl": "Holy Shields Ultima"
+   },
+   {
+    "nom": "Canopus Bill",
+    "sg": "Canopus bill",
+    "pl": "Canopus bills"
+   },
+   {
+    "nom": "Canopus Shield",
+    "sg": "Canopus shield",
+    "pl": "Canopus shields"
+   },
+   {
+    "nom": "Curtana Ultima",
+    "sg": "Curtana Ultima",
+    "pl": "Curtana Ultima"
+   },
+   {
+    "nom": "Canopus Guisarme",
+    "sg": "Canopus guisarme",
+    "pl": "Canopus guisarmes"
+   },
+   {
+    "nom": "Sphere Scroll: Holy Shield",
+    "sg": "sphere scroll: Holy Shield",
+    "pl": "sphere scrolls: Holy Shield"
+   },
+   {
+    "nom": "Canopus Stilettos",
+    "sg": "pair of canopus stilettos",
+    "pl": "pairs of canopus stilettos"
+   },
+   {
+    "nom": "Unfinished Curtana",
+    "sg": "unfinished Curtana",
+    "pl": "unfinished Curtana"
+   },
+   {
+    "nom": "Ultimate Deneb",
+    "sg": "ultimate Deneb",
+    "pl": "ultimate Deneb"
+   },
+   {
+    "nom": "Vigil Canopus Shield",
+    "sg": "Vigil Canopus shield",
+    "pl": "Vigil Canopus shields"
+   },
+   {
+    "nom": "Sphere Scroll: Curtana",
+    "sg": "sphere scroll: Curtana",
+    "pl": "sphere scrolls: Curtana"
+   },
+   {
+    "nom": "Bravura Ultima",
+    "sg": "Bravura Ultima",
+    "pl": "Bravura Ultima"
+   },
+   {
+    "nom": "Wind-up Ragnarok",
+    "sg": "wind-up Ragnarok",
+    "pl": "wind-up Ragnaroks"
+   },
+   {
+    "nom": "Unfinished Bravura",
+    "sg": "unfinished Bravura",
+    "pl": "unfinished Bravura"
+   },
+   {
+    "nom": "Ragnarok Orchestrion Roll",
+    "sg": "Ragnarok orchestrion roll",
+    "pl": "Ragnarok orchestrion rolls"
+   },
+   {
+    "nom": "Sphere Scroll: Bravura",
+    "sg": "sphere scroll: Bravura",
+    "pl": "sphere scrolls: Bravura"
+   },
+   {
+    "nom": "Lake Sphairai",
+    "sg": "lake Sphairai",
+    "pl": "lake Sphairai"
+   },
+   {
+    "nom": "Sphairai Ultima",
+    "sg": "pair of Sphairai Ultima",
+    "pl": "pairs of Sphairai Ultima"
+   },
+   {
+    "nom": "Gae Bolg Ultima",
+    "sg": "Gae Bolg Ultima",
+    "pl": "Gae Bolg Ultima"
+   },
+   {
+    "nom": "Unfinished Sphairai",
+    "sg": "pair of unfinished Sphairai",
+    "pl": "pairs of unfinished Sphairai"
+   },
+   {
+    "nom": "Unfinished Gae Bolg",
+    "sg": "unfinished Gae Bolg",
+    "pl": "unfinished Gae Bolg"
+   },
+   {
+    "nom": "Sphere Scroll: Sphairai",
+    "sg": "sphere scroll: Sphairai",
+    "pl": "sphere scrolls: Sphairai"
+   },
+   {
+    "nom": "Sphere Scroll: Gae Bolg",
+    "sg": "sphere scroll: Gae Bolg",
+    "pl": "sphere scrolls: Gae Bolg"
+   },
+   {
+    "nom": "Yoshimitsu Ultima",
+    "sg": "pair of Yoshimitsu Ultima",
+    "pl": "pairs of Yoshimitsu Ultima"
+   },
+   {
+    "nom": "Unfinished Yoshimitsu",
+    "sg": "pair of unfinished Yoshimitsu",
+    "pl": "pairs of unfinished Yoshimitsu"
+   },
+   {
+    "nom": "Sphere Scroll: Yoshimitsu",
+    "sg": "sphere scroll: Yoshimitsu",
+    "pl": "sphere scrolls: Yoshimitsu"
+   },
+   {
+    "nom": "Artemis Bow Ultima",
+    "sg": "the Artemis Bow Ultima",
+    "pl": "the Artemis Bow Ultima"
+   },
+   {
+    "nom": "Unfinished Artemis Bow",
+    "sg": "unfinished Artemis Bow",
+    "pl": "unfinished Artemis Bows"
+   },
+   {
+    "nom": "Sphere Scroll: Artemis Bow",
+    "sg": "sphere scroll: Artemis Bow",
+    "pl": "sphere scrolls: Artemis Bow"
+   },
+   {
+    "nom": "Stardust Rod Ultima",
+    "sg": "Stardust Rod Ultima",
+    "pl": "Stardust Rods Ultima"
+   },
+   {
+    "nom": "Unfinished Stardust Rod",
+    "sg": "unfinished Stardust Rod",
+    "pl": "unfinished Stardust Rods"
+   },
+   {
+    "nom": "Sphere Scroll: Stardust Rod",
+    "sg": "sphere scroll: Stardust Rod",
+    "pl": "sphere scrolls: Stardust Rod"
+   },
+   {
+    "nom": "The Veil of Wiyu Ultima",
+    "sg": "the Veil of Wiyu Ultima",
+    "pl": "the Veil of Wiyu Ultima"
+   },
+   {
+    "nom": "Sphere Scroll: The Veil of Wiyu",
+    "sg": "sphere scroll: the Veil of Wiyu",
+    "pl": "sphere scrolls: the Veil of Wiyu"
+   },
+   {
+    "nom": "Thyrus Ultima",
+    "sg": "Thyrus Ultima",
+    "pl": "Thyrus Ultima"
+   },
+   {
+    "nom": "Unfinished Thyrus",
+    "sg": "unfinished Thyrus",
+    "pl": "unfinished Thyrus"
+   },
+   {
+    "nom": "Sphere Scroll: Thyrus",
+    "sg": "sphere scroll: Thyrus",
+    "pl": "sphere scrolls: Thyrus"
+   },
+   {
+    "nom": "Nirvana Crab",
+    "sg": "nirvana crab",
+    "pl": "nirvana crabs"
+   },
+   {
+    "nom": "Omnilex Ultima",
+    "sg": "copy of the Omnilex Ultima",
+    "pl": "copies of the Omnilex Ultima"
+   },
+   {
+    "nom": "Unfinished Omnilex",
+    "sg": "unfinished copy of the Omnilex",
+    "pl": "unfinished copies of the Omnilex"
+   },
+   {
+    "nom": "Sphere Scroll: Omnilex",
+    "sg": "sphere scroll: Omnilex",
+    "pl": "sphere scrolls: Omnilex"
+   },
+   {
+    "nom": "Smoldering Protean Crystal",
+    "sg": "smoldering protean crystal",
+    "pl": "smoldering protean crystals"
+   },
+   {
+    "nom": "Sharlayan Aether Oil",
+    "sg": "pot of Sharlayan aether oil",
+    "pl": "pots of Sharlayan aether oil"
+   },
+   {
+    "nom": "Deep-sea Umbrite",
+    "sg": "lump of deep-sea umbrite",
+    "pl": "lumps of deep-sea umbrite"
+   },
+   {
+    "nom": "Flawless Alexandrite",
+    "sg": "piece of flawless alexandrite",
+    "pl": "pieces of flawless alexandrite"
+   }
+  ]
  },
  "de": {
   "objets": {
@@ -12910,6 +13855,8 @@ window.NOMS_JEU = {
    "antitour": "Antiturm",
    "hellsLid": "Höllenspund",
    "a1": "Alexander - Faust des Vaters",
+   "a2": "Alexander - Elle des Vaters",
+   "a3": "Alexander - Arm des Vaters",
    "a4": "Alexander - Last des Vaters",
    "o1": "Deltametrie 1.0",
    "o3": "Deltametrie 3.0",
@@ -13009,7 +13956,8 @@ window.NOMS_JEU = {
    "hubairtin": "Hubairtin",
    "remon": "Remon",
    "oiseleur": "Expeditionswächter",
-   "receleur": "Fundsachen-Verwalter"
+   "receleur": "Fundsachen-Verwalter",
+   "sabina": "Sabina"
   },
   "lieux": {
    "tuliyollal": "Tuliyollal",
@@ -18325,6 +19273,518 @@ window.NOMS_JEU = {
    "defis": "Zufallsinhalt: Prüfung",
    "alliance": "Zufallsinhalt: Allianz-Raid",
    "raidsNormaux": "Zufallsinhalt: Normaler Raid"
-  }
+  },
+  "homonymes": [
+   {
+    "nom": "Kinna-Dreizack",
+    "sg": "Kinna-Dreizack",
+    "pl": "Kinna-Dreizacke"
+   },
+   {
+    "nom": "Omega-Dreizack",
+    "sg": "Omega-Dreizack",
+    "pl": "Omega-Dreizacke"
+   },
+   {
+    "nom": "Mythrit-Dreizack",
+    "sg": "Mythrit-Dreizack",
+    "pl": "Mythrit-Dreizack"
+   },
+   {
+    "nom": "Molybdän-Dreizack",
+    "sg": "Molybdän-Dreizack",
+    "pl": "Molybdän-Dreizacke"
+   },
+   {
+    "nom": "Gallenerz-Dreizack",
+    "sg": "Gallenerz-Dreizack",
+    "pl": "Gallenerz-Dreizacke"
+   },
+   {
+    "nom": "Adamantit-Dreizack",
+    "sg": "Adamantit-Dreizack",
+    "pl": "Adamantit-Dreizacke"
+   },
+   {
+    "nom": "Edelstahl-Dreizack",
+    "sg": "Edelstahl-Dreizack",
+    "pl": "Edelstahl-Dreizacke"
+   },
+   {
+    "nom": "Düsterwolf-Dreizack",
+    "sg": "Düsterwolf-Dreizack",
+    "pl": "Düsterwolf-Dreizacke"
+   },
+   {
+    "nom": "Gordischer Dreizack",
+    "sg": "gordisch[a] Dreizack",
+    "pl": "gordisch[a] Dreizacke"
+   },
+   {
+    "nom": "Metallener Dreizack",
+    "sg": "metallen[a] Dreizack",
+    "pl": "metallen[a] Dreizacke"
+   },
+   {
+    "nom": "Asphodelos-Dreizack",
+    "sg": "Asphodelos-Dreizack",
+    "pl": "Asphodelos-Dreizacke"
+   },
+   {
+    "nom": "Geläuterter Dreizack",
+    "sg": "geläutert[a] Dreizack",
+    "pl": "geläutert[a] Dreizacke"
+   },
+   {
+    "nom": "Señor Kaktor-Dreizack",
+    "sg": "Señor Kaktor-Dreizack",
+    "pl": "Señor Kaktor-Dreizacke"
+   },
+   {
+    "nom": "Neo-Ishgarder Dreizack",
+    "sg": "Neo-Ishgarder Dreizack",
+    "pl": "Neo-Ishgarder Dreizacke"
+   },
+   {
+    "nom": "Dreizack des Aufstiegs",
+    "sg": "Dreizack[p] des Aufstiegs",
+    "pl": "Dreizacke[p] des Aufstiegs"
+   },
+   {
+    "nom": "Sturmbootsmann-Dreizack",
+    "sg": "Sturmbootsmann-Dreizack",
+    "pl": "Sturmbootsmann-Dreizacke"
+   },
+   {
+    "nom": "Ultimativer Omega-Dreizack",
+    "sg": "ultimativ[a] Omega-Dreizack",
+    "pl": "ultimativ[a] Omega-Dreizacke"
+   },
+   {
+    "nom": "Modifizierter Neo-Ishgarder Dreizack",
+    "sg": "modifiziert[a] Neo-Ishgarder Dreizack",
+    "pl": "modifiziert[a] Neo-Ishgarder Dreizacke"
+   },
+   {
+    "nom": "Unbegutachteter Frontsplitter der Brillanz",
+    "sg": "unbegutachtet[a] Frontsplitter[p] der Brillanz",
+    "pl": "unbegutachtet[a] Frontsplitter[p] der Brillanz"
+   },
+   {
+    "nom": "Elementar-Schwert +1",
+    "sg": "Elementar-Schwert[p] +1",
+    "pl": "Elementar-Schwerter[p] +1"
+   },
+   {
+    "nom": "Elementar-Schwert +2",
+    "sg": "Elementar-Schwert[p] +2",
+    "pl": "Elementar-Schwerter[p] +2"
+   },
+   {
+    "nom": "Elementar-Schild +1",
+    "sg": "Elementar-Schild[p] +1",
+    "pl": "Elementar-Schilde[p] +1"
+   },
+   {
+    "nom": "Elementar-Schild +2",
+    "sg": "Elementar-Schild[p] +2",
+    "pl": "Elementar-Schilde[p] +2"
+   },
+   {
+    "nom": "Elementar-Guillotine +1",
+    "sg": "Elementar-Guillotine[p] +1",
+    "pl": "Elementar-Guillotine[p] +1"
+   },
+   {
+    "nom": "Elementar-Guillotine +2",
+    "sg": "Elementar-Guillotine[p] +2",
+    "pl": "Elementar-Guillotine[p] +2"
+   },
+   {
+    "nom": "Elementar-Kriegsaxt +1",
+    "sg": "Elementar-Kriegsaxt[p] +1",
+    "pl": "Elementar-Kriegsäxte[p] +1"
+   },
+   {
+    "nom": "Elementar-Kriegsaxt +2",
+    "sg": "Elementar-Kriegsaxt[p] +2",
+    "pl": "Elementar-Kriegsäxte[p] +2"
+   },
+   {
+    "nom": "Elementar-Lanze +1",
+    "sg": "Elementar-Lanze[p] +1",
+    "pl": "Elementar-Lanze[p] +1"
+   },
+   {
+    "nom": "Elementar-Lanze +2",
+    "sg": "Elementar-Lanze[p] +2",
+    "pl": "Elementar-Lanze[p] +2"
+   },
+   {
+    "nom": "Elementar-Schlagringe +1",
+    "sg": "Paar[p] Elementar-Schlagringe +1",
+    "pl": "Paar[p] Elementar-Schlagringe +1"
+   },
+   {
+    "nom": "Elementar-Schlagringe +2",
+    "sg": "Paar[p] Elementar-Schlagringe +2",
+    "pl": "Paar[p] Elementar-Schlagringe +2"
+   },
+   {
+    "nom": "Elementar-Klinge +1",
+    "sg": "Elementar-Klinge[p] +1",
+    "pl": "Elementar-Klinge[p] +1"
+   },
+   {
+    "nom": "Elementar-Klinge +2",
+    "sg": "Elementar-Klinge[p] +2",
+    "pl": "Elementar-Klinge[p] +2"
+   },
+   {
+    "nom": "Elementar-Harfenbogen +1",
+    "sg": "Elementar-Harfenbogen[p] +1",
+    "pl": "Elementar-Harfenbögen[p] +1"
+   },
+   {
+    "nom": "Elementar-Harfenbogen +2",
+    "sg": "Elementar-Harfenbogen[p] +2",
+    "pl": "Elementar-Harfenbögen[p] +2"
+   },
+   {
+    "nom": "Elementar-Messer +1",
+    "sg": "Paar[p] Elementar-Messer +1",
+    "pl": "Paar[p] Elementar-Messer +1"
+   },
+   {
+    "nom": "Elementar-Messer +2",
+    "sg": "Paar[p] Elementar-Messer +2",
+    "pl": "Paar[p] Elementar-Messer +2"
+   },
+   {
+    "nom": "Elementar-Donnerbüchse +1",
+    "sg": "Elementar-Donnerbüchse[p] +1",
+    "pl": "Elementar-Donnerbüchse[p] +1"
+   },
+   {
+    "nom": "Elementar-Donnerbüchse +2",
+    "sg": "Elementar-Donnerbüchse[p] +2",
+    "pl": "Elementar-Donnerbüchse[p] +2"
+   },
+   {
+    "nom": "Elementar-Grimoire +1",
+    "sg": "Elementar-Grimoire[p] +1",
+    "pl": "Elementar-Grimoires[p] +1"
+   },
+   {
+    "nom": "Elementar-Grimoire +2",
+    "sg": "Elementar-Grimoire[p] +2",
+    "pl": "Elementar-Grimoires[p] +2"
+   },
+   {
+    "nom": "Elementar-Stab +1",
+    "sg": "Elementar-Stab[p] +1",
+    "pl": "Elementar-Stäbe[p] +1"
+   },
+   {
+    "nom": "Elementar-Stab +2",
+    "sg": "Elementar-Stab[p] +2",
+    "pl": "Elementar-Stäbe[p] +2"
+   },
+   {
+    "nom": "Elementar-Stock +1",
+    "sg": "Elementar-Stock[p] +1",
+    "pl": "Elementar-Stöcke +1"
+   },
+   {
+    "nom": "Elementar-Estoc +1",
+    "sg": "Elementar-Estoc[p] +1",
+    "pl": "Elementar-Estoc[p] +1"
+   },
+   {
+    "nom": "Elementar-Stock +2",
+    "sg": "Elementar-Stock[p] +2",
+    "pl": "Elementar-Stöcke +2"
+   },
+   {
+    "nom": "Elementar-Estoc +2",
+    "sg": "Elementar-Estoc[p] +2",
+    "pl": "Elementar-Estoc[p] +2"
+   },
+   {
+    "nom": "Elementar-Kodex +1",
+    "sg": "Elementar-Kodex[p] +1",
+    "pl": "Elementar-Kodices[p] +1"
+   },
+   {
+    "nom": "Elementar-Kodex +2",
+    "sg": "Elementar-Kodex[p] +2",
+    "pl": "Elementar-Kodices[p] +2"
+   },
+   {
+    "nom": "Elementar-Astrometer +1",
+    "sg": "Elementar-Astrometer[p] +1",
+    "pl": "Elementar-Astrometer[p] +1"
+   },
+   {
+    "nom": "Elementar-Astrometer +2",
+    "sg": "Elementar-Astrometer[p] +2",
+    "pl": "Elementar-Astrometer[p] +2"
+   },
+   {
+    "nom": "Ultimatives Almace",
+    "sg": "ultimativ[a] Almace",
+    "pl": "ultimativ[a] Almace"
+   },
+   {
+    "nom": "Ultimatives Ancile",
+    "sg": "ultimativ[a] Ancile",
+    "pl": "ultimativ[a] Ancile"
+   },
+   {
+    "nom": "Ultimatives Ukonvasara",
+    "sg": "ultimativ[a] Ukonvasara",
+    "pl": "ultimativ[a] Ukonvasara"
+   },
+   {
+    "nom": "Ultimativer Rhongomiant",
+    "sg": "ultimativ[a] Rhongomiant",
+    "pl": "ultimativ[a] Rhongomiant"
+   },
+   {
+    "nom": "Ultimatives Nothung",
+    "sg": "ultimativ[a] Nothung",
+    "pl": "ultimativ[a] Nothung"
+   },
+   {
+    "nom": "Ultimative Verethragna",
+    "sg": "Paar[p] ultimativer Verethragna",
+    "pl": "Paar[p] ultimativer Verethragna"
+   },
+   {
+    "nom": "Ultimative Kannagi",
+    "sg": "Paar[p] ultimativer Kannagi",
+    "pl": "Paar[p] ultimativer Kannagi"
+   },
+   {
+    "nom": "Ultimativer Gandiva",
+    "sg": "ultimativ[a] Gandiva",
+    "pl": "ultimativ[a] Gandiva"
+   },
+   {
+    "nom": "Ultimatives Armageddon",
+    "sg": "ultimativ[a] Armageddon",
+    "pl": "ultimativ[a] Armageddon"
+   },
+   {
+    "nom": "Ultimatives Hvergelmir",
+    "sg": "ultimativ[a] Hvergelmir",
+    "pl": "ultimativ[a] Hvergelmir"
+   },
+   {
+    "nom": "Ultimatives Draconomicon",
+    "sg": "ultimativ[a] Draconomicon",
+    "pl": "ultimativ[a] Draconomicon"
+   },
+   {
+    "nom": "Ultimatives Majestas",
+    "sg": "ultimativ[a] Majestas",
+    "pl": "ultimativ[a] Majestas"
+   },
+   {
+    "nom": "Ultimativer Tetrabiblos",
+    "sg": "ultimativ[a] Tetrabiblos",
+    "pl": "ultimativ[a] Tetrabiblos"
+   },
+   {
+    "nom": "Ultima-Curtana",
+    "sg": "Ultima-Curtana",
+    "pl": "Ultima-Curtana"
+   },
+   {
+    "nom": "Unvollendetes Curtana",
+    "sg": "unvollendet[a] Curtana",
+    "pl": "unvollendet[a] Curtana"
+   },
+   {
+    "nom": "Ultimativer Deneb",
+    "sg": "ultimativ[a] Deneb",
+    "pl": "ultimativ[a] Deneb"
+   },
+   {
+    "nom": "Aegis der Furie",
+    "sg": "Aegis[p] der Furie",
+    "pl": "Aegiden[p] der Furie"
+   },
+   {
+    "nom": "Ragnarök-Miniatur",
+    "sg": "Ragnarök-Miniatur",
+    "pl": "Ragnarök-Miniaturen"
+   },
+   {
+    "nom": "Ultima-Bravura",
+    "sg": "Ultima-Bravura",
+    "pl": "Ultima-Bravura"
+   },
+   {
+    "nom": "Unvollendete Bravura",
+    "sg": "unvollendet[a] Bravura",
+    "pl": "unvollendet[a] Bravura"
+   },
+   {
+    "nom": "See-Sphairai",
+    "sg": "See-Sphairai",
+    "pl": "See-Sphairai"
+   },
+   {
+    "nom": "Eisen-Sphairai",
+    "sg": "Eisen-Sphairai",
+    "pl": "Eisen-Sphairaie"
+   },
+   {
+    "nom": "Ultima-Sphairai",
+    "sg": "Paar[p] Ultima-Sphairai",
+    "pl": "Paar[p] Ultima-Sphairai"
+   },
+   {
+    "nom": "Ultima-Gae Bolg",
+    "sg": "Ultima-Gae Bolg",
+    "pl": "Ultima-Gae Bolg"
+   },
+   {
+    "nom": "Unvollendete Sphairai",
+    "sg": "Paar[p] unvollendete Sphairai",
+    "pl": "Paar[p] unvollendete Sphairai"
+   },
+   {
+    "nom": "Unvollendeter Gae Bolg",
+    "sg": "unvollendet[a] Gae Bolg[p]",
+    "pl": "unvollendet[a] Gae Bolg[p]"
+   },
+   {
+    "nom": "Ultima-Yoshimitsu",
+    "sg": "Paar[p] Ultima-Yoshimitsu",
+    "pl": "Paar[p] Ultima-Yoshimitsu"
+   },
+   {
+    "nom": "Unvollendete Yoshimitsu",
+    "sg": "unvollendet[a] Paar[p] Yoshimitsu",
+    "pl": "unvollendet[a] Paar[p] Yoshimitsu"
+   },
+   {
+    "nom": "Ultima-Artemis-Bogen",
+    "sg": "Ultima-Artemis-Bogen",
+    "pl": "Ultima-Artemis-Bögen"
+   },
+   {
+    "nom": "Unvollendeter Artemis-Bogen",
+    "sg": "unvollendet[a] Artemis-Bogen",
+    "pl": "unvollendet[a] Artemis-Bögen"
+   },
+   {
+    "nom": "Roter Sternenstaub",
+    "sg": "Stück[p] roter Sternenstaub",
+    "pl": "Stücke[p] roter Sternenstaub"
+   },
+   {
+    "nom": "Ultima-Sternenstaub",
+    "sg": "Ultima-Sternenstaub",
+    "pl": "Ultima-Sternenstaub"
+   },
+   {
+    "nom": "Blauer Sternenstaub",
+    "sg": "Stück[p] blauer Sternenstaub",
+    "pl": "Stücke[p] blauer Sternenstaub"
+   },
+   {
+    "nom": "Sternenstaub-Oktopus",
+    "sg": "Sternenstaub-Oktopus",
+    "pl": "Sternenstaub-Oktopoden"
+   },
+   {
+    "nom": "Sternenstaub-Schläfer",
+    "sg": "Sternenstaub-Schläfer",
+    "pl": "Sternenstaub-Schläfer"
+   },
+   {
+    "nom": "Goldener Sternenstaub",
+    "sg": "Stück[p] goldener Sternenstaub",
+    "pl": "Stücke[p] goldener Sternenstaub"
+   },
+   {
+    "nom": "Unvollendeter Sternenstaub",
+    "sg": "unvollendet[a] Sternenstaub",
+    "pl": "unvollendet[a] Sternenstaub-Stäbe"
+   },
+   {
+    "nom": "Holo-Prisma „Sternenstaub“",
+    "sg": "Holo-Prisma[p] „Sternenstaub“",
+    "pl": "Holo-Prismen[p] „Sternenstaub“"
+   },
+   {
+    "nom": "Sternenstaub-Baumwollstoff",
+    "sg": "Ballen[p] Sternenstaub-Baumwollstoff",
+    "pl": "Ballen[p] Sternenstaub-Baumwollstoff"
+   },
+   {
+    "nom": "Sternenstaub-Baumwoll-Garnrolle",
+    "sg": "Sternenstaub-Baumwoll-Garnrolle",
+    "pl": "Sternenstaub-Baumwoll-Garnrollen"
+   },
+   {
+    "nom": "Ultima-Oeil Vert",
+    "sg": "Ultima-Oeil Vert",
+    "pl": "Ultima-Oeil Vert"
+   },
+   {
+    "nom": "Ultima-Thyrus",
+    "sg": "Ultima-Thyrus",
+    "pl": "Ultima-Thyrus"
+   },
+   {
+    "nom": "Unvollendetes Oeil Vert",
+    "sg": "unvollendet[a] Oeil Vert",
+    "pl": "unvollendet[a] Oeil Vert"
+   },
+   {
+    "nom": "Unvollendeter Thyrus",
+    "sg": "unvollendet[a] Thyrus",
+    "pl": "unvollendet[a] Thyrus"
+   },
+   {
+    "nom": "Ultima-Omnilex",
+    "sg": "Ultima-Omnilex",
+    "pl": "Ultima-Omnilex"
+   },
+   {
+    "nom": "Unvollendetes Omnilex",
+    "sg": "unvollendet[a] Omnilex",
+    "pl": "unvollendet[a] Omnilex"
+   },
+   {
+    "nom": "Sharlayanisches Äther-Öl",
+    "sg": "Flasche[p] sharlayanisches Äther-Öl",
+    "pl": "Flaschen[p] sharlayanisches Äther-Öl"
+   },
+   {
+    "nom": "Moosgrüne Starkzauber-Tinte",
+    "sg": "Fläschchen[p] moosgrüner Starkzauber-Tinte",
+    "pl": "Fläschchen[p] moosgrüner Starkzauber-Tinte"
+   },
+   {
+    "nom": "Azurblaue Starkzauber-Tinte",
+    "sg": "Fläschchen[p] azurblauer Starkzauber-Tinte",
+    "pl": "Fläschchen[p] azurblauer Starkzauber-Tinte"
+   },
+   {
+    "nom": "Purer Alexandrit",
+    "sg": "pur[a] Alexandrit",
+    "pl": "pur[a] Alexandrite"
+   },
+   {
+    "nom": "Scharlachrote Starkzauber-Tinte",
+    "sg": "Fläschchen[p] scharlachroter Starkzauber-Tinte",
+    "pl": "Fläschchen[p] scharlachroter Starkzauber-Tinte"
+   }
+  ]
  }
 };

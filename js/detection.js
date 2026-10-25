@@ -74,6 +74,9 @@
   const OBJETS_CLES = { magiSpherier: 'orbes', lunette: 'pate', cristalSavoir: 'mementos' };
   const CLES = Object.entries(OBJETS_CLES).map(([cle, quete]) => ({ quete, motifs: variantes(LANGUES.map((l) => NJ[l].objetsCles[cle])) }));
   const REPLIQUES = LANGUES.map((l) => NJ[l].replique).filter(Boolean);
+  // Objets dont le nom contient celui d'une arme ou d'un objet suivi (« Forgotten Fragment of Tenacity »,
+  // « Unfinished Bravura »…) : retirés du message avant la recherche, sinon ils passeraient pour eux.
+  const HOMONYMES = Object.fromEntries(LANGUES.map((l) => [l, variantes(NJ[l].homonymes || []).map((m) => new RegExp(m.source, 'gu'))]));
   const indexer = (fn) => Object.fromEntries(LANGUES.flatMap((l) => Object.entries(fn(l)).map(([cle, nom]) => [norm(nom), cle])));
   const QUETES = indexer((l) => NJ[l].quetes);
   const MISSIONS = indexer((l) => NJ[l].missions);
@@ -135,17 +138,18 @@
 
       if (m.gain.test(texte)) {
         if (REPLIQUES.some((r) => texte.includes(r))) return vue();
+        const net = HOMONYMES[langue].reduce((s, h) => s.replace(h, ' '), texte);
         // Lors d'un échange, l'ancienne et la nouvelle arme peuvent être citées, et « Manderville Axe » est contenu
         // dans « Amazing Manderville Axe » : on garde le stade le plus haut.
-        const armes = ARMES.filter((a) => trouver(texte, a.motifs)).sort((a, b) => b.stade - a.stade);
+        const armes = ARMES.filter((a) => trouver(net, a.motifs)).sort((a, b) => b.stade - a.stade);
         if (armes.length) return [...vue(), { type: 'arme', relique: armes[0].relique, job: armes[0].job, stade: armes[0].stade }];
         let meilleur = null;
         for (const o of OBJETS) {
-          const r = trouver(texte, o.motifs);
+          const r = trouver(net, o.motifs);
           if (r && (!meilleur || r.longueur > meilleur.longueur)) meilleur = { ...r, cle: o.cle };
         }
         if (meilleur) return [...vue(), { type: 'objet', cle: meilleur.cle, qte: meilleur.qte }];
-        const cle = CLES.find((c) => trouver(texte, c.motifs));
+        const cle = CLES.find((c) => trouver(net, c.motifs));
         return cle ? [...vue(), { type: 'quete', cle: cle.quete, statut: 'encours' }] : vue();
       }
 

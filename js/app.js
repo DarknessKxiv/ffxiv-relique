@@ -534,7 +534,8 @@
       const titre = phase.num ? `${phase.num}. ${stades()[phase.num]} <small>${t('ilvl', { n: phase.ilvl })}</small>` : t(phase.titre || 'phaseAcces');
       const id = `ph:${r.cle}:${phase.num}`;
       if (racine.reglages.ouverts[id] === undefined && phase.num === s + 1) racine.reglages.ouverts[id] = true;
-      return pli(id, titre, faites === total ? '✔' : `${faites}/${total}`, () => quetes + arme + bonus, faites === total);
+      const toutes = total > 0 && faites === total;
+      return pli(id, titre, toutes ? '✔' : total ? `${faites}/${total}` : '', () => quetes + arme + bonus, toutes);
     }).join('') + (r.repliques ? `<p class="aide">${t('repliques', { metallurgiste: echapper(ou(r.repliques)) })}</p>` : '');
   }
 
@@ -727,10 +728,12 @@
       case 'arme': {
         const relique = a.relique || rel().cle;
         if (a.stade > stadeJob(a.job, relique)) {
-          armesDe(relique)[a.job] = a.stade;
           const phase = RELIQUES[relique].phases[a.stade];
+          // Première arme offerte par une quête (« Fire in the Forge ») : rien n'est remis.
+          const offerte = phase.quetes.some((q) => q.premiereArme) && stadeMax(relique) < a.stade;
+          armesDe(relique)[a.job] = a.stade;
           // Les objets demandés sont remis avec l'arme : 3 objets d'échange, ou ceux de l'étape « par arme ».
-          const remis = phase.arcanite ? [{ cle: phase.arcanite, qte: 3 }]
+          const remis = offerte ? [] : phase.arcanite ? [{ cle: phase.arcanite, qte: 3 }]
             : (phase.arme?.taches || []).flatMap((tch) => (tch.type === 'compteurs' ? tch.elements : ['objet', 'compteur'].includes(tch.type) ? [tch] : []));
           for (const o of remis) e.objets[o.cle] = Math.max(0, (e.objets[o.cle] || 0) - o.qte);
         }

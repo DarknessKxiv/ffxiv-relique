@@ -68,7 +68,8 @@ export const MISSIONS = {
   arche: 'The Void Ark', mhach: 'The Weeping City of Mhach', dunScaith: 'Dun Scaith', rabanastre: 'The Royal City of Rabanastre',
   ridorana: 'The Ridorana Lighthouse', orbonne: 'The Orbonne Monastery', palais: 'The Palace of the Dead (Floors 1-10)',
   empyree: 'Heaven-on-High  (Floors 1-10)', antitour: 'The Antitower', hellsLid: "Hells' Lid",
-  a1: 'Alexander - The Fist of the Father', a4: 'Alexander - The Burden of the Father', o1: 'Deltascape V1.0', o3: 'Deltascape V3.0',
+  a1: 'Alexander - The Fist of the Father', a2: 'Alexander - The Cuff of the Father', a3: 'Alexander - The Arm of the Father',
+  a4: 'Alexander - The Burden of the Father', o1: 'Deltascape V1.0', o3: 'Deltascape V3.0',
   e1: "Eden's Gate: Resurrection", e3: "Eden's Gate: Inundation",
   // Stormblood
   anemos: 'The Forbidden Land, Eureka Anemos', pagos: 'The Forbidden Land, Eureka Pagos', pyros: 'The Forbidden Land, Eureka Pyros',
@@ -108,7 +109,7 @@ export const LIEUX = {
 export const PNJ = {
   auriana: 'Auriana', hismena: 'Hismena', zlatan: 'Zlatan', syndony: 'Syndony', ardashir: 'Ardashir', cristiana: 'Cristiana',
   ulan: 'Ulan', blamprest: 'Blamprest', jalzahn: 'Jalzahn', gjusana: "G'jusana", hubairtin: 'Hubairtin', remon: 'Remon',
-  oiseleur: 'expedition birdwatcher', receleur: 'Calamity salvager',
+  oiseleur: 'expedition birdwatcher', receleur: 'Calamity salvager', sabina: 'Sabina',
 };
 
 // ALÉA nommés (feuille Fate) qui donnent un objet précis.
