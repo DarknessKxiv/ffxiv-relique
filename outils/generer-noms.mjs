@@ -17,6 +17,8 @@ const OBJETS = {
   pierre: 50970, alliageAtypique: 50972, ficelle: 50971, huile: 50973,
   dissipAlpha: 50974, dissipBeta: 50975, dissipGamma: 50976,
   memoquartz: 48, gemme: 26807, couteau: 52582,
+  // Endwalker (Manderville)
+  meteorite: 38420, chondrite: 38940, achondrite: 40322, cristallite: 41032, poetique: 28,
 };
 const OBJETS_CLES = { magiSpherier: 2003766, lunette: 2003765, cristalSavoir: 2003836 };
 const QUETES = {
@@ -26,6 +28,12 @@ const QUETES = {
   recherche: 70990, pate: 70991, puissance: 70992,
   mirage: 71038, dissipateurs: 71039, purete: 71040,
   mementos: 71041, finale: 71042,
+  // Endwalker (Manderville) : quête principale, série d'Hildibrand, puis par stade la quête d'histoire, la première arme et l'échange répétable
+  ewMsq: 70000, ewHildiDebut: 66740, ewHildiFin: 70178,
+  ewFaire: 70188, ewEncore: 70189,
+  ewGeneration: 70255, ewInstinct: 70261, ewEblouissante: 70262,
+  ewVisiteur: 70291, ewForgerons: 70307, ewMajestueuse: 70308,
+  ewCadeau: 70336, ewDanse: 70342, ewManderveilleuse: 70343,
 };
 const MISSIONS = {
   // Donjons niv. 91-99
@@ -53,11 +61,13 @@ const PNJ = {
   messager: 1053805, ketenramm: 1039720, archive: 1053794, jeffroy: 1053797, lydirceil: 1053727, gerolt: 1053907,
   ermina: 1053728, dodokkuli: 1053729, archeologue: 1058068, brigid: 1056453, metallurgiste: 1054004,
   goplu: 1048382, rral: 1048933,
+  jubrunnah: 1043892, artisanManderville: 1043891, domestiqueManderville: 1043950, alchimisteManderville: 1045568, geroltEw: 1043890,
 };
 const LIEUX = {
   tuliyollal: 4504, villeFantome: 4757, urqopacha: 4505, kozamauka: 4506, yakTel: 4507, shaaloani: 4508,
   hoirie: 4509, memoireVivante: 4510, lunule: 4931, lunuleSud: 4932, lunuleNord: 5577,
   yokTural: 4500, xakTural: 4501, mondeInephemere: 4502,
+  radzAtHan: 3707,
 };
 const EMOTES = { feliciter: 29 };
 const CLASSES = {
@@ -65,7 +75,18 @@ const CLASSES = {
   RPR: 39, VPR: 41, BRD: 23, MCH: 31, DNC: 38, BLM: 25, SMN: 27, RDM: 35, PCT: 42,
   CRP: 8, BSM: 9, ARM: 10, GSM: 11, LTW: 12, WVR: 13, ALC: 14, CUL: 15,
 };
-const STADES = ['Penumbrae', 'Umbrae', 'Obscurum', 'Eclipticum', 'Occultum'];
+// Armes de chaque relique, stade par stade : recherche par nom, puis tri par niveau d'objet (les répliques sont niv. 1).
+const SANS_REPLIQUE = '-Name~"Replica"';
+const RELIQUES = {
+  dt: ['Penumbrae', 'Umbrae', 'Obscurum', 'Eclipticum', 'Occultum'].map((s, i) => ({
+    requete: `+Name~"Phantom" +Name~"${s}" ${SANS_REPLIQUE}`, ilvl: [745, 760, 775, 790, 795][i] })),
+  ew: [
+    { requete: `+Name~"Manderville" -Name~"Amazing" -Name~"Majestic" ${SANS_REPLIQUE}`, ilvl: 615 },
+    { requete: `+Name~"Amazing Manderville" ${SANS_REPLIQUE}`, ilvl: 630 },
+    { requete: `+Name~"Majestic Manderville" ${SANS_REPLIQUE}`, ilvl: 645 },
+    { requete: `+Name~"Mandervillous" ${SANS_REPLIQUE}`, ilvl: 665 },
+  ],
+};
 // Une arme et sa réplique d'apparence : la différence de nom donne le mot « réplique » de chaque langue.
 const ARME_TEMOIN = 47871, REPLIQUE_TEMOIN = 49101;
 
@@ -140,14 +161,16 @@ const classes = await parCle('ClassJob', CLASSES, ['Name', 'Abbreviation']);
 const emotes = await parCle('Emote', EMOTES, ['Name']);
 const temoins = await parCle('Item', { arme: ARME_TEMOIN, replique: REPLIQUE_TEMOIN }, ['Name']);
 
-// Armes : pour chaque stade, toutes les armes « Phantom … <stade> » hors répliques, rangées par job.
+// Armes : pour chaque relique et chaque stade, les armes du bon niveau d'objet, rangées par job.
 const armesBrutes = [];
-for (const [i, stade] of STADES.entries()) {
-  const q = encodeURIComponent(`+Name~"Phantom" +Name~"${stade}" -Name~"Replica"`);
-  const { results } = await json(`${API}/search?sheets=Item&query=${q}&fields=Name,${champs(['Name', 'Singular', 'Plural'])},ClassJobCategory.Name&limit=100`);
-  for (const r of results) {
-    const job = r.fields.ClassJobCategory?.fields?.Name;
-    if (CLASSES[job] && new RegExp(`${stade}$`).test(r.fields.Name)) armesBrutes.push({ job, stade: i, f: r.fields });
+for (const [relique, stades] of Object.entries(RELIQUES)) {
+  for (const [i, { requete, ilvl }] of stades.entries()) {
+    const { results } = await json(`${API}/search?sheets=Item&query=${encodeURIComponent(requete)}`
+      + `&fields=Name,${champs(['Name', 'Singular', 'Plural'])},ClassJobCategory.Name,LevelItem.value&limit=150`);
+    for (const r of results) {
+      const job = r.fields.ClassJobCategory?.fields?.Name;
+      if (CLASSES[job] && r.fields.LevelItem?.value === ilvl) armesBrutes.push({ relique, job, stade: i, f: r.fields });
+    }
   }
 }
 
@@ -162,10 +185,14 @@ const { rows: lignesRoulettes } = await json(`${API}/sheet/ContentRoulette?rows=
 
 const donnees = enLangues((l) => {
   const nom = (f, champ = 'Name') => propre(f[`${champ}@lang(${l})`]);
-  const armes = Object.fromEntries(Object.keys(CLASSES).filter((c) => CLASSES[c] >= 19).map((c) => [c, STADES.map(() => [])]));
-  for (const a of armesBrutes) armes[a.job][a.stade].push(formes(a.f, l));
-  // Le mot qui distingue une réplique d'apparence (« réplique de », « replica »…), en minuscules.
-  const replique = nom(temoins.replique).toLowerCase().replace(nom(temoins.arme).toLowerCase(), '').replace(/[^\p{L}\s-]/gu, '').trim();
+  // armes[relique][job][stade] = formes des armes (le paladin en a deux : épée et bouclier).
+  const armes = {};
+  for (const a of armesBrutes) {
+    const parJob = (armes[a.relique] ||= {});
+    (parJob[a.job] ||= RELIQUES[a.relique].map(() => []))[a.stade].push(formes(a.f, l));
+  }
+  // Le mot qui distingue une réplique d'apparence (« réplique », « replica », « replik »), en minuscules.
+  const replique = nom(temoins.replique).toLowerCase().replace(nom(temoins.arme).toLowerCase(), '').replace(/[^\p{L}\s-]/gu, '').trim().split(/\s/)[0];
   return {
     objets: Object.fromEntries(Object.entries(objets).map(([c, f]) => [c, formes(f, l)])),
     objetsCles: Object.fromEntries(Object.entries(objetsCles).map(([c, f]) => [c, formes(f, l)])),

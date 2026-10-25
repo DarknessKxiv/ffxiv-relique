@@ -1,9 +1,16 @@
-# Phantom Relic — ACT overlay for FFXIV Dawntrail
+# Relic Tracker — ACT overlay for FFXIV relic weapons
 
 [Français](README.fr.md) · **English**
 
-An overlay for **ACT + OverlayPlugin** that tracks the Dawntrail relic weapons (Phantom Weapons, from **Penumbrae iLvl 745** to **Occultum iLvl 795**) for all **21 combat jobs**.
-It shows where you are and **what to do next**: the quest, the NPC and its coordinates, the items to gather and where to get them.
+An overlay for **ACT + OverlayPlugin** that tracks the FFXIV relic weapons, job by job:
+
+| Expansion | Relic | Stages | Jobs |
+|---|---|---|---|
+| Dawntrail (Lv. 100) | Phantom Weapons | Penumbrae iLvl 745 → Occultum iLvl 795 | 21 |
+| Endwalker (Lv. 90) | Manderville Weapons | Manderville iLvl 615 → Mandervillous iLvl 665 | 19 |
+
+Pick the relic at the top of the overlay. It shows where you are and **what to do next**: the quest, the NPC and its coordinates, the items to gather and where to get them.
+Older relics (Shadowbringers, Stormblood, Heavensward, A Realm Reborn) are planned.
 
 ![Overlay preview](docs/apercu-en.png)
 
@@ -14,9 +21,9 @@ It shows where you are and **what to do next**: the quest, the NPC and its coord
 ## Features
 
 - **Next step** for the tracked job: quest, NPC with coordinates, items to gather and where to get them.
-- **Every phase in detail**: demiatma, Aetherwell Array, crystal paste, phantom dispellers, knowledge crystal (65 objectives).
+- **Every phase in detail**: for Dawntrail, demiatma, Aetherwell Array, crystal paste, phantom dispellers, knowledge crystal (65 objectives); for Endwalker, the Hildibrand quests and the tomestone exchanges.
 - **Where to farm**: which Occult Crescent FATEs and critical engagements give each demiatma or dispeller.
-- **All 21 jobs** tracked, with the tomestones left to spend for each.
+- **Every job** tracked, with the tomestones left to spend for each.
 - **Automatic tracking** while you play (see below); the tracked job follows the job you are playing.
 - **Three display sizes**: full, compact (☰, no tabs) or **collapsed to a single bar** (▴) showing just the next step.
 - **Hidden automatically during dungeons, trials and raids** (on by default, can be turned off in Settings). It stays visible in the Occult Crescent.
@@ -59,9 +66,9 @@ While ACT is running, the overlay reads the game log that OverlayPlugin passes t
 | Character and job being played | Completed quests (“✓ Quest complete” button) when no message was seen |
 | Game language | Aetherwell Array gauges |
 | Demiatma, crystal paste, phantom dispellers obtained | Gold-rated FATEs and monsters of the knowledge crystal |
-| Arcanite bought (all four kinds) | |
+| Upgrade items bought (arcanite, Manderium meteorite…) | |
 | Quest items (glue, synthetic dark matter, etc.) | |
-| Phantom weapons received | |
+| Relic weapons received | |
 | Quests accepted and completed | |
 | Knowledge crystal duties completed | |
 
@@ -87,7 +94,8 @@ No build step: plain HTML, CSS and JavaScript.
 | File | Purpose |
 |---|---|
 | `index.html`, `style.css` | Overlay page |
-| `js/etapes.js` | Structure: jobs, NPCs, phases, quests and tasks (no text) |
+| `js/etapes.js` | Shared structure: jobs and NPC coordinates (no text) |
+| `js/reliques/*.js` | One file per relic: phases, quests and tasks (no text) |
 | `js/textes.js` | Interface text in French, English and German |
 | `js/noms-jeu.js` | Official game names in each language (generated) |
 | `js/detection.js` | Reads the ACT log lines (official message formats of each language) |

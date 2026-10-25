@@ -5,7 +5,8 @@
 //   00|…|0839||La mission “La Nécropole intemporelle” commence.|   puis   33|…|80034E88|40000003|…  (victoire)
 (function () {
   const NJ = window.NOMS_JEU;
-  const { JOBS, MEMOIRES, MISSIONS_TERRAIN } = window.RELIQUE;
+  const { JOBS, RELIQUES } = window.RELIQUE;
+  const MISSIONS_TERRAIN = Object.values(RELIQUES).flatMap((r) => r.missionsTerrain || []);
   const LANGUES = Object.keys(NJ);
 
   const norm = (s) => String(s || '').normalize('NFC')
@@ -63,11 +64,13 @@
     .sort((a, b) => b.length - a.length).map(motif);
 
   const OBJETS = Object.keys(NJ.fr.objets)
-    .filter((cle) => !['memoquartz', 'gemme', 'couteau'].includes(cle))
+    .filter((cle) => !['memoquartz', 'poetique', 'gemme', 'couteau'].includes(cle))
     .map((cle) => ({ cle, motifs: variantes(LANGUES.map((l) => NJ[l].objets[cle])) }));
-  const ARMES = JOBS.flatMap((j) => NJ.fr.armes[j.code].map((_, i) => ({
-    job: j.code, stade: i + 1, motifs: variantes(LANGUES.flatMap((l) => NJ[l].armes[j.code][i])),
-  })));
+  // Armes de toutes les reliques : chacune sait à quelle relique, quel job et quel stade elle correspond.
+  const ARMES = Object.keys(RELIQUES).flatMap((relique) => JOBS.filter((j) => NJ.fr.armes[relique]?.[j.code])
+    .flatMap((j) => NJ.fr.armes[relique][j.code].map((_, i) => ({
+      relique, job: j.code, stade: i + 1, motifs: variantes(LANGUES.flatMap((l) => NJ[l].armes[relique][j.code][i])),
+    }))));
   const OBJETS_CLES = { magiSpherier: 'orbes', lunette: 'pate', cristalSavoir: 'mementos' };
   const CLES = Object.entries(OBJETS_CLES).map(([cle, quete]) => ({ quete, motifs: variantes(LANGUES.map((l) => NJ[l].objetsCles[cle])) }));
   const REPLIQUES = LANGUES.map((l) => NJ[l].replique).filter(Boolean);
@@ -75,7 +78,7 @@
   const QUETES = indexer((l) => NJ[l].quetes);
   const MISSIONS = indexer((l) => NJ[l].missions);
   const JOB_PAR_ID = Object.fromEntries(JOBS.map((j) => [String(j.id), j.code]));
-  const MISSIONS_MEMOIRE = new Set(MEMOIRES.missions.flatMap((c) => c.cles));
+  const MISSIONS_MEMOIRE = new Set(Object.values(RELIQUES).flatMap((r) => r.memoires?.missions.flatMap((c) => c.cles) || []));
 
   let missionEnCours = null;   // nom (normalisé) de la mission commencée
   let derniereLangue = null;
@@ -128,9 +131,10 @@
 
       if (m.gain.test(texte)) {
         if (REPLIQUES.some((r) => texte.includes(r))) return vue();
-        // Lors d'un échange chez Dodokkuli, l'ancienne et la nouvelle arme sont citées : on garde la plus haute.
+        // Lors d'un échange, l'ancienne et la nouvelle arme peuvent être citées, et « Manderville Axe » est contenu
+        // dans « Amazing Manderville Axe » : on garde le stade le plus haut.
         const armes = ARMES.filter((a) => trouver(texte, a.motifs)).sort((a, b) => b.stade - a.stade);
-        if (armes.length) return [...vue(), { type: 'arme', job: armes[0].job, stade: armes[0].stade }];
+        if (armes.length) return [...vue(), { type: 'arme', relique: armes[0].relique, job: armes[0].job, stade: armes[0].stade }];
         let meilleur = null;
         for (const o of OBJETS) {
           const r = trouver(texte, o.motifs);

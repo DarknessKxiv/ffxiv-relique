@@ -1,13 +1,12 @@
-// Overlay de suivi de la relique fantôme : état, affichage, sauvegarde et branchement sur ACT.
+// Overlay de suivi des reliques : état, affichage, sauvegarde et branchement sur ACT.
 (function () {
-  const { JOBS, PNJ, PHASES, MEMOIRES, CASES_MEMOIRES } = window.RELIQUE;
+  const { JOBS, PNJ, RELIQUES } = window.RELIQUE;
   const NJ = window.NOMS_JEU, TX = window.TEXTES;
   const LANGUES = Object.keys(TX);
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const ILVL = [null, 745, 760, 775, 790, 795];
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   const LANGUE_URL = (location.search.match(/[?&]lang=(\w+)/) || [])[1];
@@ -19,7 +18,7 @@
   });
   let racine = {
     version: 1, maj: 0, persoActif: SANS_PERSO, persos: {}, langueJeu: null,
-    reglages: { compact: false, reduit: false, cacherEnMission: true, echelle: 1, opacite: 0.88, onglet: 'suivi', job: 'auto', langue: 'auto', ouverts: {} },
+    reglages: { relique: 'dt', compact: false, reduit: false, cacherEnMission: true, echelle: 1, opacite: 0.88, onglet: 'suivi', job: 'auto', langue: 'auto', ouverts: {} },
   };
   let jobJeu = null;        // job joué en ce moment (détecté via ACT)
   let langueAct = null;     // langue réglée dans le plugin FFXIV d'ACT, si OverlayPlugin la donne
@@ -62,19 +61,29 @@
   const rouletteCourte = (cle) => majuscule(roulette(cle).replace(/^[^:]+:\s*/, ''));
   const nomPerso = (cle) => (cle === SANS_PERSO ? t('persoDefaut') : cle === PERSO_DEMO ? t('persoDemo') : cle);
   const infoJob = (code) => JOBS.find((j) => j.code === code) || JOBS[1];
-  const nomJob = (code) => majuscule(N().classes[code].nom);
+  // Noms de jobs : l'anglais met une majuscule à chaque mot (« Dark Knight »), le français seulement au premier.
+  const nomJob = (code) => (L === 'en' ? N().classes[code].nom.replace(/\b\p{L}/gu, (c) => c.toUpperCase()) : majuscule(N().classes[code].nom));
   const abrJob = (code) => N().classes[code].abr;
   const jobAffiche = () => (racine.reglages.job === 'auto' ? jobJeu || 'WAR' : racine.reglages.job);
-  const stadeJob = (code) => etat().armes[code] || 0;
-  const stadeMax = () => Math.max(0, ...JOBS.map((j) => stadeJob(j.code)));
-  const phaseDe = (id) => PHASES.find((p) => p.quetes.some((q) => q.id === id) || p.bonus?.id === id);
+
+  // Relique suivie (Dawntrail, Endwalker…) : chacune a ses phases, ses stades et ses jobs.
+  const rel = () => RELIQUES[racine.reglages.relique] || RELIQUES.dt;
+  const phases = () => rel().phases;
+  const nbStades = () => rel().phases.length - 1;
+  const stades = () => T().stades[rel().cle];
+  const ilvl = (stade) => rel().phases[stade]?.ilvl;
+  const jobsRelique = () => JOBS.filter((j) => rel().jobs.includes(j.code));
+  const armesDe = (relique) => (etat().armes[relique] ||= {});
+  const stadeJob = (code, relique = rel().cle) => armesDe(relique)[code] || 0;
+  const stadeMax = (relique = rel().cle) => Math.max(0, ...RELIQUES[relique].jobs.map((j) => stadeJob(j, relique)));
+  const phaseDe = (id) => phases().find((p) => p.quetes.some((q) => q.id === id) || p.bonus?.id === id);
   const nomQuete = (id) => N().quetes[id];
 
-  function nomArme(code, stade) {
+  function nomArme(code, stade, relique = rel().cle) {
     if (stade < 1) return t('pasArme');
-    const formes = N().armes[code][stade - 1];
-    // Paladin : épée + bouclier. L'ordre est le même dans toutes les langues ; l'anglais dit lequel est l'épée.
-    const i = Math.max(0, NJ.en.armes[code][stade - 1].findIndex((f) => /sword/i.test(f.nom)));
+    const formes = N().armes[relique][code][stade - 1];
+    // Paladin : arme + bouclier. L'ordre est le même dans toutes les langues ; l'anglais dit lequel est le bouclier.
+    const i = Math.max(0, NJ.en.armes[relique][code][stade - 1].findIndex((f) => !/shield/i.test(f.nom)));
     return majuscule(formes[i].nom) + (formes.length > 1 ? ` ${t('bouclier')}` : '');
   }
 
@@ -83,17 +92,17 @@
   const queteFaite = (phase, id) => !!etat().quetes[id] || queteDeduite(phase, id);
 
   function prochaineEtape(code) {
-    const s = stadeJob(code);
-    if (s >= 5) return { fini: true };
-    const acces = PHASES[0].quetes.find((q) => !queteFaite(PHASES[0], q.id));
-    if (acces) return { phase: PHASES[0], quete: acces };
-    const phase = PHASES[s + 1];
+    const s = stadeJob(code), ph = phases();
+    if (s >= nbStades()) return { fini: true };
+    const acces = ph[0].quetes.find((q) => !queteFaite(ph[0], q.id));
+    if (acces) return { phase: ph[0], quete: acces };
+    const phase = ph[s + 1];
     const quete = phase.quetes.find((q) => !queteFaite(phase, q.id));
     return quete ? { phase, quete } : { phase, echange: true };
   }
 
   // Mémoquartz encore à dépenser pour finir la relique de ce job.
-  const memoquartzRestants = (code) => PHASES.filter((p) => p.arcanite && p.num > stadeJob(code)).length * 1500;
+  const memoquartzRestants = (code) => phases().filter((p) => p.arcanite && p.num > stadeJob(code)).length * 1500;
 
   function avancement(tache) {
     const e = etat();
@@ -103,7 +112,7 @@
       case 'compteur': return [borne(e.objets[tache.cle], tache.qte), tache.qte];
       case 'compteurs': return tache.elements.reduce(([f, tot], el) => [f + borne(e.objets[el.cle], el.qte), tot + el.qte], [0, 0]);
       case 'jauges': return tache.jauges.reduce(([f, tot], j) => [f + borne(e.jauges[j.cle], tache.max), tot + tache.max], [0, 0]);
-      case 'memoires': return [CASES_MEMOIRES.filter((k) => e.memoires[k]).length, CASES_MEMOIRES.length];
+      case 'memoires': return [rel().casesMemoires.filter((k) => e.memoires[k]).length, rel().casesMemoires.length];
       default: return [0, 0];
     }
   }
@@ -134,7 +143,7 @@
       else if (k === 'donjon') p.donjon = echapper(N().missions[v]);
       else if (k === 'gemme') p.gemme = echapper(nomObjet(v));
       else if (k === 'artisans') p.artisans = echapper(liste(v.map((c) => N().classes[c].nom)));
-      else if (k === 'phase') p.phase = echapper(T().stades[v]);
+      else if (k === 'phase') p.phase = echapper(stades()[v]);
       else if (typeof v === 'number') p[k] = nombre(v);
       else p[k] = echapper(v);
     }
@@ -155,6 +164,7 @@
     n: nombre(1200),
     emote: echapper(N().emotes.feliciter),
     couteau: echapper(nomObjet('couteau')),
+    debut: t('cite', { nom: echapper(nomQuete('ewHildiDebut')) }),
   });
 
   // Entrée du journal ou notification : { k, p } traduit au moment de l'affichage (ou ancien texte figé { t }).
@@ -163,7 +173,7 @@
     const p = e.p || {}, r = {};
     if (p.qte != null) r.qte = nombre(p.qte);
     if (p.objet) r.objet = echapper(nomObjet(p.objet));
-    if (p.job) r.arme = echapper(nomArme(p.job, p.stade));
+    if (p.job) r.arme = echapper(nomArme(p.job, p.stade, p.relique || 'dt'));
     if (p.quete) r.quete = echapper(nomQuete(p.quete));
     if (p.mission) r.mission = echapper(majuscule(N().missions[p.mission]));
     if (p.langue) r.langue = echapper(TX[p.langue].langue);
@@ -234,14 +244,15 @@
     const e = etat();
     const [faits, total] = avancement({ type: 'memoires' });
     let h = `<div class="compteur-tete"><span>${echapper(majuscule(N().objetsCles.cristalSavoir.nom))}</span><b>${faits} / ${total}</b></div>${barre(faits, total)}`;
-    MEMOIRES.terrain.forEach((g, i) => {
+    const { terrain, missions } = rel().memoires;
+    terrain.forEach((g, i) => {
       const cles = g.zones.flatMap((z) => [`z:${z.cle}:alea`, ...z.monstres.map((_, k) => `z:${z.cle}:m${k}`)]);
       const n = cles.filter((k) => e.memoires[k]).length;
       h += pli(`mem:t${i}`, t('memTerrain', { region: echapper(N().lieux[g.region]) }), `${n}/${cles.length}`, () => g.zones.map((z) => `<div class="zone"><div class="sous-titre">${echapper(N().lieux[z.lieu])}</div>
         ${caseMemoire(`z:${z.cle}:alea`, t('memAlea'))}
         ${z.monstres.map((m, k) => caseMemoire(`z:${z.cle}:m${k}`, t('memVaincre', { monstre: echapper(majuscule(N().monstres[m])) }))).join('')}</div>`).join(''), n === cles.length);
     });
-    MEMOIRES.missions.forEach((c, i) => {
+    missions.forEach((c, i) => {
       const n = c.cles.filter((k) => e.memoires[`m:${k}`]).length;
       h += pli(`mem:m${i}`, t(c.titre), `${n}/${c.cles.length}`, () => c.cles.map((k) => caseMemoire(`m:${k}`, echapper(majuscule(N().missions[k])), true)).join(''), n === c.cles.length);
     });
@@ -274,8 +285,8 @@
 
   // ---------- Carte « Prochaine étape » ----------
   const etiquette = (phase) => (phase.num
-    ? t('phaseEtiquette', { n: phase.num, nom: T().stades[phase.num], ilvl: t('ilvl', { n: phase.ilvl }) })
-    : t('phaseAcces'));
+    ? t('phaseEtiquette', { n: phase.num, nom: stades()[phase.num], ilvl: t('ilvl', { n: phase.ilvl }) })
+    : t(phase.titre || 'phaseAcces'));
 
   function carteQuete(code, phase, q) {
     if (q.echange) return carteEchange(code, phase, q);
@@ -293,26 +304,31 @@
   }
 
   function carteEchange(code, phase, quete) {
+    const r = rel();
     const precedente = echapper(nomArme(code, phase.num - 1));
     const cible = echapper(nomArme(code, phase.num));
-    if (phase.num === 5) {
+    // Échange gratuit, sans objet à acheter (Occultum).
+    if (!phase.arcanite) {
       return `<section class="carte">
         <div class="etiquette">${etiquette(phase)}</div>
         <h2>${t('echangerArme')}</h2>
         <p>${t('occultumAvec', { arme: precedente })}</p>
-        ${pnj('▶', '', 'dodokkuli')}
+        ${pnj('▶', '', r.echangeur)}
         <p>${t('occultumGratuit', { arme: cible })}</p>
-        <button class="valider" data-act="arme" data-job="${code}" data-stade="5">${t('armeRecue')}</button>
+        <button class="valider" data-act="arme" data-job="${code}" data-stade="${phase.num}">${t('armeRecue')}</button>
       </section>`;
     }
+    // Première arme du stade : on la reçoit par la quête ; ensuite, échange (ou quête répétable) chez l'échangeur.
     const n = etat().objets[phase.arcanite] || 0;
-    const commun = { dodokkuli: echapper(majuscule(nomPnj('dodokkuli'))), coords: coords(PNJ.dodokkuli), cible };
+    const remise = (quete && quete.rendu) || r.echangeur;
+    const commun = { pnj: echapper(majuscule(nomPnj(remise))), coords: coords(PNJ[remise]), cible };
     return `<section class="carte">
       <div class="etiquette">${etiquette(phase)}</div>
-      <h2>${quete ? t('cite', { nom: echapper(nomQuete(quete.id)) }) : t('armePhase', { nom: T().stades[phase.num] })}</h2>
-      ${quete ? pnj('▶', t('debut'), 'lydirceil') : ''}
+      <h2>${quete ? t('cite', { nom: echapper(nomQuete(quete.id)) }) : t('armePhase', { nom: stades()[phase.num] })}</h2>
+      ${quete && quete.debut ? pnj('▶', t('debut'), quete.debut) : ''}
+      ${!quete && phase.repetable ? `<p>${t('repetable', { quete: t('cite', { nom: echapper(nomQuete(phase.repetable)) }), pnj: echapper(majuscule(ou(r.echangeur))) })}</p>` : ''}
       <ol class="etapes">
-        <li>${t('acheterArcanite', { n: 3, arcanite: echapper(nomObjet(phase.arcanite)), ermina: echapper(majuscule(nomPnj('ermina'))), coords: coords(PNJ.ermina), memoquartz: echapper(pluriel(N().objets.memoquartz)), total: nombre(1500) })}</li>
+        <li>${t('acheterArcanite', { n: 3, arcanite: echapper(nomObjet(phase.arcanite)), vendeur: echapper(majuscule(nomPnj(r.vendeur))), coords: coords(PNJ[r.vendeur]), memoquartz: echapper(pluriel(N().objets[r.monnaie])), total: nombre(1500) })}</li>
         <li>${phase.num > 1 ? t('echangerAvec', { ...commun, arme: precedente }) : t('echanger', commun)}</li>
       </ol>
       <div class="mini${n >= 3 ? ' ok' : ''}"><span class="mini-nom">${echapper(nomObjet(phase.arcanite))}</span><span class="mini-val">${n}/3</span>
@@ -322,16 +338,19 @@
   }
 
   function carteFinie(code) {
-    const suivants = JOBS.filter((j) => stadeJob(j.code) < 5).sort((a, b) => stadeJob(b.code) - stadeJob(a.code)).slice(0, 5);
+    const r = rel(), max = nbStades();
+    const suivants = jobsRelique().filter((j) => stadeJob(j.code) < max).sort((a, b) => stadeJob(b.code) - stadeJob(a.code)).slice(0, 5);
     return `<section class="carte fini">
       <div class="etiquette">${t('finiEtiquette')}</div>
-      <h2>🎉 ${echapper(nomArme(code, 5))}</h2>
-      <p>${t('finiTexte', { ilvl: t('ilvl', { n: 795 }), brigid: echapper(ou('brigid')), ecliptite: echapper(nomObjet('ecliptite')), metallurgiste: echapper(ou('metallurgiste')) })}</p>
-      ${suivants.length ? `<div class="sous-titre">${t('prochainsJobs')}</div>${suivants.map((j) => `<button class="puce" data-act="choisirJob" data-job="${j.code}">${echapper(nomJob(j.code))} · ${T().stades[stadeJob(j.code)]}</button>`).join('')}` : ''}
+      <h2>🎉 ${echapper(nomArme(code, max))}</h2>
+      <p>${t('finiTexte', { ilvl: t('ilvl', { n: ilvl(max) }), pnj: echapper(ou(r.fin.pnj)), objet: echapper(nomObjet(r.fin.objet)) })}
+        ${r.repliques ? t('finiReplique', { metallurgiste: echapper(ou(r.repliques)) }) : ''}</p>
+      ${suivants.length ? `<div class="sous-titre">${t('prochainsJobs')}</div>${suivants.map((j) => `<button class="puce" data-act="choisirJob" data-job="${j.code}">${echapper(nomJob(j.code))} · ${stades()[stadeJob(j.code)]}</button>`).join('')}` : ''}
     </section>`;
   }
 
   function carteProchaine(code) {
+    if (!rel().jobs.includes(code)) return `<section class="carte"><p>${t('jobSansRelique', { job: echapper(nomJob(code)) })}</p></section>`;
     const e = prochaineEtape(code);
     if (e.fini) return carteFinie(code);
     if (e.echange) return carteEchange(code, e.phase, null);
@@ -342,10 +361,10 @@
   // Une ligne pour la barre réduite : la prochaine étape et son avancement.
   function resumeCourt(code) {
     const e = prochaineEtape(code);
-    if (e.fini) return `${nomArme(code, 5)} ✔`;
-    const nom = T().stades[e.phase.num];
+    if (e.fini) return `${nomArme(code, nbStades())} ✔`;
+    const nom = stades()[e.phase.num];
     if (e.echange) {
-      if (!e.phase.arcanite) return t('resumeOccultum', { nom, dodokkuli: majuscule(nomPnj('dodokkuli')) });
+      if (!e.phase.arcanite) return t('resumeOccultum', { nom, pnj: majuscule(nomPnj(rel().echangeur)) });
       return t('resumeArcanite', { nom, n: etat().objets[e.phase.arcanite] || 0, arcanite: nomObjet(e.phase.arcanite) });
     }
     const [fait, total] = (e.quete.taches || []).reduce(([f, tot], tch) => {
@@ -365,10 +384,12 @@
     }
     const auto = `${t('auto')}${jobJeu ? ` · ${nomJob(jobJeu)}` : ''}`;
     return `<header class="entete">
-      <span class="titre">◆ ${t('nomOutil')}</span>
+      <select class="titre-relique" data-change="relique" title="${echapper(t('choisirRelique'))}">
+        ${Object.values(RELIQUES).map((x) => `<option value="${x.cle}"${rel().cle === x.cle ? ' selected' : ''} title="${t('ilvl', { n: x.phases[x.phases.length - 1].ilvl })}">◆ ${echapper(T().reliques[x.cle])}</option>`).join('')}
+      </select>
       <select data-change="job" title="${echapper(t('jobSuivi'))}">
         <option value="auto"${r.job === 'auto' ? ' selected' : ''}>${echapper(auto)}</option>
-        ${JOBS.map((j) => `<option value="${j.code}"${r.job === j.code ? ' selected' : ''}>${echapper(nomJob(j.code))}</option>`).join('')}
+        ${jobsRelique().map((j) => `<option value="${j.code}"${r.job === j.code ? ' selected' : ''}>${echapper(nomJob(j.code))}</option>`).join('')}
       </select>
       ${point}
       <button class="icone${r.compact ? '' : ' actif'}" data-act="compact" title="${echapper(t(r.compact ? 'afficherOnglets' : 'masquerOnglets'))}">☰</button>
@@ -383,10 +404,10 @@
       <div class="ligne-job"><span class="role ${j.role}">${echapper(abrJob(code))}</span><b>${echapper(nomJob(code))}</b>${racine.persoActif !== SANS_PERSO ? `<small>${echapper(nomPerso(racine.persoActif))}</small>` : ''}</div>
       <div class="arme">
         <button data-act="stade" data-job="${code}" data-n="-1" title="${echapper(t('stadePrec'))}">‹</button>
-        <span>${echapper(nomArme(code, s))}${ILVL[s] ? ` <small>${t('ilvl', { n: ILVL[s] })}</small>` : ''}</span>
+        <span>${rel().jobs.includes(code) ? echapper(nomArme(code, s)) : '—'}${ilvl(s) ? ` <small>${t('ilvl', { n: ilvl(s) })}</small>` : ''}</span>
         <button data-act="stade" data-job="${code}" data-n="1" title="${echapper(t('stadeSuiv'))}">›</button>
       </div>
-      <ol class="phases">${[1, 2, 3, 4, 5].map((n) => `<li class="${n <= s ? 'fait' : n === s + 1 ? 'encours' : ''}" title="${T().stades[n]} · ${t('ilvl', { n: ILVL[n] })}">${T().stades[n]}</li>`).join('')}</ol>
+      <ol class="phases">${Array.from({ length: nbStades() }, (_, i) => i + 1).map((n) => `<li class="${n <= s ? 'fait' : n === s + 1 ? 'encours' : ''}" title="${stades()[n]} · ${t('ilvl', { n: ilvl(n) })}">${stades()[n]}</li>`).join('')}</ol>
       ${restants ? `<div class="cout">${t('memoquartzRestants', { n: nombre(restants) })}</div>` : ''}
     </section>`;
   }
@@ -407,13 +428,14 @@
 
   // ---------- Onglets (mode détaillé) ----------
   function ongletSuivi(code) {
-    const s = stadeJob(code);
-    return PHASES.map((phase) => {
+    const s = stadeJob(code), r = rel();
+    const echangeur = echapper(majuscule(nomPnj(r.echangeur)));
+    return phases().map((phase) => {
       const quetes = phase.quetes.map((q) => {
         const fait = queteFaite(phase, q.id), deduite = !etat().quetes[q.id] && queteDeduite(phase, q.id);
         const sous = q.echange
-          ? t('sousEchange', { arcanite: echapper(nomObjet(phase.arcanite)), total: nombre(1500), dodokkuli: echapper(majuscule(nomPnj('dodokkuli'))) })
-          : q.premiereArme ? t('sousOccultum', { dodokkuli: echapper(majuscule(nomPnj('dodokkuli'))) }) : '';
+          ? t('sousEchange', { arcanite: echapper(nomObjet(phase.arcanite)), total: nombre(1500), pnj: echangeur })
+          : q.premiereArme ? t('sousOccultum', { dodokkuli: echangeur }) : '';
         return `<div class="quete${fait ? ' faite' : ''}">
           <button class="case" data-act="quete" data-id="${q.id}" title="${echapper(t(deduite ? 'deduiteTitre' : 'cocherTitre'))}">${fait ? '✔' : ''}</button>
           <div class="quete-corps"><b>${echapper(nomQuete(q.id))}</b>${deduite ? `<small class="auto">${t('deduite')}</small>` : ''}
@@ -427,20 +449,20 @@
           <button class="case" data-act="quete" data-id="${b.id}">${etat().quetes[b.id] ? '✔' : ''}</button>
           <div class="quete-corps"><b>${echapper(nomQuete(b.id))}</b><small>${texteQuete(b)}</small></div></div>` : '';
       const toutes = phase.quetes.every((q) => queteFaite(phase, q.id));
-      const titre = phase.num ? `${phase.num}. ${T().stades[phase.num]} <small>${t('ilvl', { n: phase.ilvl })}</small>` : t('phaseAcces');
-      const id = `ph:${phase.num}`;
+      const titre = phase.num ? `${phase.num}. ${stades()[phase.num]} <small>${t('ilvl', { n: phase.ilvl })}</small>` : t(phase.titre || 'phaseAcces');
+      const id = `ph:${r.cle}:${phase.num}`;
       if (racine.reglages.ouverts[id] === undefined && phase.num === s + 1) racine.reglages.ouverts[id] = true;
       return pli(id, titre, toutes ? '✔' : `${phase.quetes.filter((q) => queteFaite(phase, q.id)).length}/${phase.quetes.length}`, () => quetes + bonus, toutes);
-    }).join('') + `<p class="aide">${t('repliques', { metallurgiste: echapper(ou('metallurgiste')) })}</p>`;
+    }).join('') + (r.repliques ? `<p class="aide">${t('repliques', { metallurgiste: echapper(ou(r.repliques)) })}</p>` : '');
   }
 
   function ongletJobs(code) {
-    return ['tank', 'soin', 'dps'].map((role) => `<div class="sous-titre">${T().roles[role]}</div>` + JOBS.filter((j) => j.role === role).map((j) => {
+    return ['tank', 'soin', 'dps'].map((role) => `<div class="sous-titre">${T().roles[role]}</div>` + jobsRelique().filter((j) => j.role === role).map((j) => {
       const s = stadeJob(j.code);
-      return `<div class="job${j.code === code ? ' actif' : ''}${s >= 5 ? ' ok' : ''}">
+      return `<div class="job${j.code === code ? ' actif' : ''}${s >= nbStades() ? ' ok' : ''}">
         <button class="job-nom" data-act="choisirJob" data-job="${j.code}"><span class="role ${j.role}">${echapper(abrJob(j.code))}</span>${echapper(nomJob(j.code))}</button>
         <button data-act="stade" data-job="${j.code}" data-n="-1">‹</button>
-        <span class="job-stade" title="${echapper(nomArme(j.code, s))}">${T().stades[s]}</span>
+        <span class="job-stade" title="${echapper(nomArme(j.code, s))}">${stades()[s]}</span>
         <button data-act="stade" data-job="${j.code}" data-n="1">›</button>
       </div>`;
     }).join('')).join('');
@@ -462,6 +484,8 @@
       '00|t|0839||The Meso Terminal has begun.|',
       '00|t|083E||Du hast 13 Entphantomisierer α erhalten.|', '00|t|083E||Du hast einen Phantom-Berdysch Obscurum erhalten.|',
       '00|t|0839||„Das Meso-System“ hat begonnen.|',
+      '00|t|083E||Vous obtenez 3 morceaux de météorite rarissime.|', '00|t|083E||Vous obtenez une hache éblouissante des Manderville.|',
+      '00|t|083E||You obtain a Mandervillous battleaxe.|',
       '00|t|000A|Joueur|Vous obtenez 50 morceaux de pâte de cristal.|',
       '33|t|80034E88|40000003|00|00|00|00|', '01|t|4AD|Zone|',
     ].map((l) => `<button class="puce test" data-act="simuler" data-ligne="${echapper(l)}">${echapper(l.startsWith('00|') ? l.split('|')[4] : l)}</button>`).join('')}` : '';
@@ -522,6 +546,10 @@
     if (!d || d.version !== 1 || !d.persos) return false;
     // Les sauvegardes d'avant la v1.1 viennent forcément d'un client français (seule langue gérée alors).
     racine = { ...racine, langueJeu: 'fr', ...d, reglages: { ...racine.reglages, ...d.reglages } };
+    // Avant la v1.2, une seule relique : les armes { WAR: 2 } deviennent celles de Dawntrail { dt: { WAR: 2 } }.
+    for (const perso of Object.values(racine.persos)) {
+      if (Object.values(perso.armes || {}).some((v) => typeof v === 'number')) perso.armes = { dt: perso.armes };
+    }
     return true;
   }
 
@@ -533,7 +561,7 @@
   function chargerDemo() {
     const e = Object.assign(nouvelEtat(), {
       accueilVu: true,
-      armes: { WAR: 2, PLD: 1, WHM: 1 },
+      armes: { dt: { WAR: 2, PLD: 1, WHM: 1 }, ew: { WAR: 4, PLD: 2 } },
       quetes: { recherche: true },
       objets: { pate: 640 },
       journal: [{ h: '21:04', k: 'j.objet', p: { qte: 20, objet: 'pate' } }, { h: '20:51', k: 'j.objet', p: { qte: 15, objet: 'pate' } }],
@@ -615,12 +643,13 @@
         noter('j.objet', { qte: a.qte, objet: a.cle });
         break;
       case 'arme': {
-        if (a.stade > stadeJob(a.job)) {
-          e.armes[a.job] = a.stade;
-          const arcanite = PHASES[a.stade].arcanite;  // les 3 arcanites sont remises à Dodokkuli
+        const relique = a.relique || rel().cle;
+        if (a.stade > stadeJob(a.job, relique)) {
+          armesDe(relique)[a.job] = a.stade;
+          const arcanite = RELIQUES[relique].phases[a.stade].arcanite;  // les 3 objets d'échange sont remis avec l'arme
           if (arcanite) e.objets[arcanite] = Math.max(0, (e.objets[arcanite] || 0) - 3);
         }
-        noter('j.arme', { job: a.job, stade: a.stade });
+        noter('j.arme', { relique, job: a.job, stade: a.stade });
         break;
       }
       case 'quete':
@@ -629,7 +658,7 @@
         break;
       case 'mission':
         // Le cristal de savoir ne compte que pendant « Les mémentos martiaux » (arme eclipticum obtenue).
-        if (stadeMax() < 4 || queteFaite(PHASES[5], 'mementos')) { noter('j.missionHors', { mission: a.cle }, false); break; }
+        if (stadeMax('dt') < 4 || e.quetes.mementos || stadeMax('dt') >= 5) { noter('j.missionHors', { mission: a.cle }, false); break; }
         e.memoires[`m:${a.cle}`] = true;
         noter('j.mission', { mission: a.cle });
         break;
@@ -648,7 +677,8 @@
 
   // ---------- Interactions ----------
   function changerStade(code, delta) {
-    etat().armes[code] = Math.max(0, Math.min(5, stadeJob(code) + delta));
+    if (!rel().jobs.includes(code)) return;
+    armesDe(rel().cle)[code] = Math.max(0, Math.min(nbStades(), stadeJob(code) + delta));
   }
 
   app.addEventListener('click', (ev) => {
@@ -663,10 +693,10 @@
         else if (queteDeduite(phase, d.id) && !e.quetes[d.id]) { noter('j.deduite'); break; }
         else e.quetes[d.id] = !e.quetes[d.id];
         const q = phase.quetes.find((x) => x.id === d.id);
-        if (q?.premiereArme && e.quetes[d.id]) e.armes[jobAffiche()] = Math.max(stadeJob(jobAffiche()), phase.num);
+        if (q?.premiereArme && e.quetes[d.id]) armesDe(rel().cle)[jobAffiche()] = Math.max(stadeJob(jobAffiche()), phase.num);
         break;
       }
-      case 'arme': appliquer({ type: 'arme', job: d.job, stade: Number(d.stade) }); return;
+      case 'arme': appliquer({ type: 'arme', relique: rel().cle, job: d.job, stade: Number(d.stade) }); return;
       case 'stade': changerStade(d.job, Number(d.n)); break;
       case 'ajout': e.objets[d.cle] = Math.max(0, (e.objets[d.cle] || 0) + Number(d.n)); break;
       case 'basculerObjet': e.objets[d.cle] = (e.objets[d.cle] || 0) >= Number(d.qte) ? 0 : Number(d.qte); break;
@@ -707,6 +737,7 @@
     const v = Math.max(0, parseInt(cible.value, 10) || 0);
     if (cible.dataset.change === 'job') racine.reglages.job = cible.value;
     else if (cible.dataset.change === 'langue') racine.reglages.langue = cible.value;
+    else if (cible.dataset.change === 'relique') racine.reglages.relique = cible.value;
     else if (cible.dataset.change === 'objet') e.objets[cible.dataset.cle] = v;
     else if (cible.dataset.change === 'jauge') e.jauges[cible.dataset.cle] = Math.min(10000, v);
     else return;

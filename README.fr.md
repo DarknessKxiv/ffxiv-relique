@@ -1,9 +1,16 @@
-# Relique fantôme — overlay ACT pour FFXIV Dawntrail
+# Suivi des reliques — overlay ACT pour les armes reliques de FFXIV
 
 **Français** · [English](README.md)
 
-Overlay pour **ACT + OverlayPlugin** qui suit ta quête de l'arme relique de Dawntrail (armes fantômes, de **Penumbra iL 745** à **Occultum iL 795**) pour les **21 jobs** de combat.
-Il te montre où tu en es et **ce qu'il faut faire ensuite** : quête, PNJ et coordonnées, objets à réunir et où les obtenir.
+Overlay pour **ACT + OverlayPlugin** qui suit tes armes reliques, job par job :
+
+| Extension | Relique | Stades | Jobs |
+|---|---|---|---|
+| Dawntrail (niv. 100) | Armes fantômes | Penumbra iL 745 → Occultum iL 795 | 21 |
+| Endwalker (niv. 90) | Armes Manderville | Manderville iL 615 → Manderveilleuse iL 665 | 19 |
+
+Choisis la relique en haut de l'overlay. Il te montre où tu en es et **ce qu'il faut faire ensuite** : quête, PNJ et coordonnées, objets à réunir et où les obtenir.
+Les reliques plus anciennes (Shadowbringers, Stormblood, Heavensward, A Realm Reborn) sont prévues.
 
 ![Aperçu de l'overlay](docs/apercu-fr.png)
 
@@ -14,9 +21,9 @@ Il te montre où tu en es et **ce qu'il faut faire ensuite** : quête, PNJ et co
 ## Fonctionnalités
 
 - **Prochaine étape** du job suivi : la quête, le PNJ avec ses coordonnées, les objets à réunir et leur source.
-- **Toutes les phases** détaillées : demi-âtma, Magi sphérier, pâtes de cristal, dissipateurs, cristal de savoir (65 objectifs).
+- **Toutes les phases** détaillées : pour Dawntrail, demi-âtma, Magi sphérier, pâtes de cristal, dissipateurs, cristal de savoir (65 objectifs) ; pour Endwalker, les quêtes d'Hildibrand et les échanges de mémoquartz.
 - **Où farmer** : les ALÉA et affrontements cruciaux de Lunule qui donnent chaque demi-âtma ou dissipateur.
-- **Suivi des 21 jobs**, avec les mémoquartz restant à dépenser pour chacun.
+- **Suivi de chaque job**, avec les mémoquartz restant à dépenser pour chacun.
 - **Détection automatique** pendant que tu joues (voir plus bas), avec le job suivi qui s'adapte au job joué.
 - **Trois affichages** : complet, compact (bouton ☰, sans les onglets) ou **réduit à une seule barre** (bouton ▴) qui montre juste la prochaine étape.
 - **Masquage automatique pendant les donjons, défis et raids** (activé par défaut, désactivable dans les Réglages). L'overlay reste affiché sur l'Île de Lunule.
@@ -59,9 +66,9 @@ Quand ACT tourne, l'overlay lit le journal du jeu transmis par OverlayPlugin.
 | Personnage et job joué | Quêtes terminées (bouton « ✓ Quête terminée ») si aucun message n'a été vu |
 | Langue du jeu | Jauges du Magi sphérier |
 | Demi-âtma, pâtes de cristal, dissipateurs obtenus | ALÉA au rang or et monstres du cristal de savoir |
-| Lunulite, ombralite, alunite, écliptite achetées | |
+| Objets d'amélioration achetés (lunulite, météorite rarissime…) | |
 | Objets de quête (colle, matières sombres, etc.) | |
-| Armes fantômes reçues | |
+| Armes reliques reçues | |
 | Quêtes acceptées et terminées | |
 | Missions réussies du cristal de savoir | |
 
@@ -87,7 +94,8 @@ Aucune compilation : du HTML, CSS et JavaScript simples.
 | Fichier | Rôle |
 |---|---|
 | `index.html`, `style.css` | Page de l'overlay |
-| `js/etapes.js` | Structure : jobs, PNJ, phases, quêtes et tâches (sans texte) |
+| `js/etapes.js` | Structure commune : jobs et coordonnées des PNJ (sans texte) |
+| `js/reliques/*.js` | Un fichier par relique : phases, quêtes et tâches (sans texte) |
 | `js/textes.js` | Textes de l'interface en français, anglais et allemand |
 | `js/noms-jeu.js` | Noms officiels du jeu dans chaque langue (généré) |
 | `js/detection.js` | Lecture des lignes du journal ACT (formats officiels des messages de chaque langue) |
