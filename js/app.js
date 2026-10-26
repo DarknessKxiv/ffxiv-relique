@@ -854,9 +854,10 @@
   Overlay.ecouter('LogLine', surLigne);
   Overlay.ecouter('ChangePrimaryPlayer', (ev) => {
     if (apercu) return;
+    const avant = racine.persoActif;
     changerPerso(ev.charName);
     if (ev.charID) lireJobEnJeu(ev.charID);
-    sauver();
+    if (racine.persoActif !== avant) sauver();  // rien à enregistrer si c'est le même personnage
     rendre();
   });
   Overlay.demarrer();

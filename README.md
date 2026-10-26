@@ -53,14 +53,14 @@ You need [ACT](https://advancedcombattracker.com/) with the FFXIV plugin and [Ov
 Updates arrive on their own, because the overlay is loaded from GitHub Pages.
 For a fully local copy, download the repository (**Code → Download ZIP**) and use `file:///C:/path/to/ffxiv-relique/index.html` as the URL.
 
-**Linux or macOS** (or to show it in a browser or OBS): start OverlayPlugin's WebSocket server (**WSServer** tab → **Start**), then use this URL:
+**Linux or macOS** (or to show it in a browser or OBS): start OverlayPlugin's WebSocket server (ACT **Plugins** tab → **OverlayPlugin WSServer** → **Start**), then use this URL:
 ```
 https://DarknessKxiv.github.io/ffxiv-relique/?OVERLAY_WS=ws://127.0.0.1:10501/ws
 ```
 
 ## First use
 
-1. **Jobs** tab: set each job's phantom weapon with ‹ ›. Everything before it is checked automatically.
+1. **Jobs** tab: set each job's weapon with ‹ ›. Everything before it is checked automatically.
 2. **Steps** tab: tick the quests you have already done in your current phase.
 3. Enter your current counters (demiatma, crystal paste, Aetherwell Array gauges…) with the + / − buttons.
 

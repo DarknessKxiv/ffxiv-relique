@@ -53,14 +53,14 @@ Il faut [ACT](https://advancedcombattracker.com/) avec le plugin FFXIV et [Overl
 Les mises à jour arrivent toutes seules : l'overlay est chargé depuis GitHub Pages.
 Pour une version 100 % locale, télécharge le dépôt (**Code → Download ZIP**) et mets `file:///C:/chemin/vers/ffxiv-relique/index.html` dans le champ URL.
 
-**Sous Linux ou macOS** (ou pour l'afficher dans un navigateur ou OBS) : démarre le serveur WebSocket d'OverlayPlugin (onglet **WSServer** → **Start**), puis utilise cette URL :
+**Sous Linux ou macOS** (ou pour l'afficher dans un navigateur ou OBS) : démarre le serveur WebSocket d'OverlayPlugin (onglet **Plugins** d'ACT → **OverlayPlugin WSServer** → **Start**), puis utilise cette URL :
 ```
 https://DarknessKxiv.github.io/ffxiv-relique/?OVERLAY_WS=ws://127.0.0.1:10501/ws
 ```
 
 ## Première utilisation
 
-1. Onglet **Jobs** : règle avec ‹ › l'arme fantôme que possède chaque job. Tout ce qui précède est coché automatiquement.
+1. Onglet **Jobs** : règle avec ‹ › l'arme que possède chaque job. Tout ce qui précède est coché automatiquement.
 2. Onglet **Étapes** : coche les quêtes déjà faites de la phase en cours.
 3. Entre tes compteurs actuels (demi-âtma, pâtes de cristal, jauges du Magi sphérier…) avec les boutons + / −.
 

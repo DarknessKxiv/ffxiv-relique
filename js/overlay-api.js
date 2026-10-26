@@ -8,8 +8,11 @@
     estDansAct: () => viaWebSocket || !!window.OverlayPluginApi,
     // Fenêtre d'aperçu d'OverlayPlugin (ajout d'un overlay depuis un preset), signalée après le chargement.
     estApercu: () => !!(window.OverlayPluginApi && window.OverlayPluginApi.preview),
-    // Les écouteurs doivent tous être posés avant demarrer().
-    ecouter: (evenement, f) => window.addOverlayListener(evenement, f),
+    // Les écouteurs doivent tous être posés avant demarrer(). Une erreur dans l'un d'eux est notée dans la
+    // console sans interrompre la suite des évènements.
+    ecouter: (evenement, f) => window.addOverlayListener(evenement, (ev) => {
+      try { f(ev); } catch (e) { console.error(e); }
+    }),
     demarrer: () => window.startOverlayEvents(),
     appeler: (msg) => window.callOverlayHandler(msg).then((rep) => {
       if (rep && rep.$error) throw rep;
