@@ -45,13 +45,18 @@ Il faut [ACT](https://advancedcombattracker.com/) avec le plugin FFXIV et [Overl
    ```
    puis clique sur **Recharger l'overlay**.
 4. Laisse **Clic à travers** décoché, sinon tu ne pourras pas cliquer dans l'overlay.
-5. Décoche **Bloquer l'overlay**, place et redimensionne la fenêtre en jeu, puis recoche-la.
+5. Décoche **Bloquer l'overlay**, place et redimensionne la fenêtre en jeu (environ 500 px de large), puis recoche-la.
 6. Facultatif : onglet **Raccourcis** → **Nouveau raccourci**, type **Visible/Caché**, pour l'afficher ou le cacher d'une touche.
 
 **Texte trop petit (écran 4K) ?** Utilise le curseur **Zoom** de l'onglet **Général**, ou les boutons **A− / A+** dans les **Réglages** de l'overlay.
 
 Les mises à jour arrivent toutes seules : l'overlay est chargé depuis GitHub Pages.
 Pour une version 100 % locale, télécharge le dépôt (**Code → Download ZIP**) et mets `file:///C:/chemin/vers/ffxiv-relique/index.html` dans le champ URL.
+
+**Sous Linux ou macOS** (ou pour l'afficher dans un navigateur ou OBS) : démarre le serveur WebSocket d'OverlayPlugin (onglet **WSServer** → **Start**), puis utilise cette URL :
+```
+https://DarknessKxiv.github.io/ffxiv-relique/?OVERLAY_WS=ws://127.0.0.1:10501/ws
+```
 
 ## Première utilisation
 
@@ -105,14 +110,16 @@ Aucune compilation : du HTML, CSS et JavaScript simples.
 | `js/noms-jeu.js` | Noms officiels du jeu dans chaque langue (généré) |
 | `js/detection.js` | Lecture des lignes du journal ACT (formats officiels des messages de chaque langue) |
 | `js/app.js` | État, affichage, sauvegarde |
-| `js/overlay-api.js` | Liaison avec OverlayPlugin |
+| `js/overlay-api.js` | Liaison avec OverlayPlugin, par sa bibliothèque officielle |
+| `js/vendor/overlayplugin-common.js` | `common.js` d'OverlayPlugin (non modifié, MIT) : connexion à ACT et par WebSocket |
 | `outils/generer-noms.mjs` | Régénère `noms-jeu.js` depuis XIVAPI : `node outils/generer-noms.mjs` |
 
-Ajoute `?test` à l'URL pour des boutons qui simulent des lignes de journal (onglet Réglages), `?demo` pour une progression d'exemple, et `?lang=fr|en|de` pour présélectionner une langue.
+Ajoute `?test` à l'URL pour des boutons qui simulent des lignes de journal (onglet Réglages), `?demo` pour une progression d'exemple, et `?lang=fr|en|de` pour présélectionner une langue. La fenêtre d'aperçu d'OverlayPlugin (ajout de l'overlay depuis un preset) montre la même progression d'exemple.
 
 ## Sources et mentions
 
-- Étapes : [ffxiv.consolegameswiki.com — Phantom Weapons](https://ffxiv.consolegameswiki.com/wiki/Phantom_Weapons) et [tutostation.fr — guide relique Dawntrail](https://www.tutostation.fr/archive/2024/12/13/final-fantasy-xiv-guide-relique-dawntrail.html).
+- Étapes : ffxiv.consolegameswiki.com ([Zodiac](https://ffxiv.consolegameswiki.com/wiki/Zodiac_Weapons), [Anima](https://ffxiv.consolegameswiki.com/wiki/Anima_Weapons), [Eurekan](https://ffxiv.consolegameswiki.com/wiki/Eurekan_Weapons), [Resistance](https://ffxiv.consolegameswiki.com/wiki/Resistance_Weapons), [Manderville](https://ffxiv.consolegameswiki.com/wiki/Manderville_Weapons), [Phantom Weapons](https://ffxiv.consolegameswiki.com/wiki/Phantom_Weapons)) et [tutostation.fr — guide relique Dawntrail](https://www.tutostation.fr/archive/2024/12/13/final-fantasy-xiv-guide-relique-dawntrail.html).
+- Liaison avec ACT : `common.js` d'[OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin) (MIT).
 - Noms officiels du jeu et formats des messages : [XIVAPI](https://v2.xivapi.com).
 - Projet non officiel, sans lien avec Square Enix. FINAL FANTASY XIV © SQUARE ENIX CO., LTD. Tous droits réservés.
 

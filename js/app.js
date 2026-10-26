@@ -6,9 +6,11 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.0';
+  const VERSION = '1.3.1';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
+  let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
+  const enDemo = () => MODE_DEMO || apercu;
   const LANGUE_URL = (location.search.match(/[?&]lang=(\w+)/) || [])[1];
   const LANGUE_NAVIGATEUR = String(navigator.language || '').slice(0, 2).toLowerCase();
 
@@ -587,7 +589,7 @@
       <div class="sous-titre">${t('regRaz')}</div>
       <button class="danger" data-act="raz">${t(confirmerRaz ? 'razConfirm' : 'razBtn')}</button>
       ${tests}
-      <p class="aide">${t('nomOutil')} v${VERSION}${MODE_DEMO ? t('demo') : ''}</p>`;
+      <p class="aide">${t('nomOutil')} v${VERSION}${enDemo() ? t('demo') : ''}</p>`;
   }
 
   function onglets(code) {
@@ -616,10 +618,11 @@
   // ---------- Sauvegarde ----------
   let minuterie = null;
   function sauver() {
-    if (MODE_DEMO) return;
+    if (enDemo()) return;
     racine.maj = Date.now();
     clearTimeout(minuterie);
     minuterie = setTimeout(() => {
+      if (enDemo()) return;  // passé en aperçu entre-temps : la progression d'exemple ne doit rien écraser
       try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(racine)); } catch (e) { /* stockage indisponible */ }
       if (connecte) Overlay.appeler({ call: 'saveData', key: CLE_STOCKAGE, data: racine }).catch(() => {});
     }, 300);
@@ -640,7 +643,8 @@
     try { adopter(JSON.parse(localStorage.getItem(CLE_STOCKAGE))); } catch (e) { /* rien d'enregistré */ }
   }
 
-  // Mode démo (?demo) : progression d'exemple pour essayer l'outil dans un navigateur, jamais enregistrée.
+  // Mode démo (?demo, ou fenêtre d'aperçu d'OverlayPlugin) : progression d'exemple au milieu d'une étape,
+  // pour voir l'outil en action, jamais enregistrée.
   function chargerDemo() {
     const e = Object.assign(nouvelEtat(), {
       accueilVu: true,
@@ -651,7 +655,8 @@
     });
     racine.persos = { [PERSO_DEMO]: e };
     racine.persoActif = PERSO_DEMO;
-    racine.reglages.job = 'WAR';
+    // Affichage complet sur la relique Dawntrail, quels que soient les réglages enregistrés.
+    Object.assign(racine.reglages, { relique: 'dt', job: 'WAR', reduit: false, compact: false, onglet: 'suivi' });
   }
 
   async function avecDelai(promesse) {
@@ -661,7 +666,7 @@
   async function chargerDepuisAct() {
     try {
       const rep = await avecDelai(Overlay.appeler({ call: 'loadData', key: CLE_STOCKAGE }));
-      if (rep?.data && (rep.data.maj || 0) > (racine.maj || 0) && adopter(rep.data)) {
+      if (!enDemo() && rep?.data && (rep.data.maj || 0) > (racine.maj || 0) && adopter(rep.data)) {
         changerPerso(persoEnJeu);  // la sauvegarde ne doit pas écraser le personnage déjà détecté
         rendre();
       }
@@ -769,7 +774,8 @@
     rendre();
   }
 
-  const surLigne = (ev) => Array.isArray(ev.line) && Detection.analyser(ev.line).forEach(appliquer);
+  // Dans la fenêtre d'aperçu, l'exemple reste figé : les lignes du jeu sont ignorées.
+  const surLigne = (ev) => !apercu && Array.isArray(ev.line) && Detection.analyser(ev.line).forEach(appliquer);
 
   // ---------- Interactions ----------
   function changerStade(code, delta) {
@@ -847,15 +853,29 @@
   rendre();
   Overlay.ecouter('LogLine', surLigne);
   Overlay.ecouter('ChangePrimaryPlayer', (ev) => {
+    if (apercu) return;
     changerPerso(ev.charName);
     if (ev.charID) lireJobEnJeu(ev.charID);
     sauver();
     rendre();
   });
+  Overlay.demarrer();
+
+  // Fenêtre d'aperçu d'OverlayPlugin (ajout d'un overlay depuis un preset) : elle n'est signalée qu'après le
+  // chargement (OverlayPluginApi.preview), puis par l'évènement onExampleShowcase envoyé chaque seconde.
+  function passerEnApercu() {
+    if (enDemo()) return;
+    apercu = true;
+    chargerDemo();
+    rendre();
+  }
+  document.addEventListener('onExampleShowcase', passerEnApercu);
+
   setTimeout(() => {
     connecte = Overlay.estDansAct();
     document.documentElement.classList.toggle('navigateur', !connecte);
-    if (connecte) { if (!MODE_DEMO) chargerDepuisAct(); lireJobEnJeu(); lireLangueAct(); }
+    if (Overlay.estApercu()) passerEnApercu();
+    if (connecte) { if (!enDemo()) chargerDepuisAct(); lireJobEnJeu(); lireLangueAct(); }
     rendre();
   }, 1000);
 })();

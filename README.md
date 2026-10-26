@@ -38,20 +38,25 @@ For the older relics, the steps are the **current ones**: items that used to com
 You need [ACT](https://advancedcombattracker.com/) with the FFXIV plugin and [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin). Play the game in **borderless windowed** mode.
 
 1. In ACT: **Plugins** tab → **OverlayPlugin.dll** → **New**.
-2. **Name**: `Phantom Relic`; **Preset**: **Custom**; **Type**: **MiniParse** → OK.
+2. **Name**: `Relic Tracker`; **Preset**: **Custom**; **Type**: **MiniParse** → OK.
 3. In the **General** tab of the new overlay, set the **URL** to:
    ```
    https://DarknessKxiv.github.io/ffxiv-relique/
    ```
    then click **Reload overlay**.
 4. Leave **Enable clickthrough** unchecked, otherwise you cannot click in the overlay.
-5. Uncheck **Lock overlay**, move and resize the window in game, then lock it again.
+5. Uncheck **Lock overlay**, move and resize the window in game (about 500 px wide), then lock it again.
 6. Optional: **Hotkeys** tab → new hotkey of type **Toggle visibility** to show or hide it with a key.
 
 **Text too small (4K screen)?** Use the **Zoom** slider in the **General** tab, or the **A− / A+** buttons in the overlay **Settings**.
 
 Updates arrive on their own, because the overlay is loaded from GitHub Pages.
 For a fully local copy, download the repository (**Code → Download ZIP**) and use `file:///C:/path/to/ffxiv-relique/index.html` as the URL.
+
+**Linux or macOS** (or to show it in a browser or OBS): start OverlayPlugin's WebSocket server (**WSServer** tab → **Start**), then use this URL:
+```
+https://DarknessKxiv.github.io/ffxiv-relique/?OVERLAY_WS=ws://127.0.0.1:10501/ws
+```
 
 ## First use
 
@@ -105,14 +110,16 @@ No build step: plain HTML, CSS and JavaScript.
 | `js/noms-jeu.js` | Official game names in each language (generated) |
 | `js/detection.js` | Reads the ACT log lines (official message formats of each language) |
 | `js/app.js` | State, display, saving |
-| `js/overlay-api.js` | Link with OverlayPlugin |
+| `js/overlay-api.js` | Link with OverlayPlugin, through its official library |
+| `js/vendor/overlayplugin-common.js` | OverlayPlugin's `common.js` (unmodified, MIT): ACT and WebSocket connections |
 | `outils/generer-noms.mjs` | Regenerates `noms-jeu.js` from XIVAPI: `node outils/generer-noms.mjs` |
 
-Add `?test` to the URL for buttons that simulate log lines (Settings tab), `?demo` for sample progress, and `?lang=fr|en|de` to preselect a language.
+Add `?test` to the URL for buttons that simulate log lines (Settings tab), `?demo` for sample progress, and `?lang=fr|en|de` to preselect a language. OverlayPlugin's preview window (when adding the overlay from a preset) shows the same sample progress.
 
 ## Sources and credits
 
-- Steps: [ffxiv.consolegameswiki.com — Phantom Weapons](https://ffxiv.consolegameswiki.com/wiki/Phantom_Weapons) and [tutostation.fr — Dawntrail relic guide](https://www.tutostation.fr/archive/2024/12/13/final-fantasy-xiv-guide-relique-dawntrail.html).
+- Steps: ffxiv.consolegameswiki.com ([Zodiac](https://ffxiv.consolegameswiki.com/wiki/Zodiac_Weapons), [Anima](https://ffxiv.consolegameswiki.com/wiki/Anima_Weapons), [Eurekan](https://ffxiv.consolegameswiki.com/wiki/Eurekan_Weapons), [Resistance](https://ffxiv.consolegameswiki.com/wiki/Resistance_Weapons), [Manderville](https://ffxiv.consolegameswiki.com/wiki/Manderville_Weapons), [Phantom Weapons](https://ffxiv.consolegameswiki.com/wiki/Phantom_Weapons)) and [tutostation.fr — Dawntrail relic guide](https://www.tutostation.fr/archive/2024/12/13/final-fantasy-xiv-guide-relique-dawntrail.html).
+- Connection to ACT: [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin) `common.js` (MIT).
 - Official game names and log message formats: [XIVAPI](https://v2.xivapi.com).
 - Unofficial project, not affiliated with Square Enix. FINAL FANTASY XIV © SQUARE ENIX CO., LTD. All rights reserved.
 

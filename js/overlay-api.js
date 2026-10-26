@@ -1,51 +1,19 @@
-// Liaison minimale avec OverlayPlugin (même fonctionnement que common.js / cactbot).
-// Dans ACT, OverlayPlugin injecte window.OverlayPluginApi ; dans un navigateur normal, rien ne se passe.
+// Liaison avec OverlayPlugin par sa bibliothèque officielle (js/vendor/overlayplugin-common.js) : dans ACT,
+// elle passe par window.OverlayPluginApi ; sous Linux ou macOS (ou dans un navigateur), par le serveur WebSocket
+// d'OverlayPlugin, avec ?OVERLAY_WS=ws://… dans l'adresse de l'overlay. Ailleurs, les appels restent sans réponse.
 (function () {
-  const abonnes = {};
-  let attente = [];  // appels mis en file tant que l'API n'est pas prête (null ensuite)
-
-  function envoyer(msg, cb) {
-    if (attente) attente.push([msg, cb]);
-    else window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
-  }
-
-  function distribuer(msg) {
-    (abonnes[msg.type] || []).forEach((f) => {
-      try { f(msg); } catch (e) { console.error(e); }
-    });
-  }
-
-  function attendreApi() {
-    if (!(window.OverlayPluginApi && window.OverlayPluginApi.ready)) {
-      setTimeout(attendreApi, 300);
-      return;
-    }
-    const file = attente;
-    attente = null;
-    window.__OverlayCallback = distribuer;
-    envoyer({ call: 'subscribe', events: Object.keys(abonnes) });
-    file.forEach(([msg, cb]) => envoyer(msg, cb));
-  }
+  const viaWebSocket = /[?&]OVERLAY_WS=/.test(location.href);
 
   window.Overlay = {
-    estDansAct: () => !!window.OverlayPluginApi,
-    ecouter(evenement, f) {
-      if (!abonnes[evenement]) {
-        abonnes[evenement] = [];
-        if (!attente) envoyer({ call: 'subscribe', events: [evenement] });
-      }
-      abonnes[evenement].push(f);
-    },
-    appeler(msg) {
-      return new Promise((resoudre, rejeter) => envoyer(msg, (data) => {
-        if (data == null) return resoudre(null);
-        const rep = JSON.parse(data);
-        if (rep && rep.$error) rejeter(rep); else resoudre(rep);
-      }));
-    },
-    // Injecte un évènement à la main (mode test dans le navigateur).
-    simuler: distribuer,
+    estDansAct: () => viaWebSocket || !!window.OverlayPluginApi,
+    // Fenêtre d'aperçu d'OverlayPlugin (ajout d'un overlay depuis un preset), signalée après le chargement.
+    estApercu: () => !!(window.OverlayPluginApi && window.OverlayPluginApi.preview),
+    // Les écouteurs doivent tous être posés avant demarrer().
+    ecouter: (evenement, f) => window.addOverlayListener(evenement, f),
+    demarrer: () => window.startOverlayEvents(),
+    appeler: (msg) => window.callOverlayHandler(msg).then((rep) => {
+      if (rep && rep.$error) throw rep;
+      return rep;
+    }),
   };
-
-  attendreApi();
 })();
