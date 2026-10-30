@@ -22,6 +22,8 @@ const OBJETS = {
   meteorite: 38420, chondrite: 38940, achondrite: 40322, cristallite: 41032, poetique: 28,
 };
 const OBJETS_CLES = { magiSpherier: 2003766, lunette: 2003765, cristalSavoir: 2003836 };
+// Orbes du Magi sphérier (feuille Addon), cités par « L'orbe magique vert a reçu 545 unités d'énergie éthérée. »
+const ORBES = { vert: 16551, rouge: 16552, bleu: 16553, jaune: 16554 };
 const QUETES = {
   sentierAurore: 70495, derniereAventure: 70845, villeFantome: 70846, familier: 70847,
   forgeron: 70855, arsenal: 70856,
@@ -175,6 +177,7 @@ const formes = (f, l) => ({ nom: propre(f[`Name@lang(${l})`]), sg: propre(f[`Sin
 
 const objets = await parCle('Item', OBJETS, ['Name', 'Singular', 'Plural']);
 const objetsCles = await parCle('EventItem', OBJETS_CLES, ['Name', 'Singular', 'Plural']);
+const orbes = await parCle('Addon', ORBES, ['Text']);
 const quetes = await parCle('Quest', QUETES, ['Name']);
 const missions = await parCle('ContentFinderCondition', MISSIONS, ['Name']);
 const monstres = await parCle('BNpcName', MONSTRES, ['Singular', 'Pronoun']);
@@ -258,6 +261,7 @@ const donnees = enLangues((l) => {
   return {
     objets: Object.fromEntries(Object.entries(objets).map(([c, f]) => [c, formes(f, l)])),
     objetsCles: Object.fromEntries(Object.entries(objetsCles).map(([c, f]) => [c, formes(f, l)])),
+    orbes: Object.fromEntries(Object.entries(orbes).map(([c, f]) => [c, nom(f, 'Text')])),
     quetes: Object.fromEntries(Object.entries(quetes).map(([c, f]) => [c, nom(f)])),
     missions: Object.fromEntries(Object.entries(missions).map(([c, f]) => [c, nom(f).replace(/\s*\([^)]*\d[^)]*\)$/, '').replace(/\s+/g, ' ')])),
     monstres: Object.fromEntries(Object.entries(monstres).map(([c, f]) => [c, affichage(f[`Singular@lang(${l})`], f[`Pronoun@lang(${l})`])])),

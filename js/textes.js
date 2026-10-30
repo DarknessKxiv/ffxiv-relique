@@ -223,6 +223,8 @@ window.TEXTES = {
     journalHorsAct: ' (uniquement dans ACT)',
     j: {
       objet: '+{qte} {objet}',
+      orbe: '{orbe} : +{qte}',
+      orbeBonus: '{orbe} : +{qte} (bonus de la roulette du jour)',
       arme: 'Arme reçue : {arme}',
       queteFaite: 'Quête terminée : {quete}',
       queteEnCours: 'Quête en cours : {quete}',
@@ -471,6 +473,8 @@ window.TEXTES = {
     journalHorsAct: ' (only in ACT)',
     j: {
       objet: '+{qte} {objet}',
+      orbe: '{orbe}: +{qte}',
+      orbeBonus: '{orbe}: +{qte} (daily roulette bonus)',
       arme: 'Weapon received: {arme}',
       queteFaite: 'Quest complete: {quete}',
       queteEnCours: 'Quest in progress: {quete}',
@@ -719,6 +723,8 @@ window.TEXTES = {
     journalHorsAct: ' (nur in ACT)',
     j: {
       objet: '+{qte} {objet}',
+      orbe: '{orbe}: +{qte}',
+      orbeBonus: '{orbe}: +{qte} (Tagesbonus des Zufallsinhalts)',
       arme: 'Waffe erhalten: {arme}',
       queteFaite: 'Auftrag abgeschlossen: {quete}',
       queteEnCours: 'Auftrag läuft: {quete}',

@@ -79,6 +79,20 @@
   const OBJETS_CLES = { magiSpherier: 'orbes', lunette: 'pate', cristalSavoir: 'mementos' };
   const REPLIQUES = LANGUES.map((l) => NJ[l].replique).filter(Boolean);
 
+  // Énergie des orbes du Magi sphérier (relique Dawntrail, phase Umbra), modèles LogMessage 11142 et 11143 :
+  //   « L'orbe magique vert a reçu (un bonus de) 545 unités d'énergie éthérée. » Le bonus vient de la roulette du jour.
+  const NOMBRE = '(\\d{1,3}(?:[ .,]\\d{3})+|\\d+)';
+  const MODELES_ORBE = {
+    fr: (o) => `^l'(${o}) a reçu (un bonus de )?${NOMBRE} unités? d'énergie éthérée`,
+    en: (o) => `^the (${o}) has been filled with (a bonus )?${NOMBRE} units? of aether`,
+    de: (o) => `^die (${o}) wurde (dank des bonus zusätzlich )?mit ${NOMBRE} einheit(?:en)? äther befüllt`,
+  };
+  const ORBES = {};
+  for (const l of LANGUES) {
+    ORBES[l] = Object.fromEntries(Object.entries(NJ[l].orbes).map(([cle, nom]) => [norm(nom), cle]));
+    MOTIFS[l].orbe = new RegExp(MODELES_ORBE[l](Object.keys(ORBES[l]).map(echapperRe).join('|')));
+  }
+
   // Motifs des noms d'une langue, préparés à sa première ligne de gain : un client français ne bâtit que les siens.
   const NOMS = {};
   function noms(langue) {
@@ -150,6 +164,9 @@
         const cle = QUETES[norm((finie || acceptee)[1])];
         return cle ? [...vue(), { type: 'quete', cle, statut: finie ? 'fait' : 'encours' }] : vue();
       }
+
+      const orbe = texte.match(m.orbe);
+      if (orbe) return [...vue(), { type: 'orbe', cle: ORBES[langue][orbe[1]], qte: parseInt(orbe[3].replace(/\D/g, ''), 10), bonus: !!orbe[2] }];
 
       if (m.gain.test(texte)) {
         if (REPLIQUES.some((r) => texte.includes(r))) return vue();

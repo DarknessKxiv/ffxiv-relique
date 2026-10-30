@@ -535,6 +535,12 @@ window.NOMS_JEU = {
     "pl": "cristaux de savoir"
    }
   },
+  "orbes": {
+   "vert": "Orbe magique vert",
+   "rouge": "Orbe magique rouge",
+   "bleu": "Orbe magique bleu",
+   "jaune": "Orbe magique jaune"
+  },
   "quetes": {
    "sentierAurore": "Le sentier de l'aurore",
    "derniereAventure": "La dernière aventure de Ketenramm",
@@ -7103,6 +7109,12 @@ window.NOMS_JEU = {
     "sg": "knowledge crystal",
     "pl": "knowledge crystals"
    }
+  },
+  "orbes": {
+   "vert": "Green Aetherwell",
+   "rouge": "Red Aetherwell",
+   "bleu": "Blue Aetherwell",
+   "jaune": "Yellow Aetherwell"
   },
   "quetes": {
    "sentierAurore": "Dawntrail",
@@ -13697,6 +13709,12 @@ window.NOMS_JEU = {
     "sg": "Wissenskristall",
     "pl": "Wissenskristalle"
    }
+  },
+  "orbes": {
+   "vert": "Grüne Äthersphäre",
+   "rouge": "Rote Äthersphäre",
+   "bleu": "Blaue Äthersphäre",
+   "jaune": "Gelbe Äthersphäre"
   },
   "quetes": {
    "sentierAurore": "Pfad der Morgensonne",

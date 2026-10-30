@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.3';
+  const VERSION = '1.3.4';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -215,6 +215,7 @@
     const p = e.p || {}, r = {};
     if (p.qte != null) r.qte = nombre(p.qte);
     if (p.objet) r.objet = echapper(nomObjet(p.objet));
+    if (p.orbe) r.orbe = echapper(N().orbes[p.orbe]);
     if (p.job) r.arme = echapper(nomArme(p.job, p.stade, p.relique || 'dt'));
     if (p.quete) r.quete = echapper(nomQuete(p.quete));
     if (p.mission) r.mission = echapper(majuscule(N().missions[p.mission]));
@@ -753,6 +754,12 @@
       case 'objet':
         e.objets[a.cle] = (e.objets[a.cle] || 0) + a.qte;
         noter('j.objet', { qte: a.qte, objet: a.cle });
+        break;
+      case 'orbe':
+        e.jauges[a.cle] = Math.min(10000, (e.jauges[a.cle] || 0) + a.qte);
+        // Le bonus n'arrive qu'avec la première roulette du jour : sa case du jour se coche toute seule.
+        if (a.bonus) { verifierJour(); e.roulettes.faites[a.cle] = true; }
+        noter(a.bonus ? 'j.orbeBonus' : 'j.orbe', { qte: a.qte, orbe: a.cle });
         break;
       case 'arme': {
         const relique = a.relique || rel().cle;
