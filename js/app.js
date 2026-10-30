@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.2';
+  const VERSION = '1.3.3';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -61,6 +61,8 @@
   // Nom d'objet-clef au fil d'une phrase : forme courante (minuscules) en FR/EN, nom tel quel en DE (entre guillemets).
   const nomCourant = (cle) => { const f = N().objetsCles[cle]; return L === 'de' || !f.sg ? f.nom : f.sg.replace(/\[p\]/g, ''); };
   const nomPnj = (cle) => N().pnj[PNJ[cle]?.nom || cle];
+  // Zone et coordonnées d'un PNJ, déjà échappées : « Ville fantôme X 6.7 Y 7.1 ».
+  const situer = (cle) => `${echapper(N().lieux[PNJ[cle].lieu])} <span class="coords">${coords(PNJ[cle])}</span>`;
   const ou = (cle) => (PNJ[cle]?.lieu ? `${nomPnj(cle)} — ${N().lieux[PNJ[cle].lieu]} (${coords(PNJ[cle])})` : nomPnj(cle));
   // PNJ de départ d'une quête, tiré des données du jeu, quand etapes.js ne le précise pas.
   const ouDepart = (id) => { const d = N().departs?.[id]; return d ? `${majuscule(d.pnj)} — ${d.lieu} (${coords(d)})` : ''; };
@@ -380,14 +382,14 @@
     // Première arme du stade : on la reçoit par la quête ; ensuite, échange (ou quête répétable) chez l'échangeur.
     const n = etat().objets[phase.arcanite] || 0;
     const remise = (quete && quete.rendu) || r.echangeur;
-    const commun = { pnj: echapper(majuscule(nomPnj(remise))), coords: coords(PNJ[remise]), cible };
+    const commun = { pnj: echapper(majuscule(nomPnj(remise))), lieu: situer(remise), cible };
     return `<section class="carte">
       <div class="etiquette">${etiquette(phase)}</div>
       <h2>${quete ? t('cite', { nom: echapper(nomQuete(quete.id)) }) : t('armePhase', { nom: stades()[phase.num] })}</h2>
       ${quete && quete.debut ? pnj('▶', t('debut'), quete.debut) : ''}
       ${!quete && phase.repetable ? `<p>${t('repetable', { quete: t('cite', { nom: echapper(nomQuete(phase.repetable)) }), pnj: echapper(majuscule(ou(r.echangeur))) })}</p>` : ''}
       <ol class="etapes">
-        <li>${t('acheterArcanite', { n: 3, arcanite: echapper(nomObjet(phase.arcanite)), vendeur: echapper(majuscule(nomPnj(r.vendeur))), coords: coords(PNJ[r.vendeur]), memoquartz: echapper(pluriel(N().objets[r.monnaie])), total: nombre(1500) })}</li>
+        <li>${t('acheterArcanite', { n: 3, arcanite: echapper(nomObjet(phase.arcanite)), vendeur: echapper(majuscule(nomPnj(r.vendeur))), lieu: situer(r.vendeur), memoquartz: echapper(pluriel(N().objets[r.monnaie])), total: nombre(1500) })}</li>
         <li>${phase.num > 1 ? t('echangerAvec', { ...commun, arme: precedente }) : t('echanger', commun)}</li>
       </ol>
       <div class="mini${n >= 3 ? ' ok' : ''}"><span class="mini-nom">${echapper(nomObjet(phase.arcanite))}</span><span class="mini-val">${n}/3</span>
@@ -506,7 +508,7 @@
   // ---------- Onglets (mode détaillé) ----------
   function ongletSuivi(code) {
     const s = stadeJob(code), r = rel();
-    const echangeur = echapper(majuscule(nomPnj(r.echangeur)));
+    const echangeur = echapper(majuscule(ou(r.echangeur)));
     return phases().map((phase) => {
       const quetes = phase.quetes.map((q) => {
         const fait = queteFaite(phase, q.id), deduite = !etat().quetes[q.id] && queteDeduite(phase, q.id);
