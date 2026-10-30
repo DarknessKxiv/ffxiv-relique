@@ -1,6 +1,7 @@
 // Lecture des lignes du journal ACT (évènement LogLine d'OverlayPlugin) et traduction en actions de suivi.
-// Les trois langues du client (français, anglais, allemand) sont reconnues en même temps : les motifs viennent
-// des modèles officiels du jeu (feuille LogMessage) et les noms de noms-jeu.js. Exemples réels (client FR) :
+// Les trois langues du client (français, anglais, allemand) sont reconnues : la langue d'une ligne vient des
+// modèles officiels du jeu (feuille LogMessage), puis seuls les noms de cette langue (noms-jeu.js) y sont cherchés.
+// Exemples réels (client FR) :
 //   00|…|083E||Vous obtenez 60 mémoquartz allagois mathématiques.|
 //   00|…|0839||La mission “La Nécropole intemporelle” commence.|   puis   33|…|80034E88|40000003|…  (victoire)
 (function () {
@@ -53,30 +54,44 @@
   };
 
   // Motif d'un nom du jeu, en mot entier. Marques allemandes : [a] = terminaison d'adjectif, [p] = rien.
+  // Ses morceaux fixes servent de filtre (includes) : l'expression ne tourne que sur une ligne qui les contient.
+  // Sans ce filtre, chaque gain ferait tourner des milliers d'expressions, et le navigateur d'ACT (Chromium 95)
+  // les recompile toutes pour un message resté en UTF-16 (lien d'objet U+E0BB) : plus de 100 Mo, et il plante.
   const echapperRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   function motif(nom) {
-    const corps = norm(nom).split(/(\[a\]|\[p\])/).map((p) => (p === '[a]' ? '\\p{L}{0,3}' : p === '[p]' ? '' : echapperRe(p))).join('');
-    return new RegExp(`(?<!\\p{L})${corps.replace(/ {2,}/g, ' ')}(?!\\p{L})`, 'u');
+    const morceaux = norm(nom).split(/(\[a\]|\[p\])/);
+    const corps = morceaux.map((p) => (p === '[a]' ? '\\p{L}{0,3}' : p === '[p]' ? '' : echapperRe(p))).join('');
+    return {
+      fixes: morceaux.filter((p, i) => i % 2 === 0).map((p) => p.trim()).filter(Boolean),
+      re: new RegExp(`(?<!\\p{L})${corps.replace(/ {2,}/g, ' ')}(?!\\p{L})`, 'u'),
+    };
   }
-  // Toutes les formes (pluriel, singulier, nom) de toutes les langues, les plus longues d'abord :
+  const present = (texte, m) => m.fixes.every((f) => texte.includes(f));
+  // Toutes les formes (pluriel, singulier, nom), les plus longues d'abord :
   // « 20 morceaux de pâte de cristal » doit être reconnu en entier pour lire la quantité juste avant.
   const variantes = (listeFormes) => [...new Set(listeFormes.flatMap((f) => [f.pl, f.sg, f.nom]).filter(Boolean))]
     .sort((a, b) => b.length - a.length).map(motif);
 
-  const OBJETS = Object.keys(NJ.fr.objets)
-    .filter((cle) => !['memoquartz', 'poetique', 'gemme', 'couteau'].includes(cle))
-    .map((cle) => ({ cle, motifs: variantes(LANGUES.map((l) => NJ[l].objets[cle])) }));
+  const OBJETS_SUIVIS = Object.keys(NJ.fr.objets).filter((cle) => !['memoquartz', 'poetique', 'gemme', 'couteau'].includes(cle));
   // Armes de toutes les reliques : chacune sait à quelle relique, quel job et quel stade elle correspond.
   const ARMES = Object.keys(RELIQUES).flatMap((relique) => JOBS.filter((j) => NJ.fr.armes[relique]?.[j.code])
-    .flatMap((j) => NJ.fr.armes[relique][j.code].map((_, i) => ({
-      relique, job: j.code, stade: i + 1, motifs: variantes(LANGUES.flatMap((l) => NJ[l].armes[relique][j.code][i])),
-    }))));
+    .flatMap((j) => NJ.fr.armes[relique][j.code].map((_, i) => ({ relique, job: j.code, stade: i + 1 }))));
   const OBJETS_CLES = { magiSpherier: 'orbes', lunette: 'pate', cristalSavoir: 'mementos' };
-  const CLES = Object.entries(OBJETS_CLES).map(([cle, quete]) => ({ quete, motifs: variantes(LANGUES.map((l) => NJ[l].objetsCles[cle])) }));
   const REPLIQUES = LANGUES.map((l) => NJ[l].replique).filter(Boolean);
-  // Objets dont le nom contient celui d'une arme ou d'un objet suivi (« Forgotten Fragment of Tenacity »,
-  // « Unfinished Bravura »…) : retirés du message avant la recherche, sinon ils passeraient pour eux.
-  const HOMONYMES = Object.fromEntries(LANGUES.map((l) => [l, variantes(NJ[l].homonymes || []).map((m) => new RegExp(m.source, 'gu'))]));
+
+  // Motifs des noms d'une langue, préparés à sa première ligne de gain : un client français ne bâtit que les siens.
+  const NOMS = {};
+  function noms(langue) {
+    const nj = NJ[langue];
+    return (NOMS[langue] ||= {
+      objets: OBJETS_SUIVIS.map((cle) => ({ cle, motifs: variantes([nj.objets[cle]]) })),
+      armes: ARMES.map((a) => ({ ...a, motifs: variantes([].concat(nj.armes[a.relique][a.job][a.stade - 1])) })),
+      cles: Object.entries(OBJETS_CLES).map(([cle, quete]) => ({ quete, motifs: variantes([nj.objetsCles[cle]]) })),
+      // Objets dont le nom contient celui d'une arme ou d'un objet suivi (« Forgotten Fragment of Tenacity »,
+      // « Unfinished Bravura »…) : retirés du message avant la recherche, sinon ils passeraient pour eux.
+      homonymes: variantes(nj.homonymes || []).map((m) => ({ ...m, re: new RegExp(m.re.source, 'gu') })),
+    });
+  }
   const indexer = (fn) => Object.fromEntries(LANGUES.flatMap((l) => Object.entries(fn(l)).map(([cle, nom]) => [norm(nom), cle])));
   const QUETES = indexer((l) => NJ[l].quetes);
   const MISSIONS = indexer((l) => NJ[l].missions);
@@ -93,7 +108,7 @@
   // Premier motif reconnu dans le texte, avec la quantité écrite juste avant (1 par défaut : « un », « a », « einen »…).
   function trouver(texte, motifs) {
     for (const m of motifs) {
-      const r = m.exec(texte);
+      const r = present(texte, m) && m.re.exec(texte);
       if (!r) continue;
       const nombre = texte.slice(0, r.index).match(/(\d{1,3}(?:[ .,]\d{3})+|\d+)\s*$/);
       return { qte: nombre ? parseInt(nombre[1].replace(/\D/g, ''), 10) : 1, longueur: r[0].length };
@@ -138,18 +153,19 @@
 
       if (m.gain.test(texte)) {
         if (REPLIQUES.some((r) => texte.includes(r))) return vue();
-        const net = HOMONYMES[langue].reduce((s, h) => s.replace(h, ' '), texte);
+        const n = noms(langue);
+        const net = n.homonymes.reduce((s, h) => (present(s, h) ? s.replace(h.re, ' ') : s), texte);
         // Lors d'un échange, l'ancienne et la nouvelle arme peuvent être citées, et « Manderville Axe » est contenu
         // dans « Amazing Manderville Axe » : on garde le stade le plus haut.
-        const armes = ARMES.filter((a) => trouver(net, a.motifs)).sort((a, b) => b.stade - a.stade);
+        const armes = n.armes.filter((a) => trouver(net, a.motifs)).sort((a, b) => b.stade - a.stade);
         if (armes.length) return [...vue(), { type: 'arme', relique: armes[0].relique, job: armes[0].job, stade: armes[0].stade }];
         let meilleur = null;
-        for (const o of OBJETS) {
+        for (const o of n.objets) {
           const r = trouver(net, o.motifs);
           if (r && (!meilleur || r.longueur > meilleur.longueur)) meilleur = { ...r, cle: o.cle };
         }
         if (meilleur) return [...vue(), { type: 'objet', cle: meilleur.cle, qte: meilleur.qte }];
-        const cle = CLES.find((c) => trouver(net, c.motifs));
+        const cle = n.cles.find((c) => trouver(net, c.motifs));
         return cle ? [...vue(), { type: 'quete', cle: cle.quete, statut: 'encours' }] : vue();
       }
 

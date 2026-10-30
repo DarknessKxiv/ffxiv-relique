@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.1';
+  const VERSION = '1.3.2';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -25,6 +25,9 @@
   let jobJeu = null;        // job joué en ce moment (détecté via ACT)
   let langueAct = null;     // langue réglée dans le plugin FFXIV d'ACT, si OverlayPlugin la donne
   let connecte = false;     // OverlayPlugin présent
+  let majLocale = 0;        // date de la copie du navigateur lue au démarrage
+  let persosLocaux = new Set();  // personnages de cette copie
+  let lueDansAct = false;   // tant que la copie d'ACT n'est pas lue, rien n'y est écrit
   let enMission = false;    // dans un donjon, défi ou raid (hors Lunule)
   let notification = null;  // { k, p, fin }
   let confirmerRaz = false;
@@ -624,7 +627,7 @@
     minuterie = setTimeout(() => {
       if (enDemo()) return;  // passé en aperçu entre-temps : la progression d'exemple ne doit rien écraser
       try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(racine)); } catch (e) { /* stockage indisponible */ }
-      if (connecte) Overlay.appeler({ call: 'saveData', key: CLE_STOCKAGE, data: racine }).catch(() => {});
+      if (connecte && lueDansAct) Overlay.appeler({ call: 'saveData', key: CLE_STOCKAGE, data: racine }).catch(() => {});
     }, 300);
   }
 
@@ -640,7 +643,10 @@
   }
 
   function chargerLocal() {
-    try { adopter(JSON.parse(localStorage.getItem(CLE_STOCKAGE))); } catch (e) { /* rien d'enregistré */ }
+    try {
+      const d = JSON.parse(localStorage.getItem(CLE_STOCKAGE));
+      if (adopter(d)) { majLocale = d.maj || 0; persosLocaux = new Set(Object.keys(d.persos)); }
+    } catch (e) { /* rien d'enregistré */ }
   }
 
   // Mode démo (?demo, ou fenêtre d'aperçu d'OverlayPlugin) : progression d'exemple au milieu d'une étape,
@@ -666,11 +672,27 @@
   async function chargerDepuisAct() {
     try {
       const rep = await avecDelai(Overlay.appeler({ call: 'loadData', key: CLE_STOCKAGE }));
-      if (!enDemo() && rep?.data && (rep.data.maj || 0) > (racine.maj || 0) && adopter(rep.data)) {
+      const avant = racine;
+      if (!enDemo() && rep?.data && adopter(rep.data)) {
+        // On compare les deux copies enregistrées, pas l'état du moment : la détection du personnage, juste
+        // après l'ouverture, a déjà daté l'état d'aujourd'hui. Et aucun personnage ne doit disparaître :
+        // ceux qui ne sont que dans l'une des deux copies sont gardés.
+        const deAct = racine.persos;
+        if (majLocale > (rep.data.maj || 0)) {
+          // Un personnage créé depuis l'ouverture (vide) ne remplace pas celui qu'ACT connaît déjà.
+          const locaux = Object.entries(avant.persos).filter(([nom]) => persosLocaux.has(nom) || !deAct[nom]);
+          racine.persos = { ...deAct, ...Object.fromEntries(locaux) };
+          racine.reglages = avant.reglages;
+        } else {
+          racine.persos = { ...avant.persos, ...deAct };
+        }
+        if (avant.persoActif !== SANS_PERSO) racine.persoActif = avant.persoActif;
         changerPerso(persoEnJeu);  // la sauvegarde ne doit pas écraser le personnage déjà détecté
-        rendre();
       }
     } catch (e) { /* OverlayPlugin sans stockage : la copie locale suffit */ }
+    lueDansAct = true;
+    sauver();
+    rendre();
   }
 
   // Langue réglée dans le plugin FFXIV d'ACT : sert tant que la langue du jeu n'a pas été reconnue dans le chat.
