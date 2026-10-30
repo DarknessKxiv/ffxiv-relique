@@ -27,6 +27,7 @@ Pour les anciennes reliques, les étapes sont **celles d'aujourd'hui** : les obj
 - **Prochaine étape** du job suivi : la quête, le PNJ avec ses coordonnées, les objets à réunir et leur source.
 - **Toutes les phases** détaillées : pour Dawntrail, demi-âtma, Magi sphérier, pâtes de cristal, dissipateurs, cristal de savoir (65 objectifs) ; pour Endwalker, les quêtes d'Hildibrand et les échanges de mémoquartz ; pour les anciennes reliques, chaque objet à réunir par arme, les quêtes uniques et les missions à réussir avec chaque job.
 - **Où farmer** : les ALÉA et affrontements cruciaux de Lunule qui donnent chaque demi-âtma ou dissipateur.
+- **Roulettes restantes** : sous chaque jauge du Magi sphérier, une estimation du nombre de roulettes encore à faire (points moyens d'une mission, plus le bonus du jour s'il n'est pas encore fait).
 - **Suivi de chaque job**, avec les mémoquartz restant à dépenser pour chacun.
 - **Détection automatique** pendant que tu joues (voir plus bas), avec le job suivi qui s'adapte au job joué.
 - **Trois affichages** : complet, compact (bouton ☰, sans les onglets) ou **réduit à une seule barre** (bouton ▴) qui montre juste la prochaine étape.
@@ -73,8 +74,9 @@ Quand ACT tourne, l'overlay lit le journal du jeu transmis par OverlayPlugin.
 | Détecté automatiquement | À mettre à jour soi-même |
 |---|---|
 | Personnage et job joué | Quêtes terminées (bouton « ✓ Quête terminée ») si aucun message n'a été vu |
-| Langue du jeu | Jauges du Magi sphérier |
-| Demi-âtma, pâtes de cristal, dissipateurs obtenus | ALÉA au rang or et monstres du cristal de savoir |
+| Langue du jeu | ALÉA au rang or et monstres du cristal de savoir |
+| Énergie reçue par les orbes du Magi sphérier (jauges et bonus du jour) | |
+| Demi-âtma, pâtes de cristal, dissipateurs obtenus | |
 | Objets d'amélioration achetés (lunulite, météorite rarissime…) | |
 | Objets de quête (colle, matières sombres, etc.) | |
 | Armes reliques reçues | |

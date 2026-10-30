@@ -27,6 +27,7 @@ For the older relics, the steps are the **current ones**: items that used to com
 - **Next step** for the tracked job: quest, NPC with coordinates, items to gather and where to get them.
 - **Every phase in detail**: for Dawntrail, demiatma, Aetherwell Array, crystal paste, phantom dispellers, knowledge crystal (65 objectives); for Endwalker, the Hildibrand quests and the tomestone exchanges; for older relics, every item to gather per weapon, the one-time quests and the duties to clear on each job.
 - **Where to farm**: which Occult Crescent FATEs and critical engagements give each demiatma or dispeller.
+- **Roulettes left**: under each Aetherwell Array gauge, an estimate of how many duty roulettes are still needed (average points per duty, plus today's bonus if not done yet).
 - **Every job** tracked, with the tomestones left to spend for each.
 - **Automatic tracking** while you play (see below); the tracked job follows the job you are playing.
 - **Three display sizes**: full, compact (☰, no tabs) or **collapsed to a single bar** (▴) showing just the next step.
@@ -73,8 +74,9 @@ While ACT is running, the overlay reads the game log that OverlayPlugin passes t
 | Tracked automatically | Updated by hand |
 |---|---|
 | Character and job being played | Completed quests (“✓ Quest complete” button) when no message was seen |
-| Game language | Aetherwell Array gauges |
-| Demiatma, crystal paste, phantom dispellers obtained | Gold-rated FATEs and monsters of the knowledge crystal |
+| Game language | Gold-rated FATEs and monsters of the knowledge crystal |
+| Aether received by the Aetherwell Array orbs (gauges and daily bonus) | |
+| Demiatma, crystal paste, phantom dispellers obtained | |
 | Upgrade items bought (arcanite, Manderium meteorite…) | |
 | Quest items (glue, synthetic dark matter, etc.) | |
 | Relic weapons received | |

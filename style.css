@@ -179,6 +179,7 @@ small { color: var(--doux); }
 .j-rouge .pastille { background: #d65a50; }
 .j-jaune .pastille { background: #e2c04f; }
 .ligne-saisie { display: flex; align-items: center; gap: 0.4rem; }
+.estimation { display: block; font-size: 0.8rem; cursor: help; }
 .boutons { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .boutons button { font-size: 0.8rem; padding: 0.05rem 0.4rem; }
 .saisie {

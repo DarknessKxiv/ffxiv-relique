@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.4';
+  const VERSION = '1.3.5';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -263,13 +263,23 @@
       <div><b>${echapper(nomObjet(tache.cle))}</b><small>${texteDe(tache.source)}</small></div></div>`;
   }
 
+  // Roulettes encore nécessaires pour remplir une jauge, avec les points moyens d'une mission
+  // et le bonus du jour s'il n'a pas encore été obtenu.
+  function roulettesRestantes(j, reste) {
+    if (reste <= 0) return 0;
+    if (etat().roulettes.faites[j.cle]) return Math.ceil(reste / j.moyenne);
+    return 1 + Math.ceil(Math.max(0, reste - j.moyenne - j.bonus) / j.moyenne);
+  }
+
   function jauges(tache) {
     const e = etat();
     const lignes = tache.jauges.map((j) => {
       const v = e.jauges[j.cle] || 0;
+      const n = roulettesRestantes(j, tache.max - v);
       return `<div class="compteur jauge j-${j.cle}${v >= tache.max ? ' ok' : ''}">
         <div class="compteur-tete"><span><i class="pastille"></i>${T().couleurs[j.cle]} · ${echapper(rouletteCourte(j.roulette))}</span><b>${nombre(v)} / ${nombre(tache.max)}</b></div>
         ${barre(v, tache.max)}
+        ${n ? `<small class="estimation" title="${echapper(t('restantesTitre', { moy: nombre(j.moyenne) }))}">${t('restantes', { n })}</small>` : ''}
         <div class="ligne-saisie">${boutonsPas('jauge', j.cle, [100, 1000])}<input class="saisie" type="number" min="0" max="${tache.max}" value="${v}" data-change="jauge" data-cle="${j.cle}" title="${echapper(t('saisirJeu'))}"></div>
       </div>`;
     }).join('');
