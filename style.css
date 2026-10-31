@@ -57,26 +57,36 @@ small { color: var(--doux); }
 /* En-tête */
 .entete { display: flex; align-items: center; gap: 0.45rem; }
 .titre { color: var(--or); font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; margin-right: auto; }
-.panneau select {
-  background: var(--surface-forte);
-  border: 1px solid var(--bord);
-  border-radius: 4px;
-  padding: 0.1rem 0.25rem;
-  color: var(--texte);
-}
-.panneau select option { background: #1b1e27; }
-/* Les menus rétrécissent (texte coupé) plutôt que de pousser les boutons hors du cadre. */
-.entete select { max-width: 9.5rem; min-width: 0; }
+/* Les boutons de choix rétrécissent (texte coupé) plutôt que de pousser les autres boutons hors du cadre. */
 .entete .icone, .entete .act { flex: none; }
 .entete .titre-relique {
   margin-right: auto;
   max-width: 14rem;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: var(--or);
   font-weight: 600;
   background: transparent;
   border-color: transparent;
 }
-.entete .titre-relique:hover { border-color: var(--bord); }
+.entete .titre-relique:hover, .entete .ouvert { border-color: var(--bord); }
+.choix-job { display: flex; align-items: center; max-width: 11rem; min-width: 0; white-space: nowrap; }
+.choix-job .role { flex: none; }
+.choix-nom { overflow: hidden; text-overflow: ellipsis; }
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.45rem;
+  border: 1px solid var(--bord);
+  border-radius: 6px;
+  background: var(--surface-forte);
+}
+.menu button { font-size: 0.82rem; }
+.menu button.actif { color: var(--or); border-color: var(--bord); }
+.menu-aide { width: 100%; }
 .act { color: var(--doux); font-size: 0.8rem; cursor: help; }
 .act.ok { color: var(--ok); }
 .icone { padding: 0.1rem 0.4rem; }

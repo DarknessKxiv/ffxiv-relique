@@ -29,7 +29,7 @@ For the older relics, the steps are the **current ones**: items that used to com
 - **Where to farm**: which Occult Crescent FATEs and critical engagements give each demiatma or dispeller.
 - **Roulettes left**: under each Aetherwell Array gauge, an estimate of how many duty roulettes are still needed (average points per duty, plus today's bonus if not done yet).
 - **Every job** tracked, with the tomestones left to spend for each.
-- **Automatic tracking** while you play (see below); the tracked job follows the job you are playing.
+- **Automatic tracking** while you play (see below). Pick the job you are doing the relic on at the top of the overlay; it is kept for each character, so switching jobs for a roulette doesn't change it.
 - **Three display sizes**: full, compact (☰, no tabs) or **collapsed to a single bar** (▴) showing just the next step.
 - **Hidden automatically during dungeons, trials and raids** (on by default, can be turned off in Settings). It stays visible in the Occult Crescent, Bozja, Zadnor and Eureka.
 - Progress saved **separately for each character**.

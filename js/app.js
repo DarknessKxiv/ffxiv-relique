@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.5';
+  const VERSION = '1.3.6';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -15,7 +15,7 @@
   const LANGUE_NAVIGATEUR = String(navigator.language || '').slice(0, 2).toLowerCase();
 
   const nouvelEtat = () => ({
-    quetes: {}, objets: {}, jauges: {}, memoires: {}, armes: {},
+    quetes: {}, objets: {}, jauges: {}, memoires: {}, armes: {}, suivi: {},
     roulettes: { jour: '', faites: {} }, journal: [], accueilVu: false,
   });
   let racine = {
@@ -30,6 +30,7 @@
   let lueDansAct = false;   // tant que la copie d'ACT n'est pas lue, rien n'y est écrit
   let enMission = false;    // dans un donjon, défi ou raid (hors Lunule)
   let notification = null;  // { k, p, fin }
+  let menu = null;          // liste ouverte sous l'en-tête : 'relique' ou 'job'
   let confirmerRaz = false;
   let L = 'en';             // langue de l'affichage en cours
   const app = document.getElementById('app');
@@ -73,7 +74,17 @@
   // Noms de jobs : l'anglais met une majuscule à chaque mot (« Dark Knight »), le français seulement au premier.
   const nomJob = (code) => (L === 'en' ? N().classes[code].nom.replace(/\b\p{L}/gu, (c) => c.toUpperCase()) : majuscule(N().classes[code].nom));
   const abrJob = (code) => N().classes[code].abr;
-  const jobAffiche = () => (racine.reglages.job === 'auto' ? jobJeu || 'WAR' : racine.reglages.job);
+  // Job suivi pour la relique choisie, propre à chaque personnage : celui choisi dans l'overlay, ou fixé par la
+  // détection (quête de relique commencée, arme reçue). Sans choix, l'arme en cours la plus avancée, sinon le job
+  // joué. Changer de job en jeu (une roulette en soigneur, par exemple) ne change donc pas le job suivi.
+  const suivis = () => (etat().suivi ||= {});
+  function jobAffiche() {
+    const r = rel(), choisi = suivis()[r.cle] || racine.reglages.job;  // reglages.job : choix des versions ≤ 1.3.5
+    if (r.jobs.includes(choisi)) return choisi;
+    const enCours = r.jobs.filter((j) => stadeJob(j) > 0 && stadeJob(j) < nbStades());
+    if (enCours.length) return enCours.reduce((a, b) => (stadeJob(b) > stadeJob(a) ? b : a));
+    return [jobJeu, 'WAR'].find((j) => r.jobs.includes(j)) || r.jobs[0];
+  }
 
   // Relique suivie (Dawntrail, Endwalker…) : chacune a ses phases, ses stades et ses jobs.
   const rel = () => RELIQUES[racine.reglages.relique] || RELIQUES.dt;
@@ -472,19 +483,25 @@
       const j = infoJob(code);
       return `<header class="entete"><span class="role ${j.role}">${echapper(abrJob(code))}</span><span class="resume-court">${echapper(resumeCourt(code))}</span>${point}${reduire}</header>`;
     }
-    const auto = `${t('auto')}${jobJeu ? ` · ${nomJob(jobJeu)}` : ''}`;
+    const j = infoJob(code);
     return `<header class="entete">
-      <select class="titre-relique" data-change="relique" title="${echapper(t('choisirRelique'))}">
-        ${Object.values(RELIQUES).map((x) => `<option value="${x.cle}"${rel().cle === x.cle ? ' selected' : ''} title="${t('ilvl', { n: x.phases[x.phases.length - 1].ilvl })}">◆ ${echapper(T().reliques[x.cle])}</option>`).join('')}
-      </select>
-      <select data-change="job" title="${echapper(t('jobSuivi'))}">
-        <option value="auto"${r.job === 'auto' ? ' selected' : ''}>${echapper(auto)}</option>
-        ${jobsRelique().map((j) => `<option value="${j.code}"${r.job === j.code ? ' selected' : ''}>${echapper(nomJob(j.code))}</option>`).join('')}
-      </select>
+      <button class="titre-relique${menu === 'relique' ? ' ouvert' : ''}" data-act="menu" data-id="relique" title="${echapper(t('choisirRelique'))}">◆ ${echapper(T().reliques[rel().cle])} ▾</button>
+      <button class="choix-job${menu === 'job' ? ' ouvert' : ''}" data-act="menu" data-id="job" title="${echapper(t('jobSuivi'))}"><span class="role ${j.role}">${echapper(abrJob(code))}</span><span class="choix-nom">${echapper(nomJob(code))}</span> ▾</button>
       ${point}
       <button class="icone${r.compact ? '' : ' actif'}" data-act="compact" title="${echapper(t(r.compact ? 'afficherOnglets' : 'masquerOnglets'))}">☰</button>
       ${reduire}
-    </header>`;
+    </header>${menuEntete(code)}`;
+  }
+
+  // Listes de choix de la relique et du job suivi, en boutons : les <select> s'ouvrent mal dans les overlays d'ACT.
+  function menuEntete(code) {
+    if (menu === 'relique') {
+      return `<div class="menu">${Object.values(RELIQUES).map((x) => `<button class="${x.cle === rel().cle ? 'actif' : ''}" data-act="choisirRelique" data-id="${x.cle}">◆ ${echapper(T().reliques[x.cle])} <small>${t('ilvl', { n: x.phases[x.phases.length - 1].ilvl })}</small></button>`).join('')}</div>`;
+    }
+    if (menu === 'job') {
+      return `<div class="menu"><small class="menu-aide">${t('aideJobSuivi')}</small>${jobsRelique().map((j) => `<button class="${j.code === code ? 'actif' : ''}" data-act="choisirJob" data-job="${j.code}"><span class="role ${j.role}">${echapper(abrJob(j.code))}</span>${echapper(nomJob(j.code))}${j.code === jobJeu ? ` <small>· ${t('enJeu')}</small>` : ''}</button>`).join('')}</div>`;
+    }
+    return '';
   }
 
   function resume(code) {
@@ -590,10 +607,8 @@
       '00|t|000A|Joueur|Vous obtenez 50 morceaux de pâte de cristal.|',
       '33|t|80034E88|40000003|00|00|00|00|', '01|t|4AD|Zone|',
     ].map((l) => `<button class="puce test" data-act="simuler" data-ligne="${echapper(l)}">${echapper(l.startsWith('00|') ? l.split('|')[4] : l)}</button>`).join('')}` : '';
-    return `<div class="reglage"><span>${t('regLangue')}</span><select data-change="langue">
-        <option value="auto"${TX[r.langue] ? '' : ' selected'}>${t('auto')} (${TX[langueAuto()].langue})</option>
-        ${LANGUES.map((l) => `<option value="${l}"${r.langue === l ? ' selected' : ''}>${TX[l].langue}</option>`).join('')}
-      </select></div>
+    const langue = TX[r.langue] ? r.langue : 'auto';
+    return `<div class="reglage"><span>${t('regLangue')}</span><span class="valeur">${['auto', ...LANGUES].map((l) => `<button class="puce${langue === l ? ' ok' : ''}" data-act="langue" data-id="${l}">${l === 'auto' ? `${t('auto')} (${TX[langueAuto()].langue})` : TX[l].langue}</button>`).join('')}</span></div>
       <div class="reglage"><span>${t('regTaille')}</span><span class="valeur"><button data-act="echelle" data-n="-0.1">A−</button> ${Math.round(r.echelle * 100)} % <button data-act="echelle" data-n="0.1">A+</button></span></div>
       <div class="reglage"><span>${t('regOpacite')}</span><span class="valeur"><button data-act="opacite" data-n="-0.1">−</button> ${Math.round(r.opacite * 100)} % <button data-act="opacite" data-n="0.1">+</button></span></div>
       <div class="reglage"><span>${t('regCacher')}<small>${t('regCacherAide', { lieu: echapper(N().lieux.lunule) })}</small></span><button data-act="cacherMission">${t(r.cacherEnMission ? 'oui' : 'non')}</button></div>
@@ -778,6 +793,7 @@
           // Première arme offerte par une quête (« Fire in the Forge ») : rien n'est remis.
           const offerte = phase.quetes.some((q) => q.premiereArme) && stadeMax(relique) < a.stade;
           armesDe(relique)[a.job] = a.stade;
+          suivis()[relique] = a.job;  // l'arme reçue est celle du job sur lequel on fait la relique
           // Les objets demandés sont remis avec l'arme : 3 objets d'échange, ou ceux de l'étape « par arme ».
           const remis = offerte ? [] : phase.arcanite ? [{ cle: phase.arcanite, qte: 3 }]
             : (phase.arme?.taches || []).flatMap((tch) => (tch.type === 'compteurs' ? tch.elements : ['objet', 'compteur'].includes(tch.type) ? [tch] : []));
@@ -787,6 +803,8 @@
         break;
       }
       case 'quete':
+        // Première quête de relique vue : le job suivi ne suit plus le job joué.
+        if (phaseDe(a.cle) && !suivis()[rel().cle]) suivis()[rel().cle] = jobAffiche();
         if (a.statut === 'fait') {
           e.quetes[a.cle] = true;
           casesEnCours(jobJeu || jobAffiche(), (tch, c) => tch.quete && c === a.cle).forEach((k) => { e.memoires[k] = true; });
@@ -851,7 +869,10 @@
       case 'compact': r.compact = !r.compact; break;
       case 'reduire': r.reduit = !r.reduit; break;
       case 'cacherMission': r.cacherEnMission = !r.cacherEnMission; break;
-      case 'choisirJob': r.job = d.job; break;
+      case 'choisirJob': suivis()[rel().cle] = d.job; menu = null; break;
+      case 'choisirRelique': r.relique = d.id; menu = null; break;
+      case 'menu': menu = menu === d.id ? null : d.id; break;
+      case 'langue': r.langue = d.id; break;
       case 'accueilVu': e.accueilVu = true; break;
       case 'echelle': r.echelle = Math.round(Math.max(0.7, Math.min(2.5, r.echelle + Number(d.n))) * 10) / 10; break;
       case 'opacite': r.opacite = Math.round(Math.max(0.3, Math.min(1, r.opacite + Number(d.n))) * 10) / 10; break;
@@ -878,10 +899,7 @@
   app.addEventListener('change', (ev) => {
     const cible = ev.target, e = etat();
     const v = Math.max(0, parseInt(cible.value, 10) || 0);
-    if (cible.dataset.change === 'job') racine.reglages.job = cible.value;
-    else if (cible.dataset.change === 'langue') racine.reglages.langue = cible.value;
-    else if (cible.dataset.change === 'relique') racine.reglages.relique = cible.value;
-    else if (cible.dataset.change === 'objet') e.objets[cible.dataset.cle] = v;
+    if (cible.dataset.change === 'objet') e.objets[cible.dataset.cle] = v;
     else if (cible.dataset.change === 'jauge') e.jauges[cible.dataset.cle] = Math.min(10000, v);
     else return;
     sauver();

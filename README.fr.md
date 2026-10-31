@@ -29,7 +29,7 @@ Pour les anciennes reliques, les étapes sont **celles d'aujourd'hui** : les obj
 - **Où farmer** : les ALÉA et affrontements cruciaux de Lunule qui donnent chaque demi-âtma ou dissipateur.
 - **Roulettes restantes** : sous chaque jauge du Magi sphérier, une estimation du nombre de roulettes encore à faire (points moyens d'une mission, plus le bonus du jour s'il n'est pas encore fait).
 - **Suivi de chaque job**, avec les mémoquartz restant à dépenser pour chacun.
-- **Détection automatique** pendant que tu joues (voir plus bas), avec le job suivi qui s'adapte au job joué.
+- **Détection automatique** pendant que tu joues (voir plus bas). Le job sur lequel tu fais la relique se choisit en haut de l'overlay et reste le même pour chaque personnage : changer de job pour une roulette ne le change pas.
 - **Trois affichages** : complet, compact (bouton ☰, sans les onglets) ou **réduit à une seule barre** (bouton ▴) qui montre juste la prochaine étape.
 - **Masquage automatique pendant les donjons, défis et raids** (activé par défaut, désactivable dans les Réglages). L'overlay reste affiché sur l'Île de Lunule, à Bozja, Zadnor et Eurêka.
 - Progression enregistrée **séparément pour chaque personnage**.
