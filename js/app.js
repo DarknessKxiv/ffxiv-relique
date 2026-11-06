@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.6';
+  const VERSION = '1.3.7';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -197,6 +197,11 @@
   const parametresQuetes = () => ({
     gerolt: echapper(nomPnj('gerolt')),
     archeologue: echapper(ou('archeologue')),
+    lydirceil: echapper(nomPnj('lydirceil')),
+    dodokkuli: echapper(nomPnj('dodokkuli')),
+    emoteDoute: echapper(N().emotes.douter),
+    sagesse: t('cite', { nom: echapper(nomQuete('sagesse')) }),
+    sagesseOu: echapper(ouDepart('sagesse')),
     magi: echapper(nomCourant('magiSpherier')),
     lunette: echapper(nomCourant('lunette')),
     cristal: echapper(nomCourant('cristalSavoir')),
@@ -348,8 +353,14 @@
   function tache(tch) {
     switch (tch.type) {
       case 'objet': return objetUnique(tch);
-      case 'compteur': return compteur(tch.cle, tch.qte, tch.pas, tch.sources
-        ? pli(`src:${tch.cle}`, t('ouObtenir'), '', () => `<ul class="liste">${tch.sources.map((s) => `<li>${majuscule(texteDe(s))}</li>`).join('')}</ul>`) : '');
+      case 'compteur': {
+        // Avec `estimer`, chaque source dit combien de fois la refaire pour finir ; la première est la plus rapide.
+        const reste = Math.max(0, tch.qte - (etat().objets[tch.cle] || 0));
+        const fois = (s) => Math.ceil(reste / s.n);
+        const estimation = tch.estimer && reste ? `<small class="estimation">${t('resteSource', { reste: nombre(reste), n: nombre(fois(tch.sources[0])), roulette: echapper(rouletteCourte(tch.sources[0].roulette)) })}</small>` : '';
+        return compteur(tch.cle, tch.qte, tch.pas, tch.sources
+          ? estimation + pli(`src:${tch.cle}`, t('ouObtenir'), '', () => `<ul class="liste">${tch.sources.map((s) => `<li>${majuscule(texteDe(s))}${tch.estimer && reste ? ` <small>${t('foisRestantes', { n: nombre(fois(s)) })}</small>` : ''}</li>`).join('')}</ul>`) : '');
+      }
       case 'compteJob': return compteJob(tch);
       case 'missions': return missionsJob(tch);
       case 'case': return caseMemoire(caseJob(tch.id, tch.cle), tch.quete ? t('cite', { nom: echapper(nomQuete(tch.cle)) }) : t(`x.${tch.cle}`), tch.quete);
@@ -365,6 +376,13 @@
 
   const conseils = (q) => (q.conseils || []).map((c) => `<p class="conseil">💡 ${t(`c.${c.cle}`, { ...parametresQuetes(), ...parametres(c) })}</p>`).join('');
   const texteQuete = (q) => (q.texte ? t(`q.${q.texte}`, parametresQuetes()) : '');
+  // Ce qu'il y a à faire dans une quête : les étapes de son journal quand elles sont décrites, sinon son texte.
+  function corpsQuete(q) {
+    const n = TX[L].eq?.[q.id]?.length;
+    if (!n) return q.texte ? `<p>${texteQuete(q)}</p>` : '';
+    const p = parametresQuetes();
+    return `<ol class="etapes">${Array.from({ length: n }, (_, i) => `<li>${t(`eq.${q.id}.${i}`, p)}</li>`).join('')}</ol>`;
+  }
 
   // ---------- Carte « Prochaine étape » ----------
   const etiquette = (phase) => (phase.num
@@ -378,7 +396,7 @@
       <div class="etiquette">${etiquette(phase)}</div>
       <h2>${t('cite', { nom: echapper(nomQuete(q.id)) })}</h2>
       ${q.debut ? pnj('▶', t('debut'), q.debut) : depart(q.id)}
-      ${q.texte ? `<p>${texteQuete(q)}</p>` : ''}
+      ${corpsQuete(q)}
       ${(q.taches || []).map(tache).join('')}
       ${conseils(q)}
       ${q.rendu ? pnj('◀', pret ? `<span class="pret">${t('toutPret')}</span> ${t('rendreA')}` : t('rendreA'), q.rendu) : ''}
@@ -416,6 +434,7 @@
       </ol>
       <div class="mini${n >= 3 ? ' ok' : ''}"><span class="mini-nom">${echapper(nomObjet(phase.arcanite))}</span><span class="mini-val">${n}/3</span>
         <button data-act="ajout" data-cle="${phase.arcanite}" data-n="-1">−</button><button data-act="ajout" data-cle="${phase.arcanite}" data-n="1">+</button></div>
+      ${quete ? conseils(quete) : ''}
       <button class="valider" data-act="arme" data-job="${code}" data-stade="${phase.num}">${t('armeRecue')}</button>
     </section>`;
   }
@@ -541,13 +560,14 @@
       const quetes = phase.quetes.map((q) => {
         const fait = queteFaite(phase, q.id), deduite = !etat().quetes[q.id] && queteDeduite(phase, q.id);
         const sous = q.echange
-          ? t('sousEchange', { arcanite: echapper(nomObjet(phase.arcanite)), total: nombre(1500), pnj: echangeur })
+          ? t('sousEchange', { arcanite: echapper(nomObjet(phase.arcanite)), total: nombre(1500), vendeur: echapper(majuscule(ou(r.vendeur))), pnj: echapper(majuscule(ou(q.rendu || r.echangeur))), echangeur: echapper(majuscule(nomPnj(r.echangeur))), arme: phase.num > 1 ? t('sousArme') : '' })
           : q.premiereArme ? t('sousOccultum', { dodokkuli: echangeur }) : '';
         return `<div class="quete${fait ? ' faite' : ''}">
           <button class="case" data-act="quete" data-id="${q.id}" title="${echapper(t(deduite ? 'deduiteTitre' : 'cocherTitre'))}">${fait ? '✔' : ''}</button>
           <div class="quete-corps"><b>${echapper(nomQuete(q.id))}</b>${deduite ? `<small class="auto">${t('deduite')}</small>` : ''}
             ${q.debut ? `<small>${t('debut')} ${echapper(majuscule(ou(q.debut)))}</small>` : N().departs?.[q.id] ? `<small>${t('debut')} ${echapper(ouDepart(q.id))}</small>` : ''}
             ${sous ? `<small>${sous}</small>` : ''}
+            ${!fait && !q.echange ? `<div class="etapes-quete">${corpsQuete(q)}</div>` : ''}
             ${!fait && q.taches ? `<div class="taches">${q.taches.map(tache).join('')}</div>` : ''}
           </div></div>`;
       }).join('');

@@ -559,6 +559,7 @@ window.NOMS_JEU = {
    "purete": "Pureté fantôme",
    "mementos": "Les mémentos martiaux",
    "finale": "Finale fantasmagorie",
+   "sagesse": "Le dernier enseignement",
    "ewMsq": "Arpenteur des finitudes",
    "ewHildiDebut": "Le gentilhomme détective",
    "ewHildiFin": "Une armée de gentilshommes",
@@ -681,6 +682,8 @@ window.NOMS_JEU = {
    "lunuleSud": "Île de Lunule méridionale",
    "lunuleNord": "Île de Lunule septentrionale",
    "pelerins": "Le Sanctuaire des pèlerins",
+   "marchand": "Contes du Camelot - Donjon à embranchements",
+   "marchandAutre": "Contes du Camelot annexes - Donjon alternatif",
    "bozja": "Front sud de Bozja",
    "zadnor": "Hauts plateaux de Zadnor",
    "delubrum": "Delubrum Reginae",
@@ -971,7 +974,8 @@ window.NOMS_JEU = {
    }
   },
   "emotes": {
-   "feliciter": "Féliciter"
+   "feliciter": "Féliciter",
+   "douter": "Questionner"
   },
   "fates": {
    "pazuzu": "Défi : le démon des tempêtes",
@@ -1081,6 +1085,12 @@ window.NOMS_JEU = {
     "lieu": "Ville fantôme",
     "x": 6.6,
     "y": 7.2
+   },
+   "sagesse": {
+    "pnj": "Archive",
+    "lieu": "Île de Lunule septentrionale",
+    "x": 39.1,
+    "y": 38.8
    },
    "ewMsq": {
     "pnj": "Alphinaud",
@@ -7134,6 +7144,7 @@ window.NOMS_JEU = {
    "purete": "A Phantom Unveiled",
    "mementos": "Final Phantasm",
    "finale": "All Too Fleeting",
+   "sagesse": "Wisdom's End",
    "ewMsq": "Endwalker",
    "ewHildiDebut": "The Rise and Fall of Gentlemen",
    "ewHildiFin": "The Imperfect Gentleman",
@@ -7256,6 +7267,8 @@ window.NOMS_JEU = {
    "lunuleSud": "the Occult Crescent: South Horn",
    "lunuleNord": "the Occult Crescent: North Horn",
    "pelerins": "Pilgrim's Traverse",
+   "marchand": "The Merchant's Tale",
+   "marchandAutre": "Another Merchant's Tale",
    "bozja": "the Bozjan Southern Front",
    "zadnor": "Zadnor",
    "delubrum": "Delubrum Reginae",
@@ -7546,7 +7559,8 @@ window.NOMS_JEU = {
    }
   },
   "emotes": {
-   "feliciter": "Congratulate"
+   "feliciter": "Congratulate",
+   "douter": "Doubt"
   },
   "fates": {
    "pazuzu": "Wail in the Willows",
@@ -7656,6 +7670,12 @@ window.NOMS_JEU = {
     "lieu": "Phantom Village",
     "x": 6.6,
     "y": 7.2
+   },
+   "sagesse": {
+    "pnj": "Archive",
+    "lieu": "North Horn",
+    "x": 39.1,
+    "y": 38.8
    },
    "ewMsq": {
     "pnj": "Alphinaud",
@@ -13734,6 +13754,7 @@ window.NOMS_JEU = {
    "purete": "Die wahre Macht des Phantoms",
    "mementos": "Unzureichende Individualität",
    "finale": "Aus der Traum",
+   "sagesse": "Wofür es sich zu träumen lohnt",
    "ewMsq": "Endschreiter",
    "ewHildiDebut": "Totgesagte leben länger",
    "ewHildiFin": "Kopie eines Unnachahmlichen",
@@ -13856,6 +13877,8 @@ window.NOMS_JEU = {
    "lunuleSud": "Das südliche Kreszentia",
    "lunuleNord": "Das nördliche Kreszentia",
    "pelerins": "Pilgers Pfad",
+   "marchand": "Des Händlers Liebesmüh",
+   "marchandAutre": "Des Händlers kuriose Liebesmüh",
    "bozja": "Bozja-Südfront",
    "zadnor": "Zadnor-Hochebene",
    "delubrum": "Delubrum Reginae",
@@ -14146,7 +14169,8 @@ window.NOMS_JEU = {
    }
   },
   "emotes": {
-   "feliciter": "Super"
+   "feliciter": "Super",
+   "douter": "Beschuldigen"
   },
   "fates": {
    "pazuzu": "Ein windiger Kerl",
@@ -14256,6 +14280,12 @@ window.NOMS_JEU = {
     "lieu": "Trugstadt",
     "x": 6.6,
     "y": 7.2
+   },
+   "sagesse": {
+    "pnj": "Archiv",
+    "lieu": "Nördliches Kreszentia",
+    "x": 39.1,
+    "y": 38.8
    },
    "ewMsq": {
     "pnj": "Alphinaud",

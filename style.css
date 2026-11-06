@@ -163,6 +163,8 @@ small { color: var(--doux); }
 .pret { color: var(--ok); font-weight: 600; }
 .conseil { font-size: 0.85rem; color: var(--doux); }
 .etapes { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.etapes-quete { font-size: 0.85rem; color: var(--doux); margin-top: 0.15rem; }
+.etapes-quete p { margin: 0; }
 .valider {
   align-self: flex-start;
   background: rgba(127, 201, 141, 0.18);

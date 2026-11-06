@@ -34,7 +34,7 @@
               { cle: 'demiAmbre', qte: 3, detail: { cle: 'srcAleaZone', lieu: 'memoireVivante' } },
             ] }],
           conseils: [{ cle: 'gemmes', n: 600, gemme: 'gemme', phase: 2 }] },
-        { id: 'arsenal', echange: true, debut: 'lydirceil' },
+        { id: 'arsenal', echange: true, debut: 'lydirceil', conseils: [{ cle: 'memeJob' }] },
       ],
     },
     {
@@ -56,7 +56,7 @@
             { cle: 'jaune', roulette: 'raidsNormaux', bonus: 614, moyenne: 159 },
           ] }],
           conseils: [{ cle: 'magiDuree' }, { cle: 'abandon' }] },
-        { id: 'penombre', echange: true, debut: 'lydirceil' },
+        { id: 'penombre', echange: true, debut: 'lydirceil', conseils: [{ cle: 'memeJob' }] },
       ],
     },
     {
@@ -70,17 +70,19 @@
             { type: 'objet', cle: 'resineAspectee', qte: 1, source: craft(CHIMIE, '★★★★') },
           ] },
         { id: 'pate', debut: 'lydirceil', rendu: 'gerolt', texte: 'pate',
-          taches: [{ type: 'compteur', cle: 'pate', qte: 1200, pas: [1, 10, 100], sources: [
+          taches: [{ type: 'compteur', cle: 'pate', qte: 1200, pas: [1, 10, 100], estimer: true, sources: [
             { cle: 'srcRoulette', roulette: 'gainNiveaux', n: 20 },
+            { cle: 'srcPelerins', donjon: 'pelerins', n: 26 },
+            { cle: 'srcMission', mission: 'marchandAutre', n: 17 },
             { cle: 'srcRoulette', roulette: 'niveauMax', n: 15 },
             { cle: 'srcRoulette', roulette: 'expert', n: 15 },
-            { cle: 'srcCe', lieu: 'lunuleSud', n: 10 },
-            { cle: 'srcPelerins', donjon: 'pelerins', n: 10 },
-            { cle: 'srcDefisRaids', n: 10 },
+            { cle: 'srcMission', mission: 'marchand', n: 14 },
+            { cle: 'srcDefisRaids', n: 8 },
+            { cle: 'srcCe', lieu: 'lunuleSud', n: 5 },
             { cle: 'srcAleasDt', n: 3 },
           ] }],
-          conseils: [{ cle: 'abandon' }, { cle: 'pateJob' }] },
-        { id: 'puissance', echange: true, debut: 'lydirceil' },
+          conseils: [{ cle: 'pateRapide', roulette: 'gainNiveaux', donjon: 'pelerins', lieu: 'lunuleSud' }, { cle: 'abandon' }, { cle: 'pateJob' }] },
+        { id: 'puissance', echange: true, debut: 'lydirceil', conseils: [{ cle: 'memeJob' }] },
       ],
     },
     {
@@ -102,7 +104,7 @@
               { cle: 'dissipGamma', qte: 100, detail: { cle: 'srcParRun', roulette: 'raidsNormaux', n: 5 } },
             ] }],
           conseils: [{ cle: 'dissipLunule', lieu: 'lunuleNord' }] },
-        { id: 'purete', echange: true, debut: 'lydirceil' },
+        { id: 'purete', echange: true, debut: 'lydirceil', conseils: [{ cle: 'memeJob' }] },
       ],
     },
     {

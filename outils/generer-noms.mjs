@@ -30,7 +30,7 @@ const QUETES = {
   tablette: 70916, orbes: 70917, penombre: 70918,
   recherche: 70990, pate: 70991, puissance: 70992,
   mirage: 71038, dissipateurs: 71039, purete: 71040,
-  mementos: 71041, finale: 71042,
+  mementos: 71041, finale: 71042, sagesse: 71054,
   // Endwalker (Manderville) : quête principale, série d'Hildibrand, puis par stade la quête d'histoire, la première arme et l'échange répétable
   ewMsq: 70000, ewHildiDebut: 66740, ewHildiFin: 70178,
   ewFaire: 70188, ewEncore: 70189,
@@ -50,7 +50,7 @@ const MISSIONS = {
   // Arcadion
   m1: 985, m2: 987, m3: 989, m4: 991, m5: 1019, m6: 1021, m7: 1023, m8: 1025, m9: 1068, m10: 1070, m11: 1072, m12: 1074,
   // Opérations de terrain de Lunule (l'overlay ne s'y cache pas) et donjon sans fond
-  lunuleSud: 1018, lunuleNord: 1093, pelerins: 1032,
+  lunuleSud: 1018, lunuleNord: 1093, pelerins: 1032, marchand: 1066, marchandAutre: 1079,
 };
 const MONSTRES = {
   ratel: 13089, megapita: 13080, grosseMachoire: 13096, graveur: 13099,
@@ -72,7 +72,7 @@ const LIEUX = {
   yokTural: 4500, xakTural: 4501, mondeInephemere: 4502,
   radzAtHan: 3707,
 };
-const EMOTES = { feliciter: 29 };
+const EMOTES = { feliciter: 29, douter: 12 };
 const CLASSES = {
   PLD: 19, WAR: 21, DRK: 32, GNB: 37, WHM: 24, SCH: 28, AST: 33, SGE: 40, MNK: 20, DRG: 22, NIN: 30, SAM: 34,
   RPR: 39, VPR: 41, BRD: 23, MCH: 31, DNC: 38, BLM: 25, SMN: 27, RDM: 35, PCT: 42,
