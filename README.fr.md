@@ -39,15 +39,15 @@ Pour les anciennes reliques, les étapes sont **celles d'aujourd'hui** : les obj
 Il faut [ACT](https://advancedcombattracker.com/) avec le plugin FFXIV et [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin). Le jeu doit être en mode **fenêtré sans bordure**.
 
 1. Dans ACT : onglet **Plugins** → sous-onglet **OverlayPlugin.dll** → bouton **Nouveau**.
-2. **Nom** : `Relique` ; **Preset** : **Personnalisé** ; **Type** : **MiniParse** → valider.
-3. Dans l'onglet **Général** du nouvel overlay, remplis le champ **URL** avec :
+2. **Nom** : `Relique` ; **Preset** : **Relic Tracker** → valider. L'adresse et la taille sont déjà réglées.
+   Ce preset est inclus depuis OverlayPlugin 0.19.112. Avec une version plus ancienne, choisis plutôt **Preset** : **Personnalisé** et **Type** : **MiniParse**, valide, puis remplis le champ **URL** de l'onglet **Général** avec :
    ```
    https://DarknessKxiv.github.io/ffxiv-relique/
    ```
-   puis clique sur **Recharger l'overlay**.
-4. Laisse **Clic à travers** décoché, sinon tu ne pourras pas cliquer dans l'overlay.
-5. Décoche **Bloquer l'overlay**, place et redimensionne la fenêtre en jeu (environ 500 px de large), puis recoche-la.
-6. Facultatif : onglet **Raccourcis** → **Nouveau raccourci**, type **Visible/Caché**, pour l'afficher ou le cacher d'une touche.
+   et clique sur **Recharger l'overlay**.
+3. Laisse **Clic à travers** décoché, sinon tu ne pourras pas cliquer dans l'overlay.
+4. Décoche **Bloquer l'overlay**, place et redimensionne la fenêtre en jeu (environ 500 px de large), puis recoche-la.
+5. Facultatif : onglet **Raccourcis** → **Nouveau raccourci**, type **Visible/Caché**, pour l'afficher ou le cacher d'une touche.
 
 **Texte trop petit (écran 4K) ?** Utilise le curseur **Zoom** de l'onglet **Général**, ou les boutons **A− / A+** dans les **Réglages** de l'overlay.
 

@@ -39,15 +39,15 @@ For the older relics, the steps are the **current ones**: items that used to com
 You need [ACT](https://advancedcombattracker.com/) with the FFXIV plugin and [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin). Play the game in **borderless windowed** mode.
 
 1. In ACT: **Plugins** tab → **OverlayPlugin.dll** → **New**.
-2. **Name**: `Relic Tracker`; **Preset**: **Custom**; **Type**: **MiniParse** → OK.
-3. In the **General** tab of the new overlay, set the **URL** to:
+2. **Name**: `Relic Tracker`; **Preset**: **Relic Tracker** → OK. The URL and size are already set.
+   This preset ships with OverlayPlugin 0.19.112 and later. On an older version, pick **Preset**: **Custom** and **Type**: **MiniParse** instead, click OK, then set the **URL** in the **General** tab to:
    ```
    https://DarknessKxiv.github.io/ffxiv-relique/
    ```
-   then click **Reload overlay**.
-4. Leave **Enable clickthrough** unchecked, otherwise you cannot click in the overlay.
-5. Uncheck **Lock overlay**, move and resize the window in game (about 500 px wide), then lock it again.
-6. Optional: **Hotkeys** tab → new hotkey of type **Toggle visibility** to show or hide it with a key.
+   and click **Reload overlay**.
+3. Leave **Enable clickthrough** unchecked, otherwise you cannot click in the overlay.
+4. Uncheck **Lock overlay**, move and resize the window in game (about 500 px wide), then lock it again.
+5. Optional: **Hotkeys** tab → new hotkey of type **Toggle visibility** to show or hide it with a key.
 
 **Text too small (4K screen)?** Use the **Zoom** slider in the **General** tab, or the **A− / A+** buttons in the overlay **Settings**.
 
