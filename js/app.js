@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.7';
+  const VERSION = '1.3.8';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -365,7 +365,12 @@
       case 'missions': return missionsJob(tch);
       case 'case': return caseMemoire(caseJob(tch.id, tch.cle), tch.quete ? t('cite', { nom: echapper(nomQuete(tch.cle)) }) : t(`x.${tch.cle}`), tch.quete);
       case 'compteurs': {
-        const lignes = tch.elements.map((el) => (el.qte > 10 ? compteur(el.cle, el.qte, tch.pas || [1, 10], `<small>${texteDe(el.detail)}</small>`) : mini(el))).join('');
+        // Objets gagnés « par mission » : on ajoute le nombre de missions qu'il reste à faire.
+        const reste = (el) => {
+          const n = el.detail?.n && el.detail.cle === 'srcParRun' ? Math.ceil(Math.max(0, el.qte - (etat().objets[el.cle] || 0)) / el.detail.n) : 0;
+          return n ? t('missionsRestantes', { n: nombre(n), s: n > 1 ? 's' : '' }) : '';
+        };
+        const lignes = tch.elements.map((el) => (el.qte > 10 ? compteur(el.cle, el.qte, tch.pas || [1, 10], `<small>${texteDe(el.detail)}${reste(el)}</small>`) : mini(el))).join('');
         return `<div class="sous-titre">${t(tch.titre)}</div><div class="grille-mini">${lignes}</div>${tch.lunule ? sourcesLunule(tch.elements, tch.lunule) : ''}`;
       }
       case 'jauges': return jauges(tch);
