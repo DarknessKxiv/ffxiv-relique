@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.10';
+  const VERSION = '1.3.11';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -242,6 +242,8 @@
       const z = rel().memoires?.terrain.flatMap((g) => g.zones).find((x) => x.cle === zone) || RELIQUES.dt.memoires.terrain.flatMap((g) => g.zones).find((x) => x.cle === zone);
       if (z) {
         r.lieu = echapper(N().lieux[z.lieu]);
+        const g = RELIQUES.dt.memoires.terrain.find((x) => x.zones.includes(z));
+        r.region = echapper(N().lieux[g.region]);
         if (quoi.startsWith('m')) r.monstre = echapper(majuscule(N().monstres[z.monstres[Number(quoi.slice(1))]]));
       }
       r.n = p.n; r.total = p.total;
@@ -866,6 +868,12 @@
       }
       case 'memento':
         if (a.n != null) e.jauges[a.cle] = a.n;  // ALÉA au rang or : 3/5…
+        if (a.cles) {
+          // Catégorie (région) terminée : toutes ses cases, dont le dernier objectif qui n'a pas eu de message.
+          a.cles.forEach((k) => { e.memoires[k] = true; });
+          noter('j.memRegion', { cleMem: a.cles[0] });
+          break;
+        }
         if (a.fini !== false) e.memoires[a.cle] = true;
         noter(a.mission ? 'j.mission' : a.n != null ? 'j.memAlea' : 'j.memMonstre', { mission: a.mission, cleMem: a.cle, n: a.n, total: a.total });
         break;

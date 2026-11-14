@@ -123,8 +123,18 @@
   const MONSTRES_MEM = MEM.terrain.flatMap((g) => g.zones.flatMap((z) => z.monstres.map((m, k) => ({ cle: `z:${z.cle}:m${k}`, noms: LANGUES.map((l) => norm(NJ[l].monstres[m])) }))))
     .sort((a, b) => Math.max(...b.noms.map((n) => n.length)) - Math.max(...a.noms.map((n) => n.length)));
   let zoneEnCours = null;  // clé de zone des mémentos (urqo, koza…), d'après la ligne 01
+  // Le dernier objectif d'une région n'a pas de message à lui : le jeu annonce directement la catégorie terminée
+  // (LogMessage 11026), par exemple « Mémentos martiaux: catégorie “Yok Tural” terminée! ».
+  const CATEGORIE = [/^catégorie [“"](.+?)[”"] terminée/, /^all objectives in the (.+?) category complete/, /^alle ziele in (.+?) abgeschlossen/];
+  const REGIONS = Object.fromEntries(MEM.terrain.flatMap((g) => LANGUES.map((l) => [norm(NJ[l].lieux[g.region]),
+    g.zones.flatMap((z) => [`z:${z.cle}:alea`, ...z.monstres.map((_, k) => `z:${z.cle}:m${k}`)])])));
 
   function memento(reste) {
+    const categorie = CATEGORIE.map((re) => reste.match(re)).find(Boolean);
+    if (categorie) {
+      const cles = REGIONS[norm(categorie[1])];
+      return cles ? [{ type: 'memento', cles, region: norm(categorie[1]) }] : [];
+    }
     const duree = reste.match(/[“„"](.+?)[”“"]/);
     if (duree) {
       const cle = MISSIONS[norm(duree[1])];
