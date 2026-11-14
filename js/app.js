@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.8';
+  const VERSION = '1.3.9';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -237,6 +237,15 @@
     if (p.mission) r.mission = echapper(majuscule(N().missions[p.mission]));
     if (p.langue) r.langue = echapper(TX[p.langue].langue);
     if (p.texte) r.texte = echapper(p.texte);
+    if (p.cleMem) {
+      const [, zone, quoi] = p.cleMem.split(':');
+      const z = rel().memoires?.terrain.flatMap((g) => g.zones).find((x) => x.cle === zone) || RELIQUES.dt.memoires.terrain.flatMap((g) => g.zones).find((x) => x.cle === zone);
+      if (z) {
+        r.lieu = echapper(N().lieux[z.lieu]);
+        if (quoi.startsWith('m')) r.monstre = echapper(majuscule(N().monstres[z.monstres[Number(quoi.slice(1))]]));
+      }
+      r.n = p.n; r.total = p.total;
+    }
     r.cristal = echapper(nomCourant('cristalSavoir'));
     return t(e.k, r);
   }
@@ -319,8 +328,9 @@
       const cles = g.zones.flatMap((z) => [`z:${z.cle}:alea`, ...z.monstres.map((_, k) => `z:${z.cle}:m${k}`)]);
       const n = cles.filter((k) => e.memoires[k]).length;
       h += pli(`mem:t${i}`, t('memTerrain', { region: echapper(N().lieux[g.region]) }), `${n}/${cles.length}`, () => g.zones.map((z) => `<div class="zone"><div class="sous-titre">${echapper(N().lieux[z.lieu])}</div>
-        ${caseMemoire(`z:${z.cle}:alea`, t('memAlea'))}
-        ${z.monstres.map((m, k) => caseMemoire(`z:${z.cle}:m${k}`, t('memVaincre', { monstre: echapper(majuscule(N().monstres[m])) }))).join('')}</div>`).join(''), n === cles.length);
+        ${caseMemoire(`z:${z.cle}:alea`, t('memAlea') + (e.jauges[`z:${z.cle}:alea`] && !e.memoires[`z:${z.cle}:alea`] ? ` <small>(${e.jauges[`z:${z.cle}:alea`]}/5)</small>` : ''), true)}
+        ${z.monstres.map((m, k) => caseMemoire(`z:${z.cle}:m${k}`, t('memVaincre', { monstre: echapper(majuscule(N().monstres[m])) })
+          + (rel().memoires.positions?.[m] ? ` <small>X ${rel().memoires.positions[m][0].toFixed(1)} Y ${rel().memoires.positions[m][1].toFixed(1)}</small>` : ''), true)).join('')}</div>`).join(''), n === cles.length);
     });
     missions.forEach((c, i) => {
       const n = c.cles.filter((k) => e.memoires[`m:${k}`]).length;
@@ -847,6 +857,11 @@
         noter(cases.length || memoire ? 'j.mission' : 'j.missionHors', { mission: a.cle }, cases.length > 0 || memoire);
         break;
       }
+      case 'memento':
+        if (a.n != null) e.jauges[a.cle] = a.n;  // ALÉA au rang or : 3/5…
+        if (a.fini !== false) e.memoires[a.cle] = true;
+        noter(a.mission ? 'j.mission' : a.n != null ? 'j.memAlea' : 'j.memMonstre', { mission: a.mission, cleMem: a.cle, n: a.n, total: a.total });
+        break;
       case 'instance':
         if (enMission === a.dedans) return;
         enMission = a.dedans;

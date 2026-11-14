@@ -116,6 +116,30 @@
     ...r.phases.flatMap((p) => (p.arme?.taches || []).filter((t) => t.type === 'missions').flatMap((t) => t.groupes.flat())),
   ]));
 
+  // Mémentos martiaux (Occultum, LogMessage 11023-11025) : « Mémentos martiaux : abattre 1 ratel du Tural »,
+  // « … : ALÉA avec éval. max. : 3/5 », « … : accomplir “L'Anticréation” ».
+  const MEMENTO = { fr: /^mémentos martiaux ?: (.+)$/, en: /^martial memories: (.+)$/, de: /^kampferinnerungen: (.+)$/ };
+  const MEM = RELIQUES.dt.memoires;
+  const MONSTRES_MEM = MEM.terrain.flatMap((g) => g.zones.flatMap((z) => z.monstres.map((m, k) => ({ cle: `z:${z.cle}:m${k}`, noms: LANGUES.map((l) => norm(NJ[l].monstres[m])) }))))
+    .sort((a, b) => Math.max(...b.noms.map((n) => n.length)) - Math.max(...a.noms.map((n) => n.length)));
+  let zoneEnCours = null;  // clé de zone des mémentos (urqo, koza…), d'après la ligne 01
+
+  function memento(reste) {
+    const duree = reste.match(/[“„"](.+?)[”“"]/);
+    if (duree) {
+      const cle = MISSIONS[norm(duree[1])];
+      return cle ? [{ type: 'memento', cle: `m:${cle}`, mission: cle }] : [];
+    }
+    const monstre = MONSTRES_MEM.find((m) => m.noms.some((n) => n && reste.includes(n)));
+    if (monstre) return [{ type: 'memento', cle: monstre.cle }];
+    const fraction = reste.match(/(\d+)\s*\/\s*(\d+)\s*$/);
+    if (fraction && zoneEnCours) {
+      const n = Number(fraction[1]), total = Number(fraction[2]);
+      return [{ type: 'memento', cle: `z:${zoneEnCours}:alea`, n, total, fini: n >= total }];
+    }
+    return [];
+  }
+
   let missionEnCours = null;   // nom (normalisé) de la mission commencée
   let derniereLangue = null;
 
@@ -148,6 +172,9 @@
     for (const langue of LANGUES) {
       const m = MOTIFS[langue];
       const vue = () => langueVue(langue);
+
+      const mem = texte.match(MEMENTO[langue]);
+      if (mem) return [...vue(), ...memento(mem[1])];
 
       const debut = texte.match(m.debut), fin = texte.match(m.fin);
       if (debut || fin) {
@@ -195,7 +222,9 @@
   function analyser(ligne) {
     switch (ligne[0]) {
       // Changement de zone : on sort forcément de la mission précédente (« commence » arrive juste après l'entrée).
-      case '01': return [{ type: 'instance', dedans: false }];
+      case '01':
+        zoneEnCours = MEM.territoires[parseInt(ligne[2], 16)] || null;
+        return [{ type: 'instance', dedans: false }];
       case '02': return ligne[3] ? [{ type: 'perso', nom: ligne[3] }] : [];
       case '12': return JOB_PAR_ID[ligne[2]] ? [{ type: 'job', job: JOB_PAR_ID[ligne[2]] }] : [];
       case '33': return ligne[3] === VICTOIRE ? victoire() : [];
