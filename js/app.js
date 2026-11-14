@@ -6,7 +6,7 @@
   const CLE_STOCKAGE = 'reliqueFantome.v1';
   const SANS_PERSO = 'Personnage';  // clés internes des personnages, affichées traduites
   const PERSO_DEMO = 'Démo';
-  const VERSION = '1.3.9';
+  const VERSION = '1.3.10';
   const MODE_TEST = /[?&]test\b/.test(location.search);
   const MODE_DEMO = /[?&]demo\b/.test(location.search);
   let apercu = false;  // fenêtre d'aperçu d'OverlayPlugin : même progression d'exemple que ?demo
@@ -327,14 +327,21 @@
     terrain.forEach((g, i) => {
       const cles = g.zones.flatMap((z) => [`z:${z.cle}:alea`, ...z.monstres.map((_, k) => `z:${z.cle}:m${k}`)]);
       const n = cles.filter((k) => e.memoires[k]).length;
-      h += pli(`mem:t${i}`, t('memTerrain', { region: echapper(N().lieux[g.region]) }), `${n}/${cles.length}`, () => g.zones.map((z) => `<div class="zone"><div class="sous-titre">${echapper(N().lieux[z.lieu])}</div>
-        ${caseMemoire(`z:${z.cle}:alea`, t('memAlea') + (e.jauges[`z:${z.cle}:alea`] && !e.memoires[`z:${z.cle}:alea`] ? ` <small>(${e.jauges[`z:${z.cle}:alea`]}/5)</small>` : ''), true)}
+      // Une zone ou une catégorie terminée se replie (autre identifiant de pli : fermée par défaut) pour alléger l'overlay.
+      h += pli(`mem:t${i}${n === cles.length ? ':fini' : ''}`, t('memTerrain', { region: echapper(N().lieux[g.region]) }), `${n}/${cles.length}`, () => g.zones.map((z) => {
+        const cz = [`z:${z.cle}:alea`, ...z.monstres.map((_, k) => `z:${z.cle}:m${k}`)];
+        const nz = cz.filter((k) => e.memoires[k]).length;
+        const corps = () => `${caseMemoire(`z:${z.cle}:alea`, t('memAlea') + (e.jauges[`z:${z.cle}:alea`] && !e.memoires[`z:${z.cle}:alea`] ? ` <small>(${e.jauges[`z:${z.cle}:alea`]}/5)</small>` : ''), true)}
         ${z.monstres.map((m, k) => caseMemoire(`z:${z.cle}:m${k}`, t('memVaincre', { monstre: echapper(majuscule(N().monstres[m])) })
-          + (rel().memoires.positions?.[m] ? ` <small>X ${rel().memoires.positions[m][0].toFixed(1)} Y ${rel().memoires.positions[m][1].toFixed(1)}</small>` : ''), true)).join('')}</div>`).join(''), n === cles.length);
+          + (rel().memoires.positions?.[m] ? ` <small>X ${rel().memoires.positions[m][0].toFixed(1)} Y ${rel().memoires.positions[m][1].toFixed(1)}</small>` : ''), true)).join('')}`;
+        return nz === cz.length
+          ? pli(`mem:z:${z.cle}:fini`, echapper(N().lieux[z.lieu]), `${nz}/${cz.length}`, corps, true)
+          : `<div class="zone"><div class="sous-titre">${echapper(N().lieux[z.lieu])} <small>${nz}/${cz.length}</small></div>${corps()}</div>`;
+      }).join(''), n === cles.length);
     });
     missions.forEach((c, i) => {
       const n = c.cles.filter((k) => e.memoires[`m:${k}`]).length;
-      h += pli(`mem:m${i}`, t(c.titre), `${n}/${c.cles.length}`, () => c.cles.map((k) => caseMemoire(`m:${k}`, echapper(majuscule(N().missions[k])), true)).join(''), n === c.cles.length);
+      h += pli(`mem:m${i}${n === c.cles.length ? ':fini' : ''}`, t(c.titre), `${n}/${c.cles.length}`, () => c.cles.map((k) => caseMemoire(`m:${k}`, echapper(majuscule(N().missions[k])), true)).join(''), n === c.cles.length);
     });
     return h;
   }

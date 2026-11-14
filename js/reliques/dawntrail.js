@@ -134,8 +134,8 @@
         { cle: 'memoire', lieu: 'memoireVivante', monstres: ['aerochat', 'scorpion', 'if', 'ame'] },
       ] },
     ],
-    // Coordonnées d'un groupe de chaque monstre (wiki consolegameswiki) ; sans coordonnées : suivre la mini-carte.
-    positions: { ratel: [31.6, 15.2], grosseMachoire: [24.2, 21.6], graveur: [23.0, 33.4], uolon: [16.2, 9.0], ocelot: [32.7, 14.5], poliste: [36.3, 35.8], apollyon: [11.5, 22.9], vawtsaral: [13.0, 10.0], tohsoq: [35.2, 13.8], sylveplume: [17.2, 25.2], sangfeuille: [7.1, 25.4], crabe: [30.6, 34.5], ceratoraptor: [28.1, 13.3], pampa: [23.6, 34.2], cauahealoa: [27.9, 27.6], katobleps: [34.5, 11.9], gomphotherium: [15.1, 15.0], dosLaineux: [14.9, 33.3], aerochat: [31.4, 35.2], scorpion: [26.9, 4.7], if: [18.6, 24.2], ame: [10.2, 36.3] },
+    // Coordonnées d'un groupe de chaque monstre (wiki consolegameswiki, mégapita et rroneek relevés en jeu).
+    positions: { ratel: [31.6, 15.2], megapita: [22.7, 14.0], rroneek: [24.2, 10.4], grosseMachoire: [24.2, 21.6], graveur: [23.0, 33.4], uolon: [16.2, 9.0], ocelot: [32.7, 14.5], poliste: [36.3, 35.8], apollyon: [11.5, 22.9], vawtsaral: [13.0, 10.0], tohsoq: [35.2, 13.8], sylveplume: [17.2, 25.2], sangfeuille: [7.1, 25.4], crabe: [30.6, 34.5], ceratoraptor: [28.1, 13.3], pampa: [23.6, 34.2], cauahealoa: [27.9, 27.6], katobleps: [34.5, 11.9], gomphotherium: [15.1, 15.0], dosLaineux: [14.9, 33.3], aerochat: [31.4, 35.2], scorpion: [26.9, 4.7], if: [18.6, 24.2], ame: [10.2, 36.3] },
     // Zones (TerritoryType) : la ligne 01 du journal dit dans laquelle on est, pour les ALÉA.
     territoires: { 1187: 'urqo', 1188: 'koza', 1189: 'yak', 1190: 'shaa', 1191: 'hoirie', 1192: 'memoire' },
     missions: [
